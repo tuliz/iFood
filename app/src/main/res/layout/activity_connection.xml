@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background3"
+    android:layout_height="match_parent"
+    tools:context=".Activities.connectionActivity">
+
+    <ImageView
+        android:src="@drawable/no_connection_image"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:contentDescription="no internet image"
+        tools:ignore="HardcodedText">
+
+    </ImageView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnRefresh"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/ic_refresh"
+        android:layout_gravity="center"
+        app:maxImageSize="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+</LinearLayout>

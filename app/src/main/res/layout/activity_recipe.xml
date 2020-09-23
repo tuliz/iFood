@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background3"
+    android:layout_height="match_parent"
+    tools:context=".Activities.RecipeActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="530dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/instructions_for_the_recipe"
+                android:textSize="25dp"
+                android:textStyle="italic">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/text_recipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/recipe_name"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+            <ru.embersoft.expandabletextview.ExpandableTextView
+                    app:etv_animationTime="20"
+                    app:etv_expandLines="1"
+                    app:etv_showLine="false"
+                    app:etv_textContentSize="20sp"
+                    app:etv_textExpand="Show more"
+                    app:etv_textShrink="Show less"
+                    app:etv_textContentColor="#8A000000"
+                    app:etv_textStateColor="#8A000000"
+                    android:id="@+id/ingredients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="18dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/ingredients"
+                    android:textSize="20sp"
+            />
+
+
+
+            <TextView
+                android:id="@+id/method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/method"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <ru.embersoft.expandabletextview.ExpandableTextView
+                app:etv_animationTime="20"
+                app:etv_expandLines="1"
+                app:etv_showLine="false"
+                app:etv_textContentSize="20sp"
+                app:etv_textExpand="Show more"
+                app:etv_textShrink="Show less"
+                app:etv_textContentColor="#8A000000"
+                app:etv_textStateColor="#8A000000"
+                android:id="@+id/recipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/ingredients"
+                android:textSize="20sp"/>
+
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:gravity="center|bottom"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnFav"
+            app:maxImageSize="35dp"
+            app:tint="@color/colorWhite"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_star_">
+
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSendMessage"
+            app:maxImageSize="35dp"
+            app:tint="@color/colorWhite"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_message">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:id="@+id/btnShare"
+            app:maxImageSize="35dp"
+            app:tint="@color/colorWhite"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_baseline_share">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+    </LinearLayout>
+
+</LinearLayout>

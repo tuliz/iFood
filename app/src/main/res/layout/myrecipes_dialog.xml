@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/do_you_want_to_view_or_delete_your_recipe"
+        android:textSize="20sp"
+        android:layout_gravity="center"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/btnView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/view"
+            android:textStyle="italic" />
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_margin="5dp"
+            android:id="@+id/btnDelete"
+            android:textStyle="italic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/delete" />
+
+    </LinearLayout>
+
+</LinearLayout>

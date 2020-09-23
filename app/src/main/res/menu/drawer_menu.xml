@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   >
+
+        <item
+
+            android:id="@+id/menuHome"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home" />
+        <item
+             android:title="@string/recpies">
+        <menu>
+            <item
+
+                android:id="@+id/menu_AddRecepie"
+                android:icon="@android:drawable/ic_menu_add"
+                android:title="@string/add_recipes"
+                android:visible="true" />
+            <item
+
+                android:id="@+id/menu_MyRecepies"
+                android:icon="@android:drawable/ic_menu_myplaces"
+                android:title="@string/my_recipes"
+                android:visible="true" />
+            <item
+
+                android:id="@+id/menu_favRecipe"
+                android:icon="@drawable/ic_star_"
+                android:title="@string/favorite_list"
+                android:visible="true" />
+            <item
+
+                android:id="@+id/menu_SearchRecepie"
+                android:icon="@drawable/ic_search"
+                android:title="@string/search_a_recipe"
+                android:visible="true" />
+
+        </menu>
+        </item>
+        <item
+            android:id="@+id/modMenu"
+            android:title="@string/mod_area"
+            android:visible="false">
+            <menu>
+                <item
+
+                    android:id="@+id/menu_mod"
+                    android:icon="@drawable/ic_baseline_https"
+                    android:title="@string/waiting_for_approval"
+                    android:visible="false" />
+                <item
+
+                    android:id="@+id/menu_admin"
+                    android:icon="@drawable/ic_vpn_lock"
+                    android:title="@string/admin"
+                    android:visible="false" />
+            </menu>
+
+        </item>
+        <item
+            android:title="@string/personal_area">
+            <menu>
+                <item
+                    android:id="@+id/menuInbox"
+                    android:icon="@drawable/ic_message"
+                    android:title="@string/inbox" />
+
+                <item
+                    android:id="@+id/menuProfile"
+                    android:icon="@drawable/ic_account_circle_black"
+                    android:title="@string/profile" />
+
+            </menu>
+        </item>
+        <item
+            android:id="@+id/menu_Exit"
+            android:icon="@drawable/ic_exit"
+            android:title="@string/exit" />
+
+</menu>

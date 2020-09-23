@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background3"
+    tools:context=".Activities.MessageActivity">
+<LinearLayout
+    android:background="@drawable/message_background"
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textStyle="bold"
+        android:text="@string/from"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp">
+
+    </TextView>
+    <TextView
+        android:layout_marginTop="5dp"
+        android:id="@+id/tvFrom"
+        android:layout_width="match_parent"
+        android:layout_height="25dp">
+
+    </TextView>
+</LinearLayout>
+    <LinearLayout
+        android:background="@drawable/message_background"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_margin="5dp"
+            android:textStyle="bold"
+            android:text="@string/message_title"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp">
+
+        </TextView>
+        <TextView
+            android:layout_marginTop="5dp"
+            android:id="@+id/tvMessageTitle"
+            android:layout_width="match_parent"
+            android:layout_height="25dp">
+
+    </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:background="@drawable/message_background"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_margin="5dp"
+            android:textStyle="bold"
+            android:text="@string/received_date"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp">
+
+        </TextView>
+        <TextView
+            android:layout_marginTop="5dp"
+            android:id="@+id/tvMessageDate"
+            android:layout_width="match_parent"
+            android:layout_height="25dp">
+
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:background="@drawable/message_background"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="395dp">
+    <TextView
+        android:layout_margin="5dp"
+        android:textStyle="bold"
+        android:text="@string/message_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+    <TextView
+            android:minLines="25"
+            android:gravity="start"
+            android:id="@+id/tvMessageContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="bottom|center"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_margin="5dp"
+            android:id="@+id/btnReplayMessage"
+            android:text="@string/replay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_margin="5dp"
+            android:id="@+id/btnCloseMessage"
+            android:text="@string/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
+</LinearLayout>

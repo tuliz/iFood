@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background3"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+
+            android:id="@+id/toolBarID"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorWhite">
+        </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabItem
+                android:clickable="false"
+                android:layout_width="wrap_content"
+                android:text="@string/step_1"
+                android:layout_height="wrap_content">
+
+            </com.google.android.material.tabs.TabItem>
+            <com.google.android.material.tabs.TabItem
+                android:clickable="false"
+                android:layout_width="wrap_content"
+                android:text="@string/step_2"
+                android:layout_height="wrap_content">
+
+            </com.google.android.material.tabs.TabItem>
+            <com.google.android.material.tabs.TabItem
+                android:clickable="false"
+                android:layout_width="wrap_content"
+                android:text="@string/step_3"
+                android:layout_height="wrap_content">
+
+            </com.google.android.material.tabs.TabItem>
+        </com.google.android.material.tabs.TabLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+    <com.example.iFood.Adapters.CustomerViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:layout_height="505dp">
+
+    </com.example.iFood.Adapters.CustomerViewPager>
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/btnPrevious"
+            android:text="@string/previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_marginStart="25dp"
+            android:id="@+id/btnNext"
+            android:text="@string/next"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content">
+
+        </Button>
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_marginStart="25dp"
+            android:id="@+id/btnConfirm"
+            android:text="@string/confirm"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

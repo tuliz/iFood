@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:clickable="true"
+    app:cardBackgroundColor="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/message_id"
+    android:focusable="true">
+    <RelativeLayout
+        android:id="@+id/msgLayout"
+
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:background="@android:color/transparent"
+            android:id="@+id/messageIcon"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/no_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp">
+
+        </de.hdodenhof.circleimageview.CircleImageView>
+        <TextView
+            android:background="@android:color/transparent"
+            android:id="@+id/tvFullUserName"
+            android:textSize="16dp"
+            android:textColor="#4a4a4a"
+            android:text="User Fullname"
+            android:layout_toEndOf="@id/messageIcon"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            tools:ignore="HardcodedText,SpUsage">
+
+        </TextView>
+        <TextView
+            android:background="@android:color/transparent"
+            android:textColor="#9B9B9B"
+            android:textSize="12dp"
+            android:id="@+id/tvMessageTitle"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/messageIcon"
+            android:layout_below="@id/tvFullUserName"
+            android:text="Message title"
+            android:maxLines="1"
+            android:layout_width="250dp"
+            android:layout_height="35dp"
+            tools:ignore="HardcodedText,SpUsage">
+
+        </TextView>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

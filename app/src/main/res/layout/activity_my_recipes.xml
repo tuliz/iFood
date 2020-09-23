@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.MyRecipes"
+    android:background="@drawable/background3"
+    android:orientation="vertical">
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/starImage"
+                android:layout_marginEnd="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_fastfood"
+                android:contentDescription="favoriteList"
+                tools:ignore="HardcodedText">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tvMyRecipes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/starImage"
+                android:text="@string/here_is_your_recipes_list"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvMyRecipesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="200dp"
+                android:layout_toEndOf="@id/tvMyRecipes"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+
+        </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/MyRecipes_recycler_view"
+        android:clipChildren="false"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:scrollbars="vertical"
+        >
+
+
+    </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="end"
+        app:hideOnScroll="true"
+        app:menu="@menu/menu_bar"
+        app:navigationIcon="@drawable/ic_menu" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/bottomAddIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorAccent"
+        android:src="@drawable/ic_add"
+        app:layout_anchor="@id/bottomAppBar"
+        app:maxImageSize="35dp"
+        app:menu="@menu/menu_add"
+        app:tint="@color/colorWhite" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

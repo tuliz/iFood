@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    tools:context=".Activities.oldActivities.Inbox">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="@string/unread_messages"
+            android:textSize="24sp"
+            android:textStyle="italic|bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/unread_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="true"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="@string/opened_messages"
+            android:textSize="24sp"
+            android:textStyle="italic|bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/opened_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="true"
+            android:clipToPadding="true"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+</LinearLayout>
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="end"
+        app:hideOnScroll="true"
+        app:menu="@menu/menu_bar"
+        app:navigationIcon="@drawable/ic_menu" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/bottomAddIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorAccent"
+        android:src="@drawable/ic_add"
+        app:layout_anchor="@id/bottomAppBar"
+        app:maxImageSize="35dp"
+        app:menu="@menu/menu_add"
+        app:tint="@color/colorWhite" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

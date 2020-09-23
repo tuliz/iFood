@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+  <LinearLayout
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="580dp"
+      tools:ignore="UselessParent">
+   <LinearLayout
+       android:layout_marginEnd="15dp"
+       android:layout_marginTop="10dp"
+       android:layout_marginStart="10dp"
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <TextView
+           android:textSize="20sp"
+           android:textStyle="italic|bold"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:text="@string/recipe_name" />
+
+       <EditText
+           android:layout_marginEnd="20dp"
+           android:id="@+id/etRecipeName"
+           android:hint="recipe name"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="start"
+           android:inputType="textMultiLine"
+           android:importantForAutofill="no"
+           tools:ignore="HardcodedText" />
+   </LinearLayout>
+    <LinearLayout
+        android:layout_marginEnd="15dp"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="490dp">
+        <TextView
+            android:textSize="20sp"
+            android:textStyle="italic|bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_recipe_ingredients" />
+
+        <EditText
+
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical|horizontal"
+            android:isScrollContainer="true"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/etRecipeIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:gravity="start"
+            android:hint="@string/add_the_needed_ingredients"
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            android:importantForAutofill="no"/>
+    </LinearLayout>
+
+  </LinearLayout>
+</FrameLayout>

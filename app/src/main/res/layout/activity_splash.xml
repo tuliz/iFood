@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@drawable/background3">
+
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="iFood, your food application!"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:layout_marginBottom="130dp"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/image_delivery_man"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:src="@drawable/delivery_man"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        tools:ignore="HardcodedText"
+        android:visibility="invisible"
+        android:id="@+id/text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Created and developed by Yakir Malka"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center|bottom"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="130dp"/>
+
+</FrameLayout>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background3"
+    tools:context=".Activities.About">
+    <!-- Main layout -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="60dp"
+            android:layout_gravity="center"
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:elevation="1dp"
+            android:src="@drawable/logo"/>
+
+    </LinearLayout>
+    <!-- Contact us layout -->
+    <LinearLayout
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:gravity="center"
+            android:textStyle="italic|bold"
+            android:textSize="18sp"
+            android:text="@string/you_can_contact_me_via"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/sendEmail"
+            android:src="@drawable/send_mass_email"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="Email_contact"
+            tools:ignore="HardcodedText">
+
+        </ImageView>
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:id="@+id/sendWhatsApp"
+            android:src="@drawable/whatsapp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            tools:ignore="HardcodedText"
+            android:contentDescription="WhatsApp contact">
+
+        </ImageView>
+    </LinearLayout>
+
+    <!-- Donate us layout -->
+    <RelativeLayout
+        android:gravity="center|bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:gravity="center|bottom"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        tools:ignore="UselessParent">
+        <TextView
+            android:textStyle="italic|bold"
+            android:layout_gravity="center"
+            android:text="@string/donate_us"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <ImageView
+            android:id="@+id/donate"
+            android:layout_gravity="center"
+            android:src="@drawable/donate"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            tools:ignore="HardcodedText"
+            android:contentDescription="donate">
+
+        </ImageView>
+        <TextView
+            android:layout_gravity="center"
+            android:text="@string/disclaimer"
+            android:textSize="10sp"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="SmallSp">
+
+        </TextView>
+    </LinearLayout>
+    </RelativeLayout>
+
+<LinearLayout
+    android:gravity="center|bottom"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
+    <TextView
+        android:textStyle="bold|italic"
+        android:id="@+id/tvCreatedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom">
+
+    </TextView>
+</LinearLayout>
+
+</LinearLayout>

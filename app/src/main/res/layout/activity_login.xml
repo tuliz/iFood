@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+    android:isScrollContainer="true"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:context=".Activities.LoginActivity"
+      android:background="@drawable/background3"
+      android:orientation="vertical"
+      android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true">
+
+    <ImageView
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:src="@drawable/logo"
+        android:contentDescription="@string/todo" />
+<LinearLayout
+
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+     android:gravity="center">
+     <TextView
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:text="@string/username">
+     </TextView>
+     <EditText
+            android:focusableInTouchMode="true"
+            android:id="@+id/etUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textStyle="italic"
+            android:hint="@string/username"
+            android:inputType="text"
+            android:importantForAutofill="no">
+      </EditText>
+</LinearLayout>
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+    <TextView
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="5"
+            android:text="@string/password">
+    </TextView>
+    <EditText
+            android:focusableInTouchMode="true"
+            android:importantForAutofill="no"
+            android:id="@+id/etPass"
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword">
+    </EditText>
+</LinearLayout>
+<LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="italic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="@string/remember_me">
+        </TextView>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/btnRemember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+    </LinearLayout>
+     <Button
+           style="?android:attr/buttonBarButtonStyle"
+            android:textStyle="italic"
+            android:layout_margin="5dp"
+            android:id="@+id/btnSign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login">
+     </Button>
+
+</LinearLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="1dp">
+
+    </View>
+<LinearLayout
+    android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:gravity="bottom|center">
+    <TextView
+        android:id="@+id/reset_password"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:text="@string/reset_password"
+        android:textStyle="italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <TextView
+        android:layout_marginBottom="20dp"
+        android:id="@+id/resendVerificationEmail"
+        android:textSize="22sp"
+        android:textStyle="italic"
+        android:text="@string/resend_verification_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+      <TextView
+            android:layout_marginBottom="5dp"
+            android:textStyle="italic"
+            android:id="@+id/tv2"
+            android:textSize="22sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/don_t_have_a_user_click_here">
+      </TextView>
+
+</LinearLayout>
+</LinearLayout>

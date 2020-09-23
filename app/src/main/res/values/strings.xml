@@ -1,0 +1,112 @@
+<resources>
+    <string name="app_name" translatable="false">iFood</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="cancel">Cancel</string>
+    <string name="register">Register</string>
+    <string name="recipe_name">Recipe Name:</string>
+    <string name="recipe_ingredients">Recipe Ingredients:</string>
+    <string name="add_the_needed_ingredients" translatable="false">add the needed ingredients</string>
+    <string name="recipe_instructions">Recipe Instructions:</string>
+    <string name="explain_how_to" translatable="false">explain how to..</string>
+    <string name="save_recipe">Save Recipe</string>
+    <string name="reset">Reset</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_a_user_click_here">Don\'t have a user? click here</string>
+    <string name="remember_me">Remember me</string>
+    <string name="from">From:</string>
+    <string name="message_title">Message Title:</string>
+    <string name="received_date">Received Date:</string>
+    <string name="message_content">Message Content:</string>
+    <string name="replay">Replay</string>
+    <string name="close">Close</string>
+    <string name="here_is_your_recipes_list">Here is your Recipes list -</string>
+    <string name="instructions_for_the_recipe">Instructions for the Recipe:</string>
+    <string name="search">Search</string>
+    <string name="enter_your_ingredients_here">Enter your ingredients here</string>
+    <string name="search_for_a_recipe">Search for a Recipe:</string>
+    <string name="results">Results:</string>
+    <string name="your_favorites">Your Favorites -</string>
+    <string name="method">Instructions</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="recpies">Recipes</string>
+    <string name="favorite_list">Favorite List</string>
+    <string name="search_a_recipe">Search a Recipe</string>
+    <string name="do_you_want_to_view_or_delete_your_recipe">Do you want to view or delete your recipe?</string>
+    <string name="view">View</string>
+    <string name="delete">Delete</string>
+    <string name="are_you_sure_you_want_to_exit">Are you sure you want to Exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="to">To:</string>
+    <string name="message_title_regarding_recipe">Message Title: Regarding recipe:</string>
+    <string name="send">Send</string>
+    <string name="opened_messages">Opened Messages:</string>
+    <string name="unread_messages">Unread Messages:</string>
+    <string name="take_picture_of_your_recipe">Take picture of your recipe</string>
+    <string name="NoRecipesFound">No Recipes found, would you like to add one?</string>
+    <string name="myRecipes">My Recipes</string>
+    <string name="NoFavFound">No Favorite Recipes found, would you like to search for one?</string>
+    <string name="FavRecipes">Favorite Recipes</string>
+    <string name="accept">Accept</string>
+    <string name="psd_example" translatable="false">*************</string>
+    <string name="new_password">New Password:</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="old_password">Old Password:</string>
+    <string name="your_old_password" translatable="false">your old password</string>
+    <string name="step_1">Step 1</string>
+    <string name="step_2">Step 2</string>
+    <string name="step_3">Step 3</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="step_4" translatable="false">Step 4</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="confirm">Confirm</string>
+    <string name="enter_recipe_ingredients">Enter Recipe Ingredients:</string>
+    <string name="upload" translatable="false">Upload</string>
+    <string name="choose_photo">Choose Photo</string>
+    <string name="add_recipes">Add Recipes</string>
+    <string name="recepies">Recepies</string>
+    <string name="home">Home</string>
+    <string name="my_recipes">My Recipes</string>
+    <string name="search_recipe">Search Recipe</string>
+    <string name="inbox">Inbox</string>
+    <string name="exit">Exit</string>
+    <string name="mod_area">Mod Area</string>
+    <string name="waiting_for_approval">Waiting for Approval</string>
+    <string name="admin">Admin</string>
+    <string name="personal_area">Personal Area</string>
+    <string name="profile">Profile</string>
+    <string name="you_can_contact_me_via">You can contact me via:</string>
+    <string name="donate_us">Donate us so we could improve and develop this app:</string>
+    <string name="disclaimer">Disclaimer, all donations are not refundable</string>
+    <string name="rights">"Created by Yakir Malka, all rights reserved "</string>
+    <string name="todo" translatable="false">TODO</string>
+    <string name="password_hint" translatable="false">Password</string>
+    <string name="new_messages">New Messages</string>
+    <string name="old_messages">Old Messages</string>
+    <string name="date_format" translatable="false">dd-MM-yyyy</string>
+
+    <string name="do_you_want_to_reset_your_password_a_link_will_be_sent_to_your_account_email_address">Do you want to reset your password? A link will be sent to your account email address :</string>
+    <string name="connecting_login">Connecting</string>
+    <string name="cant_send_email">Couldn\'t send an Email, please try again later.</string>
+    <string name="psd_link_sent">Password reset link sent to your Email address.</string>
+    <string name="submit">Submit</string>
+    <string name="valid_email">Must enter a valid Email address.</string>
+    <string name="give_email_address">Password reset link will be sent to given Email</string>
+    <string name="incorrect_emailpassword">Incorrect Email/Password</string>
+    <string name="email_verify">Please verify your Email address.</string>
+    <string name="enter_emailpassword">Please enter Email/Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="already_verified">Email already verified.</string>
+    <string name="resend_verification_email">Resend verification Email</string>
+    <string name="password_star">****************</string>
+
+
+</resources>

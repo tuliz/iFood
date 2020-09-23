@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainMenu">
+    <item
+        android:id="@+id/menuHome"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/menu_Recepies"
+        android:title="@string/recepies">
+        <menu>
+
+            <item
+                android:id="@+id/menu_AddRecepie"
+                android:icon="@drawable/ic_add"
+                 android:title="@string/add_recipes"
+                android:visible="true" />
+            <item
+                android:id="@+id/menu_MyRecepies"
+                android:icon="@android:drawable/ic_menu_myplaces"
+                android:title="@string/my_recipes"
+                android:visible="true" />
+            <item
+                android:id="@+id/menu_SearchRecepie"
+                android:icon="@drawable/ic_search"
+                android:title="@string/search_recipe"
+                android:visible="true" />
+
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menuInbox"
+        android:icon="@drawable/ic_message"
+
+        android:title="@string/inbox" />
+    <item
+        android:id="@+id/menu_Exit"
+        android:icon="@drawable/ic_exit"
+        android:title="@string/exit" />
+
+
+</menu>
+

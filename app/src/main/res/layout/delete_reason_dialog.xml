@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_margin="10dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tv1"
+        android:text="Missing info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+    <CheckBox
+        android:id="@+id/reason1"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content">
+
+    </CheckBox>
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tv2"
+        android:text="Bad Picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+    <CheckBox
+        android:id="@+id/reason2"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content">
+
+    </CheckBox>
+</LinearLayout>
+    <TextView
+        android:id="@+id/tv3"
+        android:text="Bad Desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+    <CheckBox
+        android:id="@+id/reason3"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content">
+
+    </CheckBox>
+    <TextView
+        android:id="@+id/tv4"
+        android:text="Bad Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+    <CheckBox
+        android:id="@+id/reason4"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content">
+
+    </CheckBox>
+</LinearLayout>
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/tv5"
+            android:text="Spam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <CheckBox
+            android:id="@+id/reason5"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content">
+
+        </CheckBox>
+        <TextView
+            android:id="@+id/tv6"
+            android:text="Missing Ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+        <CheckBox
+            android:id="@+id/reason6"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content">
+
+        </CheckBox>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginStart="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            android:text="Other:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TextView>
+        <EditText
+            android:id="@+id/etOtherReason"
+            android:layout_weight="2"
+            android:maxLines="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnReasonConfirm"
+            android:text="@string/confirm"
+            android:layout_marginEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+        <Button
+            android:id="@+id/btnReasonCancel"
+            android:text="@string/cancel"
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
+</LinearLayout>

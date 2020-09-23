@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/background3"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activities.SearchRecipe">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_for_a_recipe"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            >
+        </TextView>
+        <EditText
+            android:id="@+id/etSearch"
+            android:hint="@string/enter_your_ingredients_here"
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:minLines="5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:importantForAutofill="no" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/search_Recipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/search">
+        </Button>
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_margin="5dp"
+            android:id="@+id/search_resetField"
+            android:text="@string/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Button>
+    </LinearLayout>
+        <TextView
+            android:text="@string/results"
+            android:textStyle="italic"
+            android:textSize="20sp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </TextView>
+<LinearLayout
+    android:id="@+id/resultsLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecipeResultsLV"
+        android:layout_width="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="true"
+        android:scrollbars="horizontal" />
+</LinearLayout>
+
+</LinearLayout>
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="end"
+        app:hideOnScroll="true"
+        app:menu="@menu/menu_bar"
+        app:navigationIcon="@drawable/ic_menu" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/bottomAddIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorAccent"
+        android:src="@drawable/ic_add"
+        app:layout_anchor="@id/bottomAppBar"
+        app:maxImageSize="35dp"
+        app:menu="@menu/menu_add"
+        app:tint="@color/colorWhite" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
