@@ -117,15 +117,26 @@ public class LoginActivity extends AppCompatActivity {
                 pwdInput = sendEmailDialog.findViewById(R.id.pwd_input);
                 input_cancel.setOnClickListener(v13 -> sendEmailDialog.dismiss());
                 input_ok.setOnClickListener(v14 -> {
-                    mAuth.signInWithEmailAndPassword(emailInput.getText().toString(),pwdInput.getText().toString()).addOnCompleteListener(task -> {
-                        AuthResult authResult = task.getResult();
-                        FirebaseUser firebaseUser = authResult.getUser();
-                        firebaseUser.sendEmailVerification();
-                        Log.w("TAG","Email sent to:"+emailInput.getText().toString());
-                        sendEmailDialog.dismiss();
-                    }).addOnFailureListener(e ->
-                            Log.w("TAG","Exception:"+e.getMessage()));
-                            sendEmailDialog.dismiss();
+                   mAuth.fetchSignInMethodsForEmail(emailInput.getText().toString()).addOnCompleteListener(task -> {
+                       if(!task.getResult().getSignInMethods().isEmpty()){
+                           mAuth.signInWithEmailAndPassword(emailInput.getText().toString(),pwdInput.getText().toString()).addOnCompleteListener(taskSignIn -> {
+                               AuthResult authResult = taskSignIn.getResult();
+                               FirebaseUser firebaseUser = authResult.getUser();
+                               firebaseUser.sendEmailVerification();
+                               Log.w("TAG","Email sent to:"+emailInput.getText().toString());
+                               sendEmailDialog.dismiss();
+                           }).addOnFailureListener(e ->
+                                   Log.w("TAG","Exception:"+e.getMessage()));
+                           Toast.makeText(LoginActivity.this,"Wrong Email/Password",Toast.LENGTH_SHORT).show();
+                       }else{
+                           Toast.makeText(LoginActivity.this,"No user found with this email address",Toast.LENGTH_SHORT).show();
+                           sendEmailDialog.dismiss();
+                       }
+                   }).addOnFailureListener(e -> {
+                       Log.w("TAG","Error:"+e.getMessage());
+                   });
+
+
                 });
                 sendEmailDialog.show();
             }
