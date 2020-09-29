@@ -29,7 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.nex3z.notificationbadge.NotificationBadge;
+
 
 import java.util.Objects;
 
@@ -40,7 +40,7 @@ import static android.content.Context.MODE_PRIVATE;
  * This fragments is responsible for our menu
  */
 public class NavDrawFragment extends BottomSheetDialogFragment {
-    NotificationBadge notificationBadge;
+
     DatabaseReference messagesRef = FirebaseDatabase.getInstance().getReference().child("Messages");
     String username,userRole;
     SharedPreferences pref;

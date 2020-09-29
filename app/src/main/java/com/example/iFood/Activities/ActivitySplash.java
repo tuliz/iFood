@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iFood.R;
 
+/**
+ * Splash Activity, first screen that user sees when he open the application.
+ */
 public class ActivitySplash extends AppCompatActivity {
 
 

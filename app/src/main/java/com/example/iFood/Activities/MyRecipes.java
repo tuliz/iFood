@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
 
@@ -68,42 +69,32 @@ public class MyRecipes extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavDrawFragment bottomNavFrag = new NavDrawFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("username",userName);
-                bundle.putString("userRole",userRole);
-                bottomNavFrag.setArguments(bundle);
-                bottomNavFrag.show(getSupportFragmentManager(),"TAG");
-
-            }
-        });
-        ///////////////////////////////
-        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                if(id == R.id.bottomAbout){
-                    Intent about = new Intent(MyRecipes.this, About.class);
-                    startActivity(about);
-                }
-                return false;
-            }
+        bottomAppBar.setNavigationOnClickListener(v -> {
+            NavDrawFragment bottomNavFrag = new NavDrawFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("username",userName);
+            bundle.putString("userRole",userRole);
+            bottomNavFrag.setArguments(bundle);
+            bottomNavFrag.show(getSupportFragmentManager(),"TAG");
 
         });
         ///////////////////////////////
-        addIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddDrawFragment addIcon = new AddDrawFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("username",userName);
-                bundle.putString("userRole",userRole);
-                addIcon.setArguments(bundle);
-                addIcon.show(getSupportFragmentManager(),"TAG");
+        bottomAppBar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if(id == R.id.bottomAbout){
+                Intent about = new Intent(MyRecipes.this, About.class);
+                startActivity(about);
             }
+            return false;
+        });
+        ///////////////////////////////
+        addIcon.setOnClickListener(v -> {
+            AddDrawFragment addIcon = new AddDrawFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("username",userName);
+            bundle.putString("userRole",userRole);
+            addIcon.setArguments(bundle);
+            addIcon.show(getSupportFragmentManager(),"TAG");
         });
 
 
@@ -128,7 +119,7 @@ public class MyRecipes extends AppCompatActivity {
                 for(DataSnapshot dst : dataSnapshot.getChildren()){
                     for(DataSnapshot userRecipes : dst.getChildren())
                             // check  the user name and add to his list
-                        if (userRecipes.getKey().equals(userName)) {
+                        if (Objects.equals(userRecipes.getKey(), userName)) {
                             Recipes userRec = userRecipes.getValue(Recipes.class);
                             myRecipes.add(userRec);
                             refresh_lv();
@@ -200,33 +191,22 @@ public class MyRecipes extends AppCompatActivity {
 
             builder.setMessage(R.string.NoRecipesFound);
             builder.setTitle(R.string.myRecipes);
-            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent moveToAdd = new Intent(MyRecipes.this, AddRecipe.class);
-                    moveToAdd.putExtra("username", userName);
-                    moveToAdd.putExtra("userRole",userRole);
-                    startActivity(moveToAdd);
-                }
+            builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+            builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                Intent moveToAdd = new Intent(MyRecipes.this, AddRecipe.class);
+                moveToAdd.putExtra("username", userName);
+                moveToAdd.putExtra("userRole",userRole);
+                startActivity(moveToAdd);
             });
             final AlertDialog alertMyRecipes = builder.create();
-            alertMyRecipes.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    params.setMargins(20,0,0,0);
-                    Button button = alertMyRecipes.getButton(AlertDialog.BUTTON_POSITIVE);
-                    button.setLayoutParams(params);
-                }
+            alertMyRecipes.setOnShowListener(dialog -> {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(20,0,0,0);
+                Button button = alertMyRecipes.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setLayoutParams(params);
             });
             alertMyRecipes.show();
         }

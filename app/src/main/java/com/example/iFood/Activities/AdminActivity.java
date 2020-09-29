@@ -137,6 +137,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(AdminActivity.this,"Search credentials are not valid",Toast.LENGTH_SHORT).show();
             }
             else {
+                usersPieData=null;
+                recipesPieData=null;
                 refUsers.orderByKey();
                 refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -160,7 +162,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                           }
                       }
                         if(userCount>0) {
-                            usersPieData.add(new SliceValue(userCount, Color.GREEN).setLabel("Users :" + userCount));
+                            if (userCount != userTotalCount){
+                                usersPieData.add(new SliceValue(userCount, Color.GREEN).setLabel("Users :" + userCount));
+                            }
                             usersPieData.add(new SliceValue(userTotalCount, Color.parseColor("#FF5252")).setLabel("Total Users :"+userTotalCount));
                             userCount=0;
                         }else{
@@ -200,9 +204,11 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
                         }
                         if(recipeCount>0) {
-                            recipesPieData.add(new SliceValue(recipeCount, Color.RED).setLabel("Recipes :" + recipeCount));
+                            if (recipeCount != recipeTotalCount) {
+                                recipesPieData.add(new SliceValue(recipeCount, Color.RED).setLabel("Recipes :" + recipeCount));
+                            }
                             recipesPieData.add(new SliceValue(recipeTotalCount, Color.parseColor("#3F51B5")).setLabel("Total Recipes :"+recipeTotalCount));
-                            recipeCount=0;
+                            recipeCount = 0;
                         }else{
                             recipesPieData.add(new SliceValue(recipeTotalCount, Color.parseColor("#3F51B5")).setLabel("Total Recipes :"+recipeTotalCount));
                         }
@@ -245,8 +251,6 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         toDate = findViewById(R.id.toDate);
         bottomAppBar = findViewById(R.id.bottomAppBar);
         addIcon = findViewById(R.id.bottomAddIcon);
-       // usersAmount = findViewById(R.id.usersAmount);
-      //  recipeAmount = findViewById(R.id.recipeAmount);
         btnSearch = findViewById(R.id.btnSearchAdmin);
 
     }

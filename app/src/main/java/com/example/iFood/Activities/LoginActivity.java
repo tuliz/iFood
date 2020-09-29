@@ -1,5 +1,6 @@
 package com.example.iFood.Activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,17 +22,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.example.iFood.Activities.oldActivities.AddRecipe;
 import com.example.iFood.Classes.Users;
 import com.example.iFood.Notification.MyFireBaseMessagingService;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 /**
  *
@@ -47,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView reset_password,resend_authEmail,signupText;
     SwitchCompat rmbMe;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    Dialog sendEmailDialog;
     EditText etUser,etPass;
     Users u;
 
@@ -62,11 +73,12 @@ public class LoginActivity extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-        pref = getSharedPreferences("userData",MODE_PRIVATE);
+
         // Declare variables ( function at the end )
         setVars();
 
         // Check if the user did asked to be remembered last time he logged in the Application
+        pref = getSharedPreferences("userData",MODE_PRIVATE);
         if(pref.contains("username")&&pref.contains("userRole")){
 
             Intent main = new Intent(LoginActivity.this, MainActivity.class);
@@ -84,7 +96,8 @@ public class LoginActivity extends AppCompatActivity {
         resend_authEmail.setOnClickListener(v -> {
             // Getting user from Firebase
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // If user is null meaning he never signed up before
+
+            // If user is null meaning he never signed up before in this device
             if(user!= null) {
                 if (!user.isEmailVerified()) {
                     Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
@@ -93,7 +106,28 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, R.string.already_verified, Toast.LENGTH_SHORT).show();
                 }
             }else{
-                Toast.makeText(LoginActivity.this, "Please sign up before trying to validate your account.", Toast.LENGTH_SHORT).show();
+                Button input_ok,input_cancel;
+                TextView emailInput,pwdInput;
+                sendEmailDialog = new Dialog(LoginActivity.this);
+                sendEmailDialog.setContentView(R.layout.resend_email_dialog);
+                sendEmailDialog.setTitle("verification email");
+                input_cancel = sendEmailDialog.findViewById(R.id.input_cancel);
+                input_ok = sendEmailDialog.findViewById(R.id.input_ok);
+                emailInput = sendEmailDialog.findViewById(R.id.email_input);
+                pwdInput = sendEmailDialog.findViewById(R.id.pwd_input);
+                input_cancel.setOnClickListener(v13 -> sendEmailDialog.dismiss());
+                input_ok.setOnClickListener(v14 -> {
+                    mAuth.signInWithEmailAndPassword(emailInput.getText().toString(),pwdInput.getText().toString()).addOnCompleteListener(task -> {
+                        AuthResult authResult = task.getResult();
+                        FirebaseUser firebaseUser = authResult.getUser();
+                        firebaseUser.sendEmailVerification();
+                        Log.w("TAG","Email sent to:"+emailInput.getText().toString());
+                        sendEmailDialog.dismiss();
+                    }).addOnFailureListener(e ->
+                            Log.w("TAG","Exception:"+e.getMessage()));
+                            sendEmailDialog.dismiss();
+                });
+                sendEmailDialog.show();
             }
         });
         reset_password.setOnClickListener(v -> {
@@ -307,7 +341,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
      /**
      * Register our Broadcast Receiver when opening the app.
      */
@@ -325,6 +358,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onStop();
         unregisterReceiver(bcr);
     }
+
+    /**
+     * Check if the Email address is valid with the expression of example@.something.com
+     * @param target Gets Email string.
+     * @return if Email address is valid or not.
+     */
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
