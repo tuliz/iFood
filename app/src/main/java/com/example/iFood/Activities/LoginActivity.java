@@ -96,7 +96,6 @@ public class LoginActivity extends AppCompatActivity {
         resend_authEmail.setOnClickListener(v -> {
             // Getting user from Firebase
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
             // If user is null meaning he never signed up before in this device
             if(user!= null) {
                 if (!user.isEmailVerified()) {
@@ -106,39 +105,58 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, R.string.already_verified, Toast.LENGTH_SHORT).show();
                 }
             }else{
+                // Bring up a dialog to the user to enter his details
+
+                // Declare variables
                 Button input_ok,input_cancel;
                 TextView emailInput,pwdInput;
                 sendEmailDialog = new Dialog(LoginActivity.this);
+                // Set Layout to Dialog
                 sendEmailDialog.setContentView(R.layout.resend_email_dialog);
+                // Set Title to Dialog
                 sendEmailDialog.setTitle("verification email");
+                // Set Variables
                 input_cancel = sendEmailDialog.findViewById(R.id.input_cancel);
                 input_ok = sendEmailDialog.findViewById(R.id.input_ok);
                 emailInput = sendEmailDialog.findViewById(R.id.email_input);
                 pwdInput = sendEmailDialog.findViewById(R.id.pwd_input);
+                // OnClickListeners
                 input_cancel.setOnClickListener(v13 -> sendEmailDialog.dismiss());
                 input_ok.setOnClickListener(v14 -> {
-                   mAuth.fetchSignInMethodsForEmail(emailInput.getText().toString()).addOnCompleteListener(task -> {
-                       if(!task.getResult().getSignInMethods().isEmpty()){
-                           mAuth.signInWithEmailAndPassword(emailInput.getText().toString(),pwdInput.getText().toString()).addOnCompleteListener(taskSignIn -> {
-                               AuthResult authResult = taskSignIn.getResult();
-                               FirebaseUser firebaseUser = authResult.getUser();
-                               firebaseUser.sendEmailVerification();
-                               Log.w("TAG","Email sent to:"+emailInput.getText().toString());
-                               sendEmailDialog.dismiss();
-                           }).addOnFailureListener(e ->
-                                   Log.w("TAG","Exception:"+e.getMessage()));
-                           Toast.makeText(LoginActivity.this,"Wrong Email/Password",Toast.LENGTH_SHORT).show();
-                       }else{
-                           Toast.makeText(LoginActivity.this,"No user found with this email address",Toast.LENGTH_SHORT).show();
-                           sendEmailDialog.dismiss();
-                       }
-                   }).addOnFailureListener(e -> {
-                       Log.w("TAG","Error:"+e.getMessage());
-                   });
+                    // if one of the fields is empty, promote a toast to the user
+                    if(emailInput.getText().toString().isEmpty() || pwdInput.getText().toString().isEmpty()){
+                        Toast.makeText(LoginActivity.this, "Please enter your email and password", Toast.LENGTH_SHORT).show();
+                    }
+                    // Check if the give email is actually registered in our DB
+                   else {
+                        mAuth.fetchSignInMethodsForEmail(emailInput.getText().toString()).addOnCompleteListener(task -> {
+                            // if there is values, mean user registered this email to our DB before, so we could make a sign in and send a verification email
+                            if (!task.getResult().getSignInMethods().isEmpty()) {
+                                mAuth.signInWithEmailAndPassword(emailInput.getText().toString(), pwdInput.getText().toString()).addOnCompleteListener(taskSignIn -> {
+                                    AuthResult authResult = taskSignIn.getResult();
+                                    FirebaseUser firebaseUser = authResult.getUser();
+                                    firebaseUser.sendEmailVerification();
+                                    Log.w("TAG", "Email sent to:" + emailInput.getText().toString());
+                                    sendEmailDialog.dismiss();
+                                }).addOnFailureListener(e ->
+                                        Log.w("TAG", "Exception:" + e.getMessage()));
+                                Toast.makeText(LoginActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "No user found with this email address", Toast.LENGTH_SHORT).show();
+                                sendEmailDialog.dismiss();
+                            }
+                        }).addOnFailureListener(e -> {
+                            Log.w("TAG", "Error:" + e.getMessage());
+                        });
 
-
+                    }
                 });
                 sendEmailDialog.show();
+                // Expand the width of dialog to maximum screen width
+                Window window = sendEmailDialog.getWindow();
+                // Make sure the given window is not null
+                assert window != null;
+                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             }
         });
         reset_password.setOnClickListener(v -> {
@@ -259,68 +277,6 @@ public class LoginActivity extends AppCompatActivity {
                             // ...
                         });
             }
-            /*
-            if(!etUser.getText().toString().isEmpty() && !etPass.getText().toString().isEmpty()){
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                Query q = ref.child("Users").orderByValue();
-                q.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        boolean foundUser = false;
-                        for(DataSnapshot dbAnswer : dataSnapshot.getChildren()) {
-                            u = dbAnswer.getValue(Users.class);
-                            assert u != null;
-                            String passWord = etPass.getText().toString();
-                            passWord = checkPass();
-                            if (u.getUsername().equals(etUser.getText().toString()) && u.getPassword().equals(passWord)) {
-                                foundUser=true;
-                                userRole = u.userRole;
-                                break;
-                            }
-                        }
-                        if(foundUser){
-
-                           if(rmbMe.isChecked()) {
-                                saveData();
-                               // doService();
-                                Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                                main.putExtra("username", etUser.getText().toString());
-                                main.putExtra("userRole",userRole);
-                                startActivity(main);
-                            }else{
-                                //doService();
-                                Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                                main.putExtra("username", etUser.getText().toString());
-                                main.putExtra("userRole",userRole);
-                                startActivity(main);
-                            }
-                           }else {
-                            Toast.makeText(LoginActivity.this, "Incorrect username and/or password, check again", Toast.LENGTH_SHORT).show();
-                            etPass.setText("");
-                            etUser.setText("");
-                            etUser.hasFocus();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle error here
-                    }
-                });
-            }else{
-                if(etUser.getText().toString().isEmpty()){
-                 //   Toast.makeText(LoginActivity.this,"Username cannot be empty",Toast.LENGTH_SHORT).show();
-                    etUser.hasFocus();
-                    etUser.setError("Username cannot be empty");
-                    etPass.setText("");
-                }
-                if(etPass.getText().toString().isEmpty()){
-                  //  Toast.makeText(LoginActivity.this,"Password cannot be empty",Toast.LENGTH_SHORT).show();
-                    etPass.setError("Password cannot be empty");
-                    etPass.hasFocus();
-
-                }
-            }*/
         });
     } // onCreate ends
 
