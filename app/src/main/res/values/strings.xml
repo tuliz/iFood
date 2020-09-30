@@ -83,10 +83,10 @@
     <string name="admin">Admin</string>
     <string name="personal_area">Personal Area</string>
     <string name="profile">Profile</string>
-    <string name="you_can_contact_me_via">You can contact me via:</string>
+    <string name="you_can_contact_me_via">You can contact us via:</string>
     <string name="donate_us">Donate us so we could improve and develop this app:</string>
     <string name="disclaimer">Disclaimer, all donations are not refundable</string>
-    <string name="rights">"Created by Yakir Malka, all rights reserved "</string>
+    <string name="rights">"Created by Yakir Malka and Yarden Tulchinsky, all rights reserved "</string>
     <string name="todo" translatable="false">TODO</string>
     <string name="password_hint" translatable="false">Password</string>
     <string name="new_messages">New Messages</string>
@@ -106,7 +106,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="already_verified">Email already verified.</string>
     <string name="resend_verification_email">Resend verification Email</string>
-    <string name="password_star">****************</string>
+    <string name="password_star" translatable="false">****************</string>
 
 
 </resources>
