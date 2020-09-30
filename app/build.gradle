@@ -27,21 +27,14 @@ android {
 dependencies {
 
 
-    // work manager
-    def work_version = "2.3.3"
-    implementation 'androidx.work:work-runtime:2.0.1'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     // Firebase Related
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-storage:19.2.0'
-
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
-    implementation 'com.google.firebase:firebase-database:19.4.0'
+    implementation 'com.google.firebase:firebase-database:19.5.0'
     implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
     // Notification
@@ -66,4 +59,5 @@ dependencies {
 
 repositories {
     google()
+
 }
