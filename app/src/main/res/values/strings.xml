@@ -92,7 +92,6 @@
     <string name="new_messages">New Messages</string>
     <string name="old_messages">Old Messages</string>
     <string name="date_format" translatable="false">dd-MM-yyyy</string>
-
     <string name="do_you_want_to_reset_your_password_a_link_will_be_sent_to_your_account_email_address">Do you want to reset your password? A link will be sent to your account email address :</string>
     <string name="connecting_login">Connecting</string>
     <string name="cant_send_email">Couldn\'t send an Email, please try again later.</string>

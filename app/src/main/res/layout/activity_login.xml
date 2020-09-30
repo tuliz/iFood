@@ -2,7 +2,7 @@
 <LinearLayout
       xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
-    android:isScrollContainer="true"
+      android:isScrollContainer="true"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:context=".Activities.LoginActivity"
