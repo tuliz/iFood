@@ -1,6 +1,5 @@
 package com.example.iFood.Activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,18 +20,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
-import com.example.iFood.Activities.oldActivities.AddRecipe;
 import com.example.iFood.Classes.Users;
 import com.example.iFood.Notification.MyFireBaseMessagingService;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -131,22 +124,24 @@ public class LoginActivity extends AppCompatActivity {
                    else {
                         mAuth.fetchSignInMethodsForEmail(emailInput.getText().toString()).addOnCompleteListener(task -> {
                             // if there is values, mean user registered this email to our DB before, so we could make a sign in and send a verification email
-                            if (!task.getResult().getSignInMethods().isEmpty()) {
+                            if (!Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getSignInMethods()).isEmpty()) {
                                 mAuth.signInWithEmailAndPassword(emailInput.getText().toString(), pwdInput.getText().toString()).addOnCompleteListener(taskSignIn -> {
                                     AuthResult authResult = taskSignIn.getResult();
+                                    assert authResult != null;
                                     FirebaseUser firebaseUser = authResult.getUser();
+                                    assert firebaseUser != null;
                                     firebaseUser.sendEmailVerification();
-                                    Log.w("TAG", "Email sent to:" + emailInput.getText().toString());
+                                    //Log.w("TAG", "Email sent to:" + emailInput.getText().toString());
                                     sendEmailDialog.dismiss();
                                 }).addOnFailureListener(e ->
-                                        Log.w("TAG", "Exception:" + e.getMessage()));
-                                Toast.makeText(LoginActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show();
+                                        //Log.w("TAG", "Exception:" + e.getMessage()));
+                                Toast.makeText(LoginActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show());
                             } else {
                                 Toast.makeText(LoginActivity.this, "No user found with this email address", Toast.LENGTH_SHORT).show();
                                 sendEmailDialog.dismiss();
                             }
                         }).addOnFailureListener(e -> {
-                            Log.w("TAG", "Error:" + e.getMessage());
+                            //Log.w("TAG", "Error:" + e.getMessage());
                         });
 
                     }
@@ -217,6 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("TAG", "signInWithEmail:success");
                                 final FirebaseUser user = mAuth.getCurrentUser();
+                                assert user != null;
                                 if (user.isEmailVerified()) {
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                     ref.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -242,15 +238,14 @@ public class LoginActivity extends AppCompatActivity {
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", u.userRole);
                                                     startActivity(main);
-                                                    progressDialog.dismiss();
                                                 } else {
 
                                                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", userRole);
                                                     startActivity(main);
-                                                    progressDialog.dismiss();
                                                 }
+                                                progressDialog.dismiss();
                                             }
                                         }
 

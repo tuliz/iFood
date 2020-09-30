@@ -244,6 +244,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
         super.onResume();
     }
+
+    /**
+     * When user click the refresh button, pull the data again from DB.
+     */
     private void refreshPage(){
         pullUserData();
     }
@@ -274,6 +278,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     public void setImage(int requestCode, Intent data) {
         String mPath = EditItemImage.mPath;
           switch (requestCode) {
@@ -328,6 +333,12 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    /**
+     * @param source Source Image to rotate
+     * @param angle the angle to rotate the Image
+     * @return Rotated Image
+     */
     public Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -351,9 +362,17 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Clear the image was taken by the User and replace it with noImage.png
+     */
     public void clearImage() {
         userProfileImage.setImageResource(R.drawable.no_image);
     }
+
+    /**
+     * Function that send the new photo to our Firebase Storage
+     */
     private void updatePhoto() {
 
         new Thread(() -> {

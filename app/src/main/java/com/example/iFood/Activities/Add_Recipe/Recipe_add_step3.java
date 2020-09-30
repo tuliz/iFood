@@ -2,7 +2,6 @@ package com.example.iFood.Activities.Add_Recipe;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -176,8 +175,5 @@ public class Recipe_add_step3 extends Fragment {
         bitmapImage = BitmapFactory.decodeStream(isBm, null, null);//The ByteArrayInputStream data generation
     }
 
-    public void clearImage() {
-        ivRecipeImage.setImageResource(R.drawable.no_image);
-        bitmapImage=null;
-    }
+
 }
