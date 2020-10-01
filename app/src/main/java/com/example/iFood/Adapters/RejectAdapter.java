@@ -53,13 +53,26 @@ public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> 
         }
         holder.recipeTitle.setText(mData.get(position).getTitle());
         holder.cardView.setOnClickListener(v -> {
-            Intent intent1 = new Intent(mContext, RecipeActivity.class);
+            Intent rejectIntent = new Intent(mContext, RecipeActivity.class);
+
+            rejectIntent.putExtra("addedBy",mData.get(position).getAddedBy());
+            rejectIntent.putExtra("approved",check);
+            rejectIntent.putExtra("username",userName);
+            rejectIntent.putExtra("userRole",userRole);
+            rejectIntent.putExtra("RecipeName",mData.get(position).getTitle());
+            rejectIntent.putExtra("RecipeIngredients",mData.get(position).getIngredients());
+            rejectIntent.putExtra("RecipeMethodTitle",mData.get(position).getRecipeMethodTitle());
+            rejectIntent.putExtra("Recipe",mData.get(position).getContent());
+            rejectIntent.putExtra("id",mData.get(position).getRecipeID());
+            rejectIntent.putExtra("Thumbnail",mData.get(position).getRecipeUrl());
+            rejectIntent.putExtra("removeDate",mData.get(position).getRejectDate());
+            rejectIntent.putExtra("rejectReasons",mData.get(position).getRejectReasons());
+            rejectIntent.putExtra("time",mData.get(position).getTimestamp().toString());
 
 
 
 
-
-            mContext.startActivity(intent1);
+            mContext.startActivity(rejectIntent);
         });
     }
 

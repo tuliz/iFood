@@ -11,12 +11,13 @@ public class RejectedRecipe {
     public String rejectReasons;
     public String addedBy;
     private boolean approved;
+    public String rejectDate;
     public Object timestamp;
 
 
     RejectedRecipe(){}
 
-    public RejectedRecipe(String recipeID, String title, String content, String recipeMethodTitle, String ingredients, String recipeUrl, String rejectReasons, String addedBy, boolean approved, Object timestamp) {
+    public RejectedRecipe(String recipeID, String title, String content, String recipeMethodTitle, String ingredients, String recipeUrl, String rejectReasons, String addedBy, boolean approved,String rejectDate ,Object timestamp) {
         this.recipeID = recipeID;
         Title = title;
         Content = content;
@@ -27,6 +28,15 @@ public class RejectedRecipe {
         this.addedBy = addedBy;
         this.approved = approved;
         this.timestamp = timestamp;
+        this.rejectDate = rejectDate;
+    }
+
+    public String getRejectDate() {
+        return rejectDate;
+    }
+
+    public void setRejectDate(String rejectDate) {
+        this.rejectDate = rejectDate;
     }
 
     public String getRecipeID() {

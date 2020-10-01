@@ -20,6 +20,7 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateVisible|adjustResize"
         tools:targetApi="q">
+        <activity android:name=".Activities.RejectedRecipeActivity"></activity>
         <activity
             android:name=".Activities.RejectedList"
             android:screenOrientation="portrait" />

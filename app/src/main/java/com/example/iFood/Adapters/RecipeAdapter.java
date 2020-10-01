@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iFood.Activities.RecipeActivity;
+import com.example.iFood.Activities.RejectedRecipeActivity;
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.R;
 import com.squareup.picasso.Picasso;
@@ -47,7 +48,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
         View view ;
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         view = layoutInflater.inflate(R.layout.cardview_recipe,viewGroup,false);
-        return  new MyHolder(view);
+        return new MyHolder(view);
     }
 
     @Override
@@ -61,25 +62,22 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
 
         }
         myHolder.recipeTitle.setText(mData.get(i).getRecipeName());
-        myHolder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, RecipeActivity.class);
-                intent.putExtra("activity",activity);
-                intent.putExtra("addedBy",mData.get(i).getAddedBy());
-                intent.putExtra("approved",check);
-                intent.putExtra("username",userName);
-                intent.putExtra("userRole",userRole);
-                intent.putExtra("RecipeName",mData.get(i).getRecipeName());
-                intent.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
-                intent.putExtra("RecipeMethodTitle",mData.get(i).getRecipeMethodTitle());
-                intent.putExtra("Recipe",mData.get(i).getRecipe());
-                intent.putExtra("id",mData.get(i).getId());
-                intent.putExtra("Thumbnail",mData.get(i).getRecipePicture());
+        myHolder.cardView.setOnClickListener(v -> {
+            Intent intent1 = new Intent(mContext, RejectedRecipeActivity.class);
+            intent1.putExtra("activity",activity);
+            intent1.putExtra("addedBy",mData.get(i).getAddedBy());
+            intent1.putExtra("approved",check);
+            intent1.putExtra("username",userName);
+            intent1.putExtra("userRole",userRole);
+            intent1.putExtra("RecipeName",mData.get(i).getRecipeName());
+            intent1.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
+            intent1.putExtra("RecipeMethodTitle",mData.get(i).getRecipeMethodTitle());
+            intent1.putExtra("Recipe",mData.get(i).getRecipe());
+            intent1.putExtra("id",mData.get(i).getId());
+            intent1.putExtra("Thumbnail",mData.get(i).getRecipePicture());
 
 
-                mContext.startActivity(intent);
-            }
+            mContext.startActivity(intent1);
         });
     }
 

@@ -277,17 +277,18 @@ public class RecipeActivity extends AppCompatActivity {
                     myDialog.dismiss();
                     if(!reason.isEmpty()) {
 
+                        // Get the time of declined recipe
+                        Date date = Calendar.getInstance().getTime();
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+                        String formattedDate = df.format(date);
                         DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
                         // Get the recipe details for future review later on
                         RejectedRecipe rejectedRecipe;
                         rejectedRecipe = new RejectedRecipe(recipeID,mRecipeName.getText().toString(),mRecipe.getTextContent().toString(),mRecipeMethodTitle.getText().toString()
-                                ,mRecipeIngredients.getTextContent().toString(),recipeImage,reason,addedBy,false,time);
+                                ,mRecipeIngredients.getTextContent().toString(),
+                                recipeImage,reason,addedBy,false,
+                                formattedDate,time);
                         deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe).addOnSuccessListener(aVoid -> {
-                            // Get the time of declined recipe
-                            Date date = Calendar.getInstance().getTime();
-                            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-                            String formattedDate = df.format(date);
-                            deleted_list.child(userName).child(recipeID).child("Reject Date").setValue(formattedDate);
                             // Remove the recipe from waiting list
                             recipesRef.child(recipeID).removeValue();
                             finish();

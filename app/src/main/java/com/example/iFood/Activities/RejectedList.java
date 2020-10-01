@@ -1,9 +1,15 @@
 package com.example.iFood.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import com.example.iFood.Adapters.RecipeAdapter;
@@ -16,6 +22,12 @@ import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +39,7 @@ public class RejectedList extends AppCompatActivity {
     RecyclerView rejectedList;
     RejectAdapter myAdapter;
     List<RejectedRecipe> rejectedRecipeList = new ArrayList<>();
+    DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,5 +85,80 @@ public class RejectedList extends AppCompatActivity {
             addIcon.show(getSupportFragmentManager(),"TAG");
         });
 
+    } // onCreate ends
+
+
+    private void getRecipeList(){
+        // enter all recipes fetched from DB to arrayList that are not approved by mod/admin
+
+        new Thread(() -> {
+            Query dbQuery = deleted_list.orderByKey();
+            dbQuery.addValueEventListener(new ValueEventListener() {
+                @SuppressLint("UseCompatLoadingForDrawables")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    rejectedRecipeList.clear();
+                    for(DataSnapshot dst : dataSnapshot.getChildren()) {
+                        for(DataSnapshot dst2 : dst.getChildren()) {
+                            if (dst2.exists()) {
+
+                                String check = String.valueOf(dst2.child("approved").getValue());
+                                if(check.equals("false")){
+                                    RejectedRecipe rec = dst2.getValue(RejectedRecipe.class);
+                                    rejectedRecipeList.add(rec);
+                                    // Call function to post all the recipes
+                                    refresh_lv();
+                                }
+
+                            }
+                        }
+                    }
+                    if(rejectedRecipeList.size() < 1){
+                        refresh_lv();
+                        CoordinatorLayout coordinatorLayout = findViewById(R.id.mainLayoutReject);
+                        coordinatorLayout.setBackground(getDrawable(R.drawable.all_clear_background));
+                    }else{
+                        CoordinatorLayout coordinatorLayout = findViewById(R.id.mainLayoutReject);
+                        coordinatorLayout.setBackground(getDrawable(R.drawable.background3));
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }).start();
+
+    }
+
+
+    /**
+     * This function is responsible for refreshing our Listview with our customer Adapter.
+     * spanCount controls on the amount of items on each row.
+     */
+    private void refresh_lv(){
+        myAdapter = new RejectAdapter(this,rejectedRecipeList);
+
+        rejectedList.setLayoutManager(new GridLayoutManager(this,1));
+
+        rejectedList.setAdapter(myAdapter);
+    }
+
+    /**
+     * Register our Broadcast Receiver when opening the app.
+     */
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(bcr,filter);
+    }
+
+    /**
+     * Stop our Broadcast Receiver when the app is closed.
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(bcr);
     }
 }
