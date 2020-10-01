@@ -20,7 +20,9 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateVisible|adjustResize"
         tools:targetApi="q">
-        <activity android:name=".RejectedList"></activity>
+        <activity
+            android:name=".Activities.RejectedList"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.LoginActivity"
             android:screenOrientation="portrait" />

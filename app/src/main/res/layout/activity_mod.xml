@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:background="@drawable/background3"
     android:id="@+id/mainLayoutMod"
-    tools:context=".Activities.MainActivity">
+    tools:context=".Activities.ModActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/modList"
