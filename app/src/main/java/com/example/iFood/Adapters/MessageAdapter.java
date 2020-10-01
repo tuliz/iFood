@@ -46,11 +46,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyHolder
     private List<Message> mData;
 
 
-
-
-
-
-
     public MessageAdapter(Context mContext, List<Message> mData){
         this.mContext = mContext;
         this.mData = mData;

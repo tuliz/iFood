@@ -26,8 +26,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.example.iFood.Classes.Recipes;
+import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -273,18 +276,13 @@ public class RecipeActivity extends AppCompatActivity {
                  Log.w("TAG","Reason :"+reason);
                     myDialog.dismiss();
                     if(!reason.isEmpty()) {
-                        String storageUrl = recipeImage;
 
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
-                        storageReference.delete().addOnSuccessListener(aVoid -> {
-                            // File deleted successfully so now remove from main DB
-                            DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
-                            // Enter the reason selected string from above
-                            deleted_list.child(userName).child(recipeID).child("Reject Reason").setValue(reason);
-                            // Get the recipe details for future review later on
-                            deleted_list.child(userName).child(recipeID).child("Title").setValue(mRecipeName.getText().toString());
-                            deleted_list.child(userName).child(recipeID).child("Content").setValue(mRecipe.getTextContent().toString());
-                            deleted_list.child(userName).child(recipeID).child("Ingredients").setValue(mRecipeIngredients.getTextContent().toString());
+                        DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
+                        // Get the recipe details for future review later on
+                        RejectedRecipe rejectedRecipe;
+                        rejectedRecipe = new RejectedRecipe(recipeID,mRecipeName.getText().toString(),mRecipe.getTextContent().toString(),mRecipeMethodTitle.getText().toString()
+                                ,mRecipeIngredients.getTextContent().toString(),recipeImage,reason,addedBy,false,time);
+                        deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe).addOnSuccessListener(aVoid -> {
                             // Get the time of declined recipe
                             Date date = Calendar.getInstance().getTime();
                             SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
@@ -293,10 +291,23 @@ public class RecipeActivity extends AppCompatActivity {
                             // Remove the recipe from waiting list
                             recipesRef.child(recipeID).removeValue();
                             finish();
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(RecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
+                            Log.w("TAG","Error:"+e.getMessage());
+                        });
+
+                        /*
+                        String storageUrl = recipeImage;
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
+                        storageReference.delete().addOnSuccessListener(aVoid -> {
+                            // File deleted successfully so now remove from main DB
+
                         }).addOnFailureListener(exception -> {
                             // Uh-oh, an error occurred! toast message to user
                             Toast.makeText(RecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
                         });
+                        */
+
                     }else{
                         Toast.makeText(RecipeActivity.this,"Please choose at least 1 option.",Toast.LENGTH_SHORT).show();
                     }

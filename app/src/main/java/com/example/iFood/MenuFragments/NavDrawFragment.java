@@ -79,6 +79,7 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                 if(userRole.equals("admin")) {
                    // Log.i("role","Found Admin, role:"+userRole);
                     nav_Menu.findItem(R.id.menu_admin).setVisible(true);
+                    nav_Menu.findItem(R.id.menu_rejectList).setVisible(true);
                 }
         }else{
          //   Log.i("role","Normal member? role:"+userRole);
@@ -109,6 +110,10 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                     profile.putExtra("username",username);
                     profile.putExtra("userRole",userRole);
                     startActivity(profile);
+
+                    break;
+
+                case R.id.menu_rejectList:
 
                     break;
                 case R.id.menuHome:

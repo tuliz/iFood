@@ -10,8 +10,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-
-        android:usesCleartextTraffic="true"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,45 +17,66 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateVisible|adjustResize"
         tools:targetApi="q">
-        <activity android:name=".Activities.LoginActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Inbox.Inbox_new"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.Add_Recipe.addRecipe_New"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.AdminActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ModActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.connectionActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ProfileActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.FavoriteRecipes"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.SendMessage"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.MessageActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.About"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.SignUpActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.oldActivities.Inbox"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.SearchRecipe"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.MyRecipes"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.oldActivities.AddRecipe"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.RecipeActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activities.ActivitySplash"
+        <activity android:name=".RejectedList"></activity>
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Inbox.Inbox_new"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Add_Recipe.addRecipe_New"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.AdminActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ModActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.connectionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.FavoriteRecipes"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.SendMessage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.MessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.About"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.SignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.oldActivities.Inbox"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.SearchRecipe"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.MyRecipes"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.oldActivities.AddRecipe"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.RecipeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.ActivitySplash"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,6 +84,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name=".Utils.GenericFileProvider"
             android:authorities="${applicationId}.provider"
@@ -74,10 +94,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <service
             android:name=".Notification.MyFireBaseMessagingService"
-            android:exported="false"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
