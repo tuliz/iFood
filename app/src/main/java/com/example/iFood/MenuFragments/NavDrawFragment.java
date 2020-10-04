@@ -23,6 +23,7 @@ import com.example.iFood.Activities.MainActivity;
 import com.example.iFood.Activities.ModActivity;
 import com.example.iFood.Activities.MyRecipes;
 import com.example.iFood.Activities.ProfileActivity;
+import com.example.iFood.Activities.RejectedListActivity;
 import com.example.iFood.Activities.SearchRecipe;
 import com.example.iFood.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -114,7 +115,10 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                     break;
 
                 case R.id.menu_rejectList:
-
+                    Intent rejectList = new Intent(mContext.getApplicationContext(), RejectedListActivity.class);
+                    rejectList.putExtra("username",username);
+                    rejectList.putExtra("userRole",userRole);
+                    startActivity(rejectList);
                     break;
                 case R.id.menuHome:
                     Intent home = new Intent(mContext.getApplicationContext(), MainActivity.class);

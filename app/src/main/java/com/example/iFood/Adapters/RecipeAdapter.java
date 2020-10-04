@@ -63,7 +63,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
         }
         myHolder.recipeTitle.setText(mData.get(i).getRecipeName());
         myHolder.cardView.setOnClickListener(v -> {
-            Intent intent1 = new Intent(mContext, RejectedRecipeActivity.class);
+            Intent intent1 = new Intent(mContext, RecipeActivity.class);
             intent1.putExtra("activity",activity);
             intent1.putExtra("addedBy",mData.get(i).getAddedBy());
             intent1.putExtra("approved",check);

@@ -72,7 +72,7 @@ public class About extends AppCompatActivity {
         sendWhatsApp.setOnClickListener(v -> openWhatsApp());
 
         formattedDate = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
-        tvDate.setText(getString(R.string.rights)+" "+ formattedDate);
+        tvDate.setText(formattedDate);
     }
 
     /**

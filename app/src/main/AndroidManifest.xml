@@ -22,7 +22,7 @@
         tools:targetApi="q">
         <activity android:name=".Activities.RejectedRecipeActivity"></activity>
         <activity
-            android:name=".Activities.RejectedList"
+            android:name=".Activities.RejectedListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.LoginActivity"

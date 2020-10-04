@@ -1,9 +1,11 @@
 package com.example.iFood.Activities.Inbox;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.iFood.Activities.About;
+import com.example.iFood.Activities.RejectedListActivity;
 import com.example.iFood.Adapters.MessageAdapter;
 import com.example.iFood.Classes.Message;
 import com.example.iFood.MenuFragments.AddDrawFragment;
@@ -45,6 +48,7 @@ import static com.example.iFood.Activities.Inbox.Inbox_Old_Messages.readMsg;
 public class Inbox_new extends AppCompatActivity {
     ConnectionBCR bcr = new ConnectionBCR();
     String userName,userRole;
+
     public static BottomAppBar bottomAppBar;
     public static FloatingActionButton addIcon,delIcon;
     public static ArrayList<String> msgList = new ArrayList<>();
@@ -166,9 +170,10 @@ public class Inbox_new extends AppCompatActivity {
      * This function responsible on fetching information regarding the user messages
      */
     private void getMessages(){
-        messagesRef.orderByKey().addValueEventListener(new ValueEventListener() {
+        new Thread(() -> messagesRef.orderByKey().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 unReadmsg.clear();
                 readMsg.clear();
                 for(DataSnapshot dst : dataSnapshot.getChildren()) {
@@ -179,7 +184,7 @@ public class Inbox_new extends AppCompatActivity {
                             assert m != null;
                             if (m.isRead.equals("true")) {
                                 readMsg.add(m);
-                                 refresh_lvRead();
+                                refresh_lvRead();
                             } else {
                                 unReadmsg.add(m);
                                 refresh_lvNotRead();
@@ -193,9 +198,11 @@ public class Inbox_new extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("TAG","Error:"+databaseError.getMessage());
 
             }
-        });
+        })).start();
+
 
     }
 

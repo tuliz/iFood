@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.example.iFood.Adapters.RecipeAdapter;
 import com.example.iFood.Adapters.RejectAdapter;
-import com.example.iFood.Classes.Recipes;
 import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.MenuFragments.AddDrawFragment;
 import com.example.iFood.MenuFragments.NavDrawFragment;
@@ -32,9 +32,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RejectedList extends AppCompatActivity {
+public class RejectedListActivity extends AppCompatActivity {
     ConnectionBCR bcr = new ConnectionBCR();
     BottomAppBar bottomAppBar;
+    ProgressDialog progressDialog;
     FloatingActionButton addIcon;
     RecyclerView rejectedList;
     RejectAdapter myAdapter;
@@ -50,6 +51,9 @@ public class RejectedList extends AppCompatActivity {
         bottomAppBar = findViewById(R.id.bottomAppBar);
         addIcon = findViewById(R.id.bottomAddIcon);
 
+        //////////
+
+        getRejectedList();
 
         ///////////////////////////////
         if(getSupportActionBar() != null){
@@ -70,7 +74,7 @@ public class RejectedList extends AppCompatActivity {
             int id = item.getItemId();
 
             if(id == R.id.bottomAbout){
-                Intent about = new Intent(RejectedList.this, About.class);
+                Intent about = new Intent(RejectedListActivity.this, About.class);
                 startActivity(about);
             }
             return false;
@@ -88,9 +92,11 @@ public class RejectedList extends AppCompatActivity {
     } // onCreate ends
 
 
-    private void getRecipeList(){
+    private void getRejectedList(){
         // enter all recipes fetched from DB to arrayList that are not approved by mod/admin
-
+        progressDialog = new ProgressDialog(RejectedListActivity.this);
+        progressDialog.setMessage("Fetching information");
+        progressDialog.show();
         new Thread(() -> {
             Query dbQuery = deleted_list.orderByKey();
             dbQuery.addValueEventListener(new ValueEventListener() {
@@ -102,13 +108,12 @@ public class RejectedList extends AppCompatActivity {
                         for(DataSnapshot dst2 : dst.getChildren()) {
                             if (dst2.exists()) {
 
-                                String check = String.valueOf(dst2.child("approved").getValue());
-                                if(check.equals("false")){
-                                    RejectedRecipe rec = dst2.getValue(RejectedRecipe.class);
-                                    rejectedRecipeList.add(rec);
-                                    // Call function to post all the recipes
-                                    refresh_lv();
-                                }
+                                RejectedRecipe rec = dst2.getValue(RejectedRecipe.class);
+                                rejectedRecipeList.add(rec);
+                                Log.d("TAG","Value:"+rec);
+                                // Call function to post all the recipes
+                               // refresh_lv();
+
 
                             }
                         }
@@ -117,10 +122,13 @@ public class RejectedList extends AppCompatActivity {
                         refresh_lv();
                         CoordinatorLayout coordinatorLayout = findViewById(R.id.mainLayoutReject);
                         coordinatorLayout.setBackground(getDrawable(R.drawable.all_clear_background));
+
                     }else{
                         CoordinatorLayout coordinatorLayout = findViewById(R.id.mainLayoutReject);
                         coordinatorLayout.setBackground(getDrawable(R.drawable.background3));
+
                     }
+                    progressDialog.dismiss();
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {

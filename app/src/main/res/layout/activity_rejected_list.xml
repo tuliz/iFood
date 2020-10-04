@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:id="@+id/mainLayoutReject"
     android:background="@drawable/background3"
-    tools:context=".Activities.RejectedList">
+    tools:context=".Activities.RejectedListActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rejectList"

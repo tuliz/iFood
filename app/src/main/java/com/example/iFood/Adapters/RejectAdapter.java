@@ -8,13 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.iFood.Activities.RecipeActivity;
-import com.example.iFood.Classes.Recipes;
+import com.example.iFood.Activities.RejectedRecipeActivity;
 import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.R;
 import com.squareup.picasso.Picasso;
@@ -53,7 +50,7 @@ public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> 
         }
         holder.recipeTitle.setText(mData.get(position).getTitle());
         holder.cardView.setOnClickListener(v -> {
-            Intent rejectIntent = new Intent(mContext, RecipeActivity.class);
+            Intent rejectIntent = new Intent(mContext, RejectedRecipeActivity.class);
 
             rejectIntent.putExtra("addedBy",mData.get(position).getAddedBy());
             rejectIntent.putExtra("approved",check);
