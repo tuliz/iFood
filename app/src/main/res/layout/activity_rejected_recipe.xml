@@ -80,7 +80,8 @@
 
     </androidx.core.widget.NestedScrollView>
     <LinearLayout
-        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -99,6 +100,7 @@
 
             </TextView>
             <TextView
+                android:maxLines="1"
                 android:layout_marginStart="5dp"
                 android:textSize="20sp"
                 android:id="@+id/tv_removedBy"
@@ -121,6 +123,7 @@
 
             </TextView>
             <TextView
+                android:maxLines="1"
                 android:layout_marginStart="5dp"
                 android:textSize="20sp"
                 android:id="@+id/tv_removeDate"
@@ -130,6 +133,7 @@
             </TextView>
         </LinearLayout>
         <LinearLayout
+            android:paddingBottom="15dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -142,6 +146,7 @@
 
             </TextView>
             <TextView
+
                 android:layout_marginStart="5dp"
                 android:textSize="20sp"
                 android:id="@+id/tv_removeReason"
@@ -150,6 +155,35 @@
 
             </TextView>
         </LinearLayout>
+    </LinearLayout>
 
+    <LinearLayout
+       android:gravity="bottom|center"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnApprove"
+            app:maxImageSize="35dp"
+            app:tint="@color/colorWhite"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_baseline_check">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnDismiss"
+            app:maxImageSize="35dp"
+            app:tint="@color/colorWhite"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_delete">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </LinearLayout>
 </LinearLayout>

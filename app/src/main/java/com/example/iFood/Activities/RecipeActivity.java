@@ -286,7 +286,7 @@ public class RecipeActivity extends AppCompatActivity {
                         RejectedRecipe rejectedRecipe;
                         rejectedRecipe = new RejectedRecipe(recipeID,mRecipeName.getText().toString(),mRecipe.getTextContent().toString(),mRecipeMethodTitle.getText().toString()
                                 ,mRecipeIngredients.getTextContent().toString(),
-                                recipeImage,reason,addedBy,false,
+                                recipeImage,reason,addedBy,userName,false,
                                 formattedDate,time);
                         deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe).addOnSuccessListener(aVoid -> {
                             // Remove the recipe from waiting list

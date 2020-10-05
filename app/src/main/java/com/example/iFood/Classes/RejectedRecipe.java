@@ -10,6 +10,7 @@ public class RejectedRecipe {
     public String recipeUrl;
     public String rejectReasons;
     public String addedBy;
+    public String rejectedBy;
     private boolean approved;
     public String rejectDate;
     public Object timestamp;
@@ -17,7 +18,7 @@ public class RejectedRecipe {
 
     RejectedRecipe(){}
 
-    public RejectedRecipe(String recipeID, String title, String content, String recipeMethodTitle, String ingredients, String recipeUrl, String rejectReasons, String addedBy, boolean approved,String rejectDate ,Object timestamp) {
+    public RejectedRecipe(String recipeID, String title, String content, String recipeMethodTitle, String ingredients, String recipeUrl, String rejectReasons, String addedBy,String rejectedBy, boolean approved,String rejectDate ,Object timestamp) {
         this.recipeID = recipeID;
         Title = title;
         Content = content;
@@ -27,6 +28,7 @@ public class RejectedRecipe {
         this.rejectReasons = rejectReasons;
         this.addedBy = addedBy;
         this.approved = approved;
+        this.rejectedBy = rejectedBy;
         this.timestamp = timestamp;
         this.rejectDate = rejectDate;
     }
@@ -101,6 +103,14 @@ public class RejectedRecipe {
 
     public void setAddedBy(String addedBy) {
         this.addedBy = addedBy;
+    }
+
+    public String getRejectedBy() {
+        return rejectedBy;
+    }
+
+    public void setRejectedBy(String rejectedBy) {
+        this.rejectedBy = rejectedBy;
     }
 
     public boolean isApproved() {

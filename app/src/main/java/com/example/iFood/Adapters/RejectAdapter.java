@@ -15,11 +15,10 @@ import com.example.iFood.Activities.RejectedRecipeActivity;
 import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.R;
 import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> {
-    String userName,userRole,check;
+    String userName,userRole;
     private Context mContext;
     private List<RejectedRecipe> mData;
 
@@ -43,7 +42,7 @@ public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> 
         Intent intent = ((Activity) mContext).getIntent();
         userName = intent.getStringExtra("username");
         userRole = intent.getStringExtra("userRole");
-        check = String.valueOf(mData.get(position).isApproved());
+
         if(mData.get(position).getRecipeUrl()!=null && !mData.get(position).getRecipeUrl().isEmpty()) {
             Picasso.get().load(mData.get(position).getRecipeUrl()).into(holder.img_recipe);
 
@@ -53,7 +52,6 @@ public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> 
             Intent rejectIntent = new Intent(mContext, RejectedRecipeActivity.class);
 
             rejectIntent.putExtra("addedBy",mData.get(position).getAddedBy());
-            rejectIntent.putExtra("approved",check);
             rejectIntent.putExtra("username",userName);
             rejectIntent.putExtra("userRole",userRole);
             rejectIntent.putExtra("RecipeName",mData.get(position).getTitle());
@@ -65,6 +63,7 @@ public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> 
             rejectIntent.putExtra("removeDate",mData.get(position).getRejectDate());
             rejectIntent.putExtra("rejectReasons",mData.get(position).getRejectReasons());
             rejectIntent.putExtra("time",mData.get(position).getTimestamp().toString());
+            rejectIntent.putExtra("rejectedBy",mData.get(position).getRejectedBy());
 
 
 
