@@ -77,6 +77,7 @@ public class RecipeActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Favorites");
     DatabaseReference recipesRef = FirebaseDatabase.getInstance().getReference().child("Recipes");
+    DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +97,7 @@ public class RecipeActivity extends AppCompatActivity {
         Recipe = intent.getExtras().getString("Recipe");
         recipeID = intent.getStringExtra("id");
         recipeImage = intent.getStringExtra("Thumbnail");
-        time = intent.getLongExtra("date",0);
+        time = intent.getLongExtra("time",0);
 
 
         //////////////
@@ -273,23 +274,26 @@ public class RecipeActivity extends AppCompatActivity {
                         if(reason.isEmpty())reason+=otherReason.getText().toString();
                         else reason+= ","+otherReason.getText().toString();
                     }
-                 Log.w("TAG","Reason :"+reason);
+                 Log.w("TAG","Reason: "+reason);
                     myDialog.dismiss();
                     if(!reason.isEmpty()) {
 
                         // Get the time of declined recipe
                         Date date = Calendar.getInstance().getTime();
-                        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+                        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                         String formattedDate = df.format(date);
-                        DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
+
                         // Get the recipe details for future review later on
                         RejectedRecipe rejectedRecipe;
-                        rejectedRecipe = new RejectedRecipe(recipeID,mRecipeName.getText().toString(),mRecipe.getTextContent().toString(),mRecipeMethodTitle.getText().toString()
-                                ,mRecipeIngredients.getTextContent().toString(),
-                                recipeImage,reason,addedBy,userName,false,
+                        rejectedRecipe = new RejectedRecipe(recipeID,Title,Recipe,MethodTitle
+                                ,Ingredients,recipeImage,reason,addedBy,userName,false,
                                 formattedDate,time);
+
+                        //deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe);
+
                         deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe).addOnSuccessListener(aVoid -> {
                             // Remove the recipe from waiting list
+                             Log.w("TAG","Recipe added to rejected list");
                             recipesRef.child(recipeID).removeValue();
                             finish();
                         }).addOnFailureListener(e -> {

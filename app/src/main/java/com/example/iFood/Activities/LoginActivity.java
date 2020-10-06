@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             main.putExtra("userRole",pref.getString("userRole",null));
           //  Log.i("userRole","role in shared pref is:"+pref.getString("userRole",null));
             startActivity(main);
+            finish();
         }
 
 
@@ -238,14 +239,17 @@ public class LoginActivity extends AppCompatActivity {
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", u.userRole);
                                                     startActivity(main);
+
                                                 } else {
 
                                                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", userRole);
                                                     startActivity(main);
+
                                                 }
                                                 progressDialog.dismiss();
+                                                finish();
                                             }
                                         }
 

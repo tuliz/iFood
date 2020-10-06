@@ -40,13 +40,13 @@ public class RejectedRecipeActivity extends AppCompatActivity {
         ///////////////
         pullIntentInformation();
         setVars();
-
+        setVarsDate();
         //////////////
 
         ///////////// Listeners
         btnDismiss.setOnClickListener(v -> {
             // If Admin clicked dismiss remove record from DB completely
-
+            //deleted_list.child(userRejected).child(recipeID).removeValue();
         });
 
         btnApprove.setOnClickListener(v -> {
@@ -54,6 +54,8 @@ public class RejectedRecipeActivity extends AppCompatActivity {
         });
         ///////////////
     } // onCreate Ends
+
+
 
     private void pullIntentInformation() {
         final Intent intent = getIntent();
@@ -77,29 +79,32 @@ public class RejectedRecipeActivity extends AppCompatActivity {
     private void setVars() {
         //Textview
         mRecipeName = findViewById(R.id.text_recipe);
-        mRecipe.setText(recipeName);
         mRecipeIngredients = findViewById(R.id.ingredients);
-        mRecipeIngredients.setText(recipeIngredients);
         mRecipeMethodTitle = findViewById(R.id.method);
-        mRecipeMethodTitle.setText(recipeMethodTitle);
         mRecipe = findViewById(R.id.recipe);
-        mRecipe.setText(recipeContent);
         rejectDate = findViewById(R.id.tv_removeDate);
-        rejectDate.setText(removeDate);
         rejectReasons = findViewById(R.id.tv_removeReason);
-        rejectReasons.setText(rejectReason);
         rejectedBy = findViewById(R.id.tv_removedBy);
-        rejectedBy.setText(userRejected);
-
-
-        //Setting the ExpandableText closed until user open it
-        mRecipeIngredients.resetState(true);
-        mRecipe.resetState(true);
         //Buttons
         btnApprove = findViewById(R.id.btnApprove);
         btnDismiss = findViewById(R.id.btnDismiss);
     }
 
+
+    private void setVarsDate() {
+
+        mRecipe.setText(recipeName);
+        mRecipeIngredients.setText(recipeIngredients);
+        mRecipeMethodTitle.setText(recipeMethodTitle);
+        mRecipe.setText(recipeContent);
+        rejectDate.setText(removeDate);
+        rejectReasons.setText(rejectReason);
+        rejectedBy.setText(userRejected);
+        //Setting the ExpandableText closed until user open it
+        mRecipeIngredients.resetState(true);
+        mRecipe.resetState(true);
+
+    }
 
     /**
      * Register our Broadcast Receiver when opening the app.

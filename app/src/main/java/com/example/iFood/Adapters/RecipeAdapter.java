@@ -4,6 +4,8 @@ package com.example.iFood.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import java.util.List;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> {
     String userName,userRole,check;
+    long time;
     private Context mContext;
     private List<Recipes> mData;
     private String activity;
@@ -56,6 +59,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
         Intent  intent = ((Activity) mContext).getIntent();
         userName = intent.getStringExtra("username");
         userRole = intent.getStringExtra("userRole");
+        time = (Long) mData.get(i).getTimestamp();
+     //   Log.w("TAG", "onBindViewHolder: time is:"+time );
         check = String.valueOf(mData.get(i).isApproved());
         if(mData.get(i).getRecipePicture()!=null && !mData.get(i).getRecipePicture().isEmpty()) {
             Picasso.get().load(mData.get(i).getRecipePicture()).into(myHolder.img_recipe);
@@ -75,6 +80,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
             intent1.putExtra("Recipe",mData.get(i).getRecipe());
             intent1.putExtra("id",mData.get(i).getId());
             intent1.putExtra("Thumbnail",mData.get(i).getRecipePicture());
+            intent1.putExtra("time",time);
+
 
 
             mContext.startActivity(intent1);

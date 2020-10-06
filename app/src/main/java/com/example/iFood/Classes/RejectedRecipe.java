@@ -3,27 +3,27 @@ package com.example.iFood.Classes;
 public class RejectedRecipe {
 
     public String recipeID;
-    public String Title;
-    public String Content;
+    public String title;
+    public String content;
     public String recipeMethodTitle;
-    public String Ingredients;
+    public String ingredients;
     public String recipeUrl;
     public String rejectReasons;
     public String addedBy;
     public String rejectedBy;
     private boolean approved;
     public String rejectDate;
-    public Object timestamp;
+    public long timestamp;
 
 
     RejectedRecipe(){}
 
-    public RejectedRecipe(String recipeID, String title, String content, String recipeMethodTitle, String ingredients, String recipeUrl, String rejectReasons, String addedBy,String rejectedBy, boolean approved,String rejectDate ,Object timestamp) {
+    public RejectedRecipe(String recipeID, String title, String content, String recipeMethodTitle, String ingredients, String recipeUrl, String rejectReasons, String addedBy,String rejectedBy, boolean approved,String rejectDate ,long timestamp) {
         this.recipeID = recipeID;
-        Title = title;
-        Content = content;
+        this.title = title;
+        this.content = content;
         this.recipeMethodTitle = recipeMethodTitle;
-        Ingredients = ingredients;
+        this.ingredients = ingredients;
         this.recipeUrl = recipeUrl;
         this.rejectReasons = rejectReasons;
         this.addedBy = addedBy;
@@ -33,12 +33,20 @@ public class RejectedRecipe {
         this.rejectDate = rejectDate;
     }
 
-    public String getRejectDate() {
-        return rejectDate;
+    public boolean isApproved() {
+        return approved;
     }
 
-    public void setRejectDate(String rejectDate) {
-        this.rejectDate = rejectDate;
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public Object getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getRecipeID() {
@@ -50,19 +58,19 @@ public class RejectedRecipe {
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
     }
 
     public String getRecipeMethodTitle() {
@@ -74,11 +82,11 @@ public class RejectedRecipe {
     }
 
     public String getIngredients() {
-        return Ingredients;
+        return ingredients;
     }
 
     public void setIngredients(String ingredients) {
-        Ingredients = ingredients;
+        this.ingredients = ingredients;
     }
 
     public String getRecipeUrl() {
@@ -113,19 +121,29 @@ public class RejectedRecipe {
         this.rejectedBy = rejectedBy;
     }
 
-    public boolean isApproved() {
-        return approved;
+    public String getRejectDate() {
+        return rejectDate;
     }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
+    public void setRejectDate(String rejectDate) {
+        this.rejectDate = rejectDate;
     }
 
-    public Object getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Object timestamp) {
-        this.timestamp = timestamp;
+    @Override
+    public String toString() {
+        return "RejectedRecipe{" +
+                "recipeID='" + recipeID + '\'' +
+                ", Title='" + title + '\'' +
+                ", Content='" + content + '\'' +
+                ", recipeMethodTitle='" + recipeMethodTitle + '\'' +
+                ", Ingredients='" + ingredients + '\'' +
+                ", recipeUrl='" + recipeUrl + '\'' +
+                ", rejectReasons='" + rejectReasons + '\'' +
+                ", addedBy='" + addedBy + '\'' +
+                ", rejectedBy='" + rejectedBy + '\'' +
+                ", approved=" + approved +
+                ", rejectDate='" + rejectDate + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

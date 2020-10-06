@@ -112,7 +112,7 @@ public class RejectedListActivity extends AppCompatActivity {
                                 rejectedRecipeList.add(rec);
                                 Log.d("TAG","Value:"+rec);
                                 // Call function to post all the recipes
-                               // refresh_lv();
+                                refresh_lv();
 
 
                             }
