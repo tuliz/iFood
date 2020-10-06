@@ -1,92 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:background="@drawable/background3"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".Activities.AdminActivity">
-    <RelativeLayout
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
+<ScrollView
+
+   android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
         <!-- Head layout -->
 
-        <!--
-    <LinearLayout
+    <RelativeLayout
 
-        android:background="@drawable/edit_text_border"
-        android:id="@+id/mainLayoutAdmin"
-        android:orientation="vertical"
+       android:id="@+id/headLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <LinearLayout
 
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-            <TextView
-
-                android:textStyle="italic|bold"
-                android:layout_marginEnd="20dp"
-                android:textSize="20sp"
-                android:text="Total number of users in DB :"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </TextView>
-            <TextView
-
-                android:textSize="18sp"
-                android:id="@+id/usersAmount"
-                android:text=""
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent">
-
-            </TextView>
-        </LinearLayout>
-        <LinearLayout
-
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-
-                android:textStyle="italic|bold"
-                android:layout_marginEnd="20dp"
-                android:textSize="20sp"
-                android:text="Total number of Recipes in DB :"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </TextView>
-            <TextView
-
-                android:textSize="18sp"
-                android:id="@+id/recipeAmount"
-                android:text=""
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent">
-
-            </TextView>
-        </LinearLayout>
-    </LinearLayout>
-    -->
         <!-- Enter Dates layout -->
     <LinearLayout
-        android:background="@drawable/edit_text_border"
+
         android:id="@+id/datesLayout"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -142,109 +83,141 @@
                     android:layout_height="wrap_content">
 
                 </TextView>
+
             </LinearLayout>
-
-
-
-    </LinearLayout>
         <Button
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
-            android:layout_below="@id/datesLayout"
             android:id="@+id/btnSearchAdmin"
-
             android:text="Search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
         </Button>
 
+
+    </LinearLayout>
+
     <!-- This is the Pie section -->
-        <RelativeLayout
-            android:isScrollContainer="true"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/btnSearchAdmin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/chartLayout"
-                android:background="@drawable/edit_text_border"
-                android:gravity="center_vertical|center_horizontal"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <lecho.lib.hellocharts.view.PieChartView
-                    android:id="@+id/chartUsers"
-                    android:layout_width="200dp"
-                    android:layout_height="300dp"
-                    />
-
-                <lecho.lib.hellocharts.view.PieChartView
-                    android:id="@+id/chartRecipe"
-                    android:layout_width="200dp"
-                    android:layout_height="300dp"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/detailLayout"
-                android:orientation="horizontal"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="10dp"
-                android:layout_below="@+id/chartLayout"
+            <RelativeLayout
+                android:isScrollContainer="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/datesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_marginEnd="5dp"
-                    android:textStyle="italic"
+                <LinearLayout
+                    android:id="@+id/chartLayout"
+                    android:background="@drawable/edit_text_border"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Total Users compared to found users between searched dates.">
+                    android:layout_height="wrap_content"
+                    >
 
-                </TextView>
-                   <TextView
-                    android:textStyle="italic"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:text="Total Recipes compared to found recipes between searched dates."
+                    <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/chartUsers"
+                        android:layout_width="200dp"
+                        android:layout_height="300dp"
+                        />
+
+                    <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/chartRecipe"
+                        android:layout_width="200dp"
+                        android:layout_height="300dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/detailLayout"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@+id/chartLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                </TextView>
+                    <TextView
+                        android:layout_marginEnd="5dp"
+                        android:textStyle="italic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Total Users compared to found users between searched dates.">
+
+                    </TextView>
+                    <TextView
+                        android:textStyle="italic"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Total Recipes compared to found recipes between searched dates."
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
 
 
-            </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/secondChartLayout"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_below="@+id/detailLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        </RelativeLayout>
+                    <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/chartTopMod"
+                        android:layout_width="200dp"
+                        android:layout_height="300dp"
+                        />
+
+                    <lecho.lib.hellocharts.view.PieChartView
+                        android:id="@+id/chartRejectReasons"
+                        android:layout_width="200dp"
+                        android:layout_height="300dp"
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/secondDetailLayout"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@+id/secondChartLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_marginEnd="5dp"
+                        android:textStyle="italic"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Total Users compared to found users between searched dates.">
+
+                    </TextView>
+                    <TextView
+                        android:textStyle="italic"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Total Recipes compared to found recipes between searched dates."
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
 
 
 </RelativeLayout>
 
+</ScrollView>
 
-<com.google.android.material.bottomappbar.BottomAppBar
-android:id="@+id/bottomAppBar"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_gravity="bottom"
-android:backgroundTint="@color/colorPrimary"
-app:fabAlignmentMode="end"
-app:hideOnScroll="true"
-app:menu="@menu/menu_bar"
-app:navigationIcon="@drawable/ic_menu" />
 
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-android:id="@+id/bottomAddIcon"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:backgroundTint="@color/colorAccent"
-android:src="@drawable/ic_add"
-app:layout_anchor="@id/bottomAppBar"
-app:maxImageSize="35dp"
-app:menu="@menu/menu_add"
-app:tint="@color/colorWhite" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

@@ -31,10 +31,20 @@
         </menu>
     </item>
     <item
-        android:id="@+id/menuInbox"
-        android:icon="@drawable/ic_message"
+        android:title="@string/personal_area">
+        <menu>
+            <item
+                android:id="@+id/menuInbox"
+                android:icon="@drawable/ic_message"
+                android:title="@string/inbox" />
 
-        android:title="@string/inbox" />
+            <item
+                android:id="@+id/menuProfile"
+                android:icon="@drawable/ic_account_circle_black"
+                android:title="@string/profile" />
+
+        </menu>
+    </item>
     <item
         android:id="@+id/menu_Exit"
         android:icon="@drawable/ic_exit"

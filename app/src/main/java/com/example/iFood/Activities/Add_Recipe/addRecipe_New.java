@@ -27,6 +27,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.iFood.Activities.MainActivity;
 import com.example.iFood.Activities.MyRecipes;
+import com.example.iFood.Activities.ProfileActivity;
 import com.example.iFood.Activities.SearchRecipe;
 import com.example.iFood.Activities.oldActivities.Inbox;
 import com.example.iFood.Classes.Recipes;
@@ -214,7 +215,13 @@ public class addRecipe_New extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-
+            case R.id.menuProfile:
+                Intent profile = new Intent(addRecipe_New.this, ProfileActivity.class);
+                profile.putExtra("username",getIntent().getStringExtra("username"));
+                profile.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                startActivity(profile);
+                finish();
+                break;
             case R.id.menu_Exit:
                 final Dialog myDialog = new Dialog(addRecipe_New.this);
                 myDialog.setContentView(R.layout.dialog);

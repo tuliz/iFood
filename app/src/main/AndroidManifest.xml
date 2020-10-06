@@ -20,7 +20,9 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateVisible|adjustResize"
         tools:targetApi="q">
-        <activity android:name=".Activities.RejectedRecipeActivity"></activity>
+        <activity
+            android:name=".Activities.RejectedRecipeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.RejectedListActivity"
             android:screenOrientation="portrait" />
@@ -35,7 +37,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.AdminActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/adminTheme"/>
         <activity
             android:name=".Activities.ModActivity"
             android:screenOrientation="portrait" />

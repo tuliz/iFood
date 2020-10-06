@@ -6,14 +6,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.iFood.Classes.Recipes;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import ru.embersoft.expandabletextview.ExpandableTextView;
 
@@ -46,11 +51,27 @@ public class RejectedRecipeActivity extends AppCompatActivity {
         ///////////// Listeners
         btnDismiss.setOnClickListener(v -> {
             // If Admin clicked dismiss remove record from DB completely
-            //deleted_list.child(userRejected).child(recipeID).removeValue();
+
+
+                        String storageUrl = recipeImage;
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
+                        storageReference.delete().addOnSuccessListener(aVoid -> {
+                            // File deleted successfully so now remove from DB
+                               deleted_list.child(userRejected).child(recipeID).removeValue();
+                        }).addOnFailureListener(exception -> {
+                            // Uh-oh, an error occurred! toast message to user
+                            Toast.makeText(RejectedRecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
+                            Log.w("TAG","Error: "+exception.getMessage());
+                        });
+
         });
 
         btnApprove.setOnClickListener(v -> {
-            // If Admin clicked Approve, add to general recipe list
+            // If Admin clicked Approve, add to general recipe list and set to approved
+            Recipes rec;
+            rec = new Recipes(recipeName,recipeIngredients,recipeMethodTitle,recipeContent,recipeImage,recipeID,addedBy);
+            rec.setApproved(true);
+            recipesRef.child(addedBy).child(recipeID).setValue(rec);
         });
         ///////////////
     } // onCreate Ends

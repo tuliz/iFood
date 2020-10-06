@@ -1,14 +1,19 @@
 package com.example.iFood.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Range;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +22,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.iFood.Activities.Add_Recipe.addRecipe_New;
+import com.example.iFood.Activities.Inbox.Inbox_new;
+import com.example.iFood.Activities.oldActivities.AddRecipe;
+import com.example.iFood.Activities.oldActivities.Inbox;
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.Classes.Users;
 import com.example.iFood.MenuFragments.AddDrawFragment;
@@ -39,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
@@ -54,7 +64,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     BottomAppBar bottomAppBar;
     FloatingActionButton addIcon;
     // Button
-    Button btnSearch;
+    Button btnSearch,btnOk,btnDismiss;
+
     // Date Variables
     Date to,from;
     long userTime,recipeTime;
@@ -76,44 +87,12 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
 
-        // hide top bar
-        if(getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
+
         setVariables();
         setCurrentDateonOpen();
         getDB_Data();
 
 
-
-        // Bottom App bar
-        bottomAppBar.setNavigationOnClickListener(v -> {
-            NavDrawFragment bottomNavFrag = new NavDrawFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("username",getIntent().getStringExtra("username"));
-            bundle.putString("userRole",getIntent().getStringExtra("userRole"));
-            bottomNavFrag.setArguments(bundle);
-            bottomNavFrag.show(getSupportFragmentManager(),"TAG");
-
-        });
-        bottomAppBar.setOnMenuItemClickListener(item -> {
-            int id = item.getItemId();
-            if(id == R.id.bottomAbout){
-                Intent about = new Intent(AdminActivity.this, About.class);
-                startActivity(about);
-            }
-            return false;
-        });
-
-
-        addIcon.setOnClickListener(v -> {
-            AddDrawFragment addIcon = new AddDrawFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("username",getIntent().getStringExtra("username"));
-            bundle.putString("userRole",getIntent().getStringExtra("userRole"));
-            addIcon.setArguments(bundle);
-            addIcon.show(getSupportFragmentManager(),"TAG");
-        });
         // onClick Listeners
         btnSearch.setOnClickListener(v -> {
             if(to==null || from==null){
@@ -249,8 +228,6 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         recipesChart = findViewById(R.id.chartRecipe);
         fromDate = findViewById(R.id.fromDate);
         toDate = findViewById(R.id.toDate);
-        bottomAppBar = findViewById(R.id.bottomAppBar);
-        addIcon = findViewById(R.id.bottomAddIcon);
         btnSearch = findViewById(R.id.btnSearchAdmin);
 
     }
@@ -346,6 +323,71 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_layout,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+
+            case R.id.menu_Exit:
+                final Dialog myDialog = new Dialog(AdminActivity.this);
+                myDialog.setContentView(R.layout.dialog);
+                btnDismiss = myDialog.findViewById(R.id.btnDismiss);
+                btnOk =  myDialog.findViewById(R.id.btnOk);
+
+                // if pressed Ok will close the App
+                btnOk.setOnClickListener(v -> {
+
+                    SharedPreferences.Editor delData = getSharedPreferences("userData",MODE_PRIVATE).edit();
+                    delData.clear();
+                    delData.apply();
+                    finishAffinity();
+                });
+                // if pressed Dismiss will stay in the App
+                btnDismiss.setOnClickListener(v -> myDialog.dismiss());
+                myDialog.show();
+                break;
+            case R.id.menuProfile:
+                Intent profile = new Intent(AdminActivity.this, ProfileActivity.class);
+                profile.putExtra("username",getIntent().getStringExtra("username"));
+                profile.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                startActivity(profile);
+                finish();
+                break;
+            case R.id.menu_MyRecepies:
+                Intent myRecipes = new Intent(AdminActivity.this, MyRecipes.class);
+                myRecipes.putExtra("username",getIntent().getStringExtra("username"));
+                myRecipes.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                startActivity(myRecipes);
+                break;
+
+            case R.id.menu_SearchRecepie:
+                Intent search = new Intent(AdminActivity.this, SearchRecipe.class);
+                search.putExtra("username",getIntent().getStringExtra("username"));
+                search.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                startActivity(search);
+                break;
+            case R.id.menuInbox:
+                Intent inbox = new Intent(AdminActivity.this, Inbox_new.class);
+                inbox.putExtra("username",getIntent().getStringExtra("username"));
+                inbox.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                startActivity(inbox);
+                break;
+            case R.id.menuHome:
+                Intent main = new Intent(AdminActivity.this, MainActivity.class);
+                main.putExtra("username",getIntent().getStringExtra("username"));
+                main.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                startActivity(main);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     /**
      * Register our Broadcast Receiver when opening the app.
      */

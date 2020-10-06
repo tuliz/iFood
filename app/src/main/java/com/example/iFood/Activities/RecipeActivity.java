@@ -274,7 +274,7 @@ public class RecipeActivity extends AppCompatActivity {
                         if(reason.isEmpty())reason+=otherReason.getText().toString();
                         else reason+= ","+otherReason.getText().toString();
                     }
-                 Log.w("TAG","Reason: "+reason);
+                // Log.w("TAG","Reason: "+reason);
                     myDialog.dismiss();
                     if(!reason.isEmpty()) {
 
