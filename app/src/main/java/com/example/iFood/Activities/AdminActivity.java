@@ -27,11 +27,13 @@ import com.example.iFood.Activities.Inbox.Inbox_new;
 import com.example.iFood.Activities.oldActivities.AddRecipe;
 import com.example.iFood.Activities.oldActivities.Inbox;
 import com.example.iFood.Classes.Recipes;
+import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.Classes.Users;
 import com.example.iFood.MenuFragments.AddDrawFragment;
 import com.example.iFood.MenuFragments.NavDrawFragment;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
+import com.google.android.gms.common.util.ArrayUtils;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import lecho.lib.hellocharts.model.PieChartData;
 import lecho.lib.hellocharts.model.SliceValue;
@@ -59,7 +63,12 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     // DB Connection / related
     DatabaseReference refRecipes = FirebaseDatabase.getInstance().getReference().child("Recipes");
     DatabaseReference refUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+    DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
     int userCount =0, recipeCount =0,userTotalCount=0,recipeTotalCount=0;
+    int spam=0,missingIngredients=0,badTitle=0,badPicture=0,missingInfo=0,badDesc=0,other=0;
+    String[] reasonArray = {"Spam","Missing info","Missing Ingredients","Bad Picture","Bad Title","Bad Desc","Other"};
+    Random rnd = new Random();
+    int color;
     // Bottom Bar
     BottomAppBar bottomAppBar;
     FloatingActionButton addIcon;
@@ -70,11 +79,14 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     Date to,from;
     long userTime,recipeTime;
     int mYear, mMonth, mDay;
+
     // PieChart
-    PieChartView usersChart,recipesChart;
+    PieChartView usersChart,recipesChart,chartTopMod,chartRejectReasons;
     List<SliceValue> usersPieData = new ArrayList<>();
     List<SliceValue> recipesPieData = new ArrayList<>();
-    PieChartData usersPieChart,recipesPieChart;
+    List<SliceValue> topModPieData = new ArrayList<>();
+    List<SliceValue> rejectReasonPieData = new ArrayList<>();
+    PieChartData usersPieChart,recipesPieChart,topModPieChart,rejectReasonPieChart;
     // TextView
     TextView fromDate,toDate;
     // Broadcast
@@ -116,8 +128,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(AdminActivity.this,"Search credentials are not valid",Toast.LENGTH_SHORT).show();
             }
             else {
-                usersPieData=null;
-                recipesPieData=null;
+                usersPieData.clear();
+                recipesPieData.clear();
                 refUsers.orderByKey();
                 refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -202,7 +214,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
             }
 
         });
-        // more onClick listeners with over ride their onClick method
+        // more onClick listeners with override their onClick method
         fromDate.setOnClickListener(this);
         toDate.setOnClickListener(this);
     } // onCreate ends
@@ -229,6 +241,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         fromDate = findViewById(R.id.fromDate);
         toDate = findViewById(R.id.toDate);
         btnSearch = findViewById(R.id.btnSearchAdmin);
+        chartTopMod = findViewById(R.id.chartTopMod);
+        chartRejectReasons = findViewById(R.id.chartRejectReasons);
 
     }
 
@@ -265,6 +279,96 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
+       Query dbDelList = deleted_list.orderByKey();
+       dbDelList.addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+           public void onDataChange(@NonNull DataSnapshot snapshot) {
+               for(DataSnapshot dst : snapshot.getChildren()){
+                   Log.w("TAG","Value is:" +dst.getKey());
+                   int count =  Integer.parseInt(String.valueOf(dst.getChildrenCount()));
+                   Log.w("TAG","Count is:" +count);
+                   color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                   // recipesPieData.add(new SliceValue(recipeCount, Color.RED).setLabel("Recipes :" + recipeCount));
+                   topModPieData.add(new SliceValue(count,color ).setLabel(""+dst.getKey()+": "+count));
+                   for(DataSnapshot dst2 : dst.getChildren()){
+                       RejectedRecipe rejectedRecipe =  dst2.getValue(RejectedRecipe.class);
+                       assert rejectedRecipe != null;
+
+                       Log.w("TAG","Reasons:"+rejectedRecipe.rejectReasons);
+                           if(rejectedRecipe.rejectReasons.contains("Spam")) spam++;
+                           if(rejectedRecipe.rejectReasons.contains("Missing info")) missingInfo++;
+                           if(rejectedRecipe.rejectReasons.contains("Bad Picture")) badPicture++;
+                           if(rejectedRecipe.rejectReasons.contains("Bad Desc")) badDesc++;
+                           if(rejectedRecipe.rejectReasons.contains("Bad Title")) badTitle++;
+                           if(rejectedRecipe.rejectReasons.contains("Missing Ingredients")) missingIngredients++;
+                           if(!rejectedRecipe.rejectReasons.contains("Spam") &&
+                              !rejectedRecipe.rejectReasons.contains("Missing info") &&
+                              !rejectedRecipe.rejectReasons.contains("Bad Picture") &&
+                              !rejectedRecipe.rejectReasons.contains("Bad Title") &&
+                              !rejectedRecipe.rejectReasons.contains("Missing Ingredients"))other++;
+
+
+
+
+                   }
+               }
+              setColors();
+              setDelPieData();
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError error) {
+
+           }
+       });
+    }
+
+    private void setDelPieData() {
+
+        rejectReasonPieChart = new PieChartData(rejectReasonPieData);
+        topModPieChart = new PieChartData(topModPieData);
+
+        rejectReasonPieChart.setHasLabels(true).setValueLabelTextSize(10);
+        rejectReasonPieChart.setValueLabelsTextColor(Color.parseColor("#FFFFFF"));
+
+        topModPieChart.setHasLabels(true).setValueLabelTextSize(10);
+        topModPieChart.setValueLabelsTextColor(Color.parseColor("#FFFFFF"));
+
+        chartTopMod.setPieChartData(topModPieChart);
+        chartRejectReasons.setPieChartData(rejectReasonPieChart);
+
+    }
+
+    private void setColors() {
+
+        if(spam>0) {
+            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            rejectReasonPieData.add(new SliceValue(spam, color).setLabel("Spam " + spam));
+        }
+        if(missingInfo>0){
+            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            rejectReasonPieData.add(new SliceValue(missingInfo,color).setLabel("Missing Info "+missingInfo));
+        }
+        if(badPicture>0){
+            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            rejectReasonPieData.add(new SliceValue(badPicture,color).setLabel("Bad Picture "+badPicture));
+        }
+        if(badDesc>0){
+            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            rejectReasonPieData.add(new SliceValue(badDesc,color).setLabel("Bad Desc "+badDesc));
+        }
+        if(badTitle>0){
+            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            rejectReasonPieData.add(new SliceValue(badTitle,color).setLabel("Bad Title "+badTitle));
+        }
+        if(missingIngredients>0){
+            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            rejectReasonPieData.add(new SliceValue(missingIngredients,color).setLabel("Missing Ingredients "+missingIngredients));
+        }
+        if(other>0){
+            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            rejectReasonPieData.add(new SliceValue(other,color).setLabel("Other "+other));
+        }
 
     }
 
