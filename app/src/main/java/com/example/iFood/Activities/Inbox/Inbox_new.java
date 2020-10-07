@@ -1,6 +1,7 @@
 package com.example.iFood.Activities.Inbox;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -167,6 +168,7 @@ public class Inbox_new extends AppCompatActivity {
      */
     private void getMessages(){
         new Thread(() -> messagesRef.orderByKey().addValueEventListener(new ValueEventListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -188,6 +190,16 @@ public class Inbox_new extends AppCompatActivity {
                         }
                     }
                 }
+                 if(unReadmsg.size()<1){
+                     Objects.requireNonNull(inboxNewMessages.getView()).setBackground(getDrawable(R.drawable.all_clear_background));
+                 }else{
+                     Objects.requireNonNull(inboxNewMessages.getView()).setBackground(getDrawable(R.drawable.background3));
+                 }
+                 if(readMsg.size()<1){
+                     Objects.requireNonNull(inboxOldMessages.getView()).setBackground(getDrawable(R.drawable.all_clear_background));
+                 }else{
+                     Objects.requireNonNull(inboxOldMessages.getView()).setBackground(getDrawable(R.drawable.background3));
+                 }
 
             }
 
