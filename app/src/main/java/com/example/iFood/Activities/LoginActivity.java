@@ -234,14 +234,12 @@ public class LoginActivity extends AppCompatActivity {
 
                                                 if (rmbMe.isChecked()) {
                                                     saveData();
-
                                                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", u.userRole);
                                                     startActivity(main);
 
                                                 } else {
-
                                                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", userRole);

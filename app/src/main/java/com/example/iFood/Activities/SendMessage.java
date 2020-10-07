@@ -200,9 +200,7 @@ public class SendMessage extends AppCompatActivity {
         }
         toUser = etTo.getText().toString();
         userImageUrl = url;
-    //    Log.i("value","userImageUrl is :"+url);
         Message msg;
-
         uniqueID = String.valueOf(ref.push().getKey());
         msg = new Message(title,userImageUrl,message,toUser,formattedDate,userName, uniqueID,"false");
         ref.child(toUser).child(uniqueID).setValue(msg);
@@ -217,13 +215,13 @@ public class SendMessage extends AppCompatActivity {
                         sendNotifications(userToken, title, shortMsg);
                        // Log.w("TAG", "Sent notification.");
                     } else {
-                        //Log.w("TAG", "Token not found.");
+                        Log.w("TAG", "Token not found.");
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                              Log.w("TAG","Error:"+error.getMessage());
                 }
             });
 
@@ -237,8 +235,8 @@ public class SendMessage extends AppCompatActivity {
             @Override
             public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                 if (response.code() == 200) {
-                    Log.w("TAG","code:"+response.code());
-                    Log.w("TAG","body:"+response.body().success);
+                    //Log.w("TAG","code:"+response.code());
+                    //Log.w("TAG","body:"+response.body().success);
                     if (response.body().success != 1) {
                         Toast.makeText(SendMessage.this, "Failed ", Toast.LENGTH_LONG).show();
                     }
@@ -247,12 +245,11 @@ public class SendMessage extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MyResponse> call, Throwable t) {
-
+                     Log.w("TAG","Error:"+t.getMessage());
             }
         });
     }
-    @Override
-    /**
+     /**
      * Register our Broadcast Receiver when opening the app.
      */
     protected void onStart() {

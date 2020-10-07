@@ -66,12 +66,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
     int userCount =0, recipeCount =0,userTotalCount=0,recipeTotalCount=0;
     int spam=0,missingIngredients=0,badTitle=0,badPicture=0,missingInfo=0,badDesc=0,other=0;
-    String[] reasonArray = {"Spam","Missing info","Missing Ingredients","Bad Picture","Bad Title","Bad Desc","Other"};
     Random rnd = new Random();
     int color;
-    // Bottom Bar
-    BottomAppBar bottomAppBar;
-    FloatingActionButton addIcon;
     // Button
     Button btnSearch,btnOk,btnDismiss;
 
@@ -246,6 +242,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    /**
+     * Get general data from the DB.
+     */
 
     private void getDB_Data(){
         Query dbQuery = refRecipes.orderByKey();
@@ -279,6 +278,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
+        rejectReasonPieData.clear();
+        topModPieData.clear();
        Query dbDelList = deleted_list.orderByKey();
        dbDelList.addListenerForSingleValueEvent(new ValueEventListener() {
              @Override
@@ -323,6 +324,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
        });
     }
 
+    /**
+     * Set the Reject Reason and Top Mod pie data.
+     */
     private void setDelPieData() {
 
         rejectReasonPieChart = new PieChartData(rejectReasonPieData);
@@ -339,6 +343,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    /**
+     * set random colors to the Top Mod and Reject Reason pie charts
+     */
     private void setColors() {
 
         if(spam>0) {
@@ -428,6 +435,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    /**
+     * Setup the Menu in the Activity and mange the user click on each option from the menu itself.
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_layout,menu);
@@ -510,6 +520,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         unregisterReceiver(bcr);
     }
 
+    /**
+     * Replace the dates in the options with the current date.
+     */
     private void setCurrentDateonOpen(){
         Calendar c = Calendar.getInstance();
         int currentYear = c.get(Calendar.YEAR);

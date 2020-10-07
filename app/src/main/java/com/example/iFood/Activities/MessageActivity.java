@@ -63,9 +63,9 @@ public class MessageActivity extends AppCompatActivity {
         msgContent.setText(contentMsg);
         msgDate.setText(dateMsg);
         msgTitle.setText(titleMsg);
-       // getMessageInfo();
+
     } // onCreate ends
-    @Override
+
     /**
      * Register our Broadcast Receiver when opening the app.
      */

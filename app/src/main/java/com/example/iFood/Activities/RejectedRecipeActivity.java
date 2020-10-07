@@ -46,13 +46,11 @@ public class RejectedRecipeActivity extends AppCompatActivity {
         pullIntentInformation();
         setVars();
         setVarsDate();
-        //////////////
+
 
         ///////////// Listeners
         btnDismiss.setOnClickListener(v -> {
             // If Admin clicked dismiss remove record from DB completely
-
-
                         String storageUrl = recipeImage;
                         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
                         storageReference.delete().addOnSuccessListener(aVoid -> {

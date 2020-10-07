@@ -22,13 +22,10 @@ public class connectionActivity extends AppCompatActivity {
 
         btn = findViewById(R.id.btnRefresh);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent login = new Intent(connectionActivity.this, LoginActivity.class);
-                startActivity(login);
-                finish();
-            }
+        btn.setOnClickListener(v -> {
+            Intent login = new Intent(connectionActivity.this, LoginActivity.class);
+            startActivity(login);
+            finish();
         });
     }
 }
