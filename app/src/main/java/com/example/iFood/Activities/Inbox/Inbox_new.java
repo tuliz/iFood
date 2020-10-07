@@ -1,12 +1,11 @@
 package com.example.iFood.Activities.Inbox;
 
-import android.app.ProgressDialog;
+
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,9 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
-
 import com.example.iFood.Activities.About;
-import com.example.iFood.Activities.RejectedListActivity;
 import com.example.iFood.Adapters.MessageAdapter;
 import com.example.iFood.Classes.Message;
 import com.example.iFood.MenuFragments.AddDrawFragment;
@@ -32,7 +29,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
