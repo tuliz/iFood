@@ -11,22 +11,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.iFood.Adapters.RecipeAdapter;
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.MenuFragments.AddDrawFragment;
 import com.example.iFood.MenuFragments.NavDrawFragment;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -35,19 +29,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import com.google.mlkit.common.model.DownloadConditions;
-import com.google.mlkit.nl.translate.TranslateLanguage;
-import com.google.mlkit.nl.translate.Translation;
-import com.google.mlkit.nl.translate.Translator;
-import com.google.mlkit.nl.translate.TranslatorOptions;
-
-
+import com.mannan.translateapi.Language;
+import com.mannan.translateapi.TranslateAPI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-
 
 
 /**
@@ -63,6 +48,7 @@ public class SearchRecipe extends AppCompatActivity {
     EditText et_search;
     String activity = this.getClass().getName();
     String[] userInput = {};
+    int i;
     List<Recipes> searchResultArray = new ArrayList<>();
     RecyclerView myrecyclerView;
     RecipeAdapter myAdapter;
@@ -149,10 +135,37 @@ public class SearchRecipe extends AppCompatActivity {
     } // onCreate ends
 
     /**
-     * This function divides the user input into multiple variables to be used in search.
+     * This function divides the user input into multiple variables to be used in search
+     * and translate the input to English to bring up results from the Database.
      */
     private void getInput(){
         userInput = et_search.getText().toString().split("\n");
+        Log.w("TAG","userInput length:"+userInput.length);
+        for(i=0;i<userInput.length;i++){
+            Log.w("TAG","input:"+userInput[i]);
+        }
+
+        for(i=0;i<userInput.length;i++) {
+            TranslateAPI translateAPI = new TranslateAPI(
+                    Language.AUTO_DETECT,
+                    Language.ENGLISH,
+                    userInput[i]);
+
+            translateAPI.setTranslateListener(new TranslateAPI.TranslateListener() {
+                @Override
+                public void onSuccess(String translatedText) {
+                    Log.w("TAG", "Translated:" + translatedText);
+                    userInput[i]=translatedText;
+                    Log.w("TAG","userInput in pos: "+i+" value now is:"+userInput[i]);
+
+                }
+
+                @Override
+                public void onFailure(String s) {
+
+                }
+            });
+        }
     }
     /**
      * This function is called each time a user hits the "Search" button.
@@ -161,8 +174,9 @@ public class SearchRecipe extends AppCompatActivity {
      * Will also called "refresh_lv" on each result.
      */
     public void searchRecipe(){
-
-
+        ProgressDialog progressDialog = new ProgressDialog(SearchRecipe.this);
+        progressDialog.setMessage("Searching for your recipe..");
+        progressDialog.show();
         Query dbQuery = ref.orderByKey();
         dbQuery.addValueEventListener(new ValueEventListener() {
             @SuppressLint("UseCompatLoadingForDrawables")
@@ -185,6 +199,7 @@ public class SearchRecipe extends AppCompatActivity {
                         }
                         }
                     }
+                progressDialog.dismiss();
                 if(searchResultArray.size()<1)
                 {
                     LinearLayout linearLayout = findViewById(R.id.resultsLayout);
@@ -231,114 +246,5 @@ public class SearchRecipe extends AppCompatActivity {
         unregisterReceiver(bcr);
     }
 
-    private void checkTranslate(){
-        TranslatorOptions options =
-                new TranslatorOptions.Builder()
-                        .setSourceLanguage(TranslateLanguage.HEBREW)
-                        .setTargetLanguage(TranslateLanguage.ENGLISH)
-                        .build();
-        final Translator englishHebrewTranslator =
-                Translation.getClient(options);
-        DownloadConditions conditions = new DownloadConditions.Builder()
-                .requireWifi()
-                .build();
-        englishHebrewTranslator.downloadModelIfNeeded(conditions).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                englishHebrewTranslator.translate("לימון").addOnSuccessListener(new OnSuccessListener<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        Log.w("TAG","Translated:"+s);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // Error here, couldn't download language pack
-                Log.w("TAG","Error:"+e.getMessage());
-            }
-        });
-    }
-/*
-    private void identifyLanguage(){
-        for(String s : userInput){
-            FirebaseLanguageIdentification identifier = FirebaseNaturalLanguage.getInstance()
-                    .getLanguageIdentification(new FirebaseLanguageIdentificationOptions.Builder()
-                    .setConfidenceThreshold(0.34f)
-                    .build());
-            identifier.identifyLanguage(s).addOnSuccessListener(s1 -> {
-                if(s1.equals("und")){
-                    Log.w("TAG","Could not get Lang code");
-                }
-                else{
-                    Log.w("TAG","Langcode:"+s1);
-                    getLanguageCode(s1);
-                }
-            });
-        }
-    }
-
-    private void getLanguageCode(String language) {
-        int langCode;
-        Log.w("TAG","Language is:"+language);
-             switch(language){
-
-                 case "he":
-                     langCode = HE;
-                     Log.w("TAG","Found code HE");
-                     break;
-                 case "ar":
-                     langCode = AR;
-                     Log.w("TAG","Found code AR");
-                     break;
-                 default:
-                    Log.w("TAG","Langcode not found.");
-                    langCode=0;
-             }
-        Log.w("TAG","langCode is:"+langCode);
-        translateText(langCode);
-    }
-
-    private void translateText(int langCode) {
-        Log.w("TAG","Start translating");
-        FirebaseTranslatorOptions option = new FirebaseTranslatorOptions.Builder()
-                // from what language
-                .setSourceLanguage(langCode)
-                // to what language
-                .setTargetLanguage(EN)
-                .build();
-        FirebaseTranslator translator = FirebaseNaturalLanguage.getInstance()
-                .getTranslator(option);
-
-        FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder().build();
-
-        translator.downloadModelIfNeeded(conditions).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                ProgressDialog progressDialog = new ProgressDialog(SearchRecipe.this);
-                progressDialog.setMessage("Translating..");
-                progressDialog.show();
-                translator.translate(et_search.getText().toString()).addOnSuccessListener(new OnSuccessListener<String>() {
-                    @Override
-                    public void onSuccess(String s) {
-                        Log.w("TAG","Translated text:"+s);
-                        progressDialog.dismiss();
-
-                    }
-                });
-
-
-
-            }
-        });
-    }
-
- */
 } // class ends
