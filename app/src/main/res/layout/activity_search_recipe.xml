@@ -7,12 +7,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activities.SearchRecipe">
 <LinearLayout
+
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -26,6 +28,7 @@
             >
         </TextView>
         <EditText
+            android:digits="0123456789 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ."
             android:id="@+id/etSearch"
             android:hint="@string/enter_your_ingredients_here"
             android:gravity="start"
