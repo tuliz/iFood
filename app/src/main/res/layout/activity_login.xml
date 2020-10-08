@@ -33,6 +33,7 @@
             android:text="@string/username">
      </TextView>
      <EditText
+
             android:focusableInTouchMode="true"
             android:id="@+id/etUser"
             android:layout_width="wrap_content"
@@ -40,7 +41,7 @@
             android:ems="10"
             android:textStyle="italic"
             android:hint="@string/username"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:importantForAutofill="no">
       </EditText>
 </LinearLayout>

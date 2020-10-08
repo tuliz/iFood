@@ -30,6 +30,15 @@ dependencies {
     implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
+    // Translation Kit
+    /*
+    implementation 'com.google.firebase:firebase-ml-natural-language:22.0.1'
+    implementation 'com.google.firebase:firebase-ml-natural-language-language-id-model:20.0.8'
+    implementation 'com.google.firebase:firebase-ml-natural-language-translate-model:20.0.9'
+
+     */
+    implementation 'com.google.mlkit:translate:16.1.1'
+
     // Firebase Related
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-storage:19.2.0'

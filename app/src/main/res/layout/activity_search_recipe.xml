@@ -28,7 +28,7 @@
             >
         </TextView>
         <EditText
-            android:digits="0123456789 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ."
+
             android:id="@+id/etSearch"
             android:hint="@string/enter_your_ingredients_here"
             android:gravity="start"
