@@ -140,8 +140,10 @@ public class SearchRecipe extends AppCompatActivity {
      */
     private void getInput(){
         userInput = et_search.getText().toString().split("\n");
+
+        /*
         Log.w("TAG","userInput length:"+userInput.length);
-        for(i=0;i<userInput.length;i++){
+             for(i=0;i<userInput.length;i++){
             Log.w("TAG","input:"+userInput[i]);
         }
 
@@ -165,7 +167,7 @@ public class SearchRecipe extends AppCompatActivity {
 
                 }
             });
-        }
+        }*/
     }
     /**
      * This function is called each time a user hits the "Search" button.
