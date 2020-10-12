@@ -133,20 +133,17 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
                     myDialog.cancel();
                 }
                     });
-            btnEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent edit = new Intent(mContext, EditRecipeActivity.class);
-                    edit.putExtra("RecipeName",mData.get(i).getRecipeName());
-                    edit.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
-                    edit.putExtra("Recipe",mData.get(i).getRecipe());
-                    edit.putExtra("Thumbnail",mData.get(i).getRecipePicture());
-                    edit.putExtra("recipeID",mData.get(i).getId());
-                    edit.putExtra("userName",userName);
-                    edit.putExtra("userRole",userRole);
-                    myDialog.dismiss();
-                    mContext.startActivity(edit);
-                }
+            btnEdit.setOnClickListener(v13 -> {
+                Intent edit = new Intent(mContext, EditRecipeActivity.class);
+                edit.putExtra("RecipeName",mData.get(i).getRecipeName());
+                edit.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
+                edit.putExtra("Recipe",mData.get(i).getRecipe());
+                edit.putExtra("Thumbnail",mData.get(i).getRecipePicture());
+                edit.putExtra("recipeID",mData.get(i).getId());
+                edit.putExtra("userName",userName);
+                edit.putExtra("userRole",userRole);
+                myDialog.dismiss();
+                mContext.startActivity(edit);
             });
 
             myDialog.show();

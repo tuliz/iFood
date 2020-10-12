@@ -115,13 +115,15 @@ public class EditRecipeActivity extends AppCompatActivity {
                         if(taskSnapshot.getMetadata()!=null){
                             if(taskSnapshot.getMetadata().getReference()!=null){
                                 Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
-                                Log.w("TAG","old value:"+recipeImageURL);
-                                newValue = result.toString();
-                                Log.w("TAG","new value:"+newValue);
-                                recipesRef.child(recipeID).child(userName).child("recipeName").setValue(recipeTitle);
-                                recipesRef.child(recipeID).child(userName).child("recipeIngredients").setValue(recipeIngredients);
-                                recipesRef.child(recipeID).child(userName).child("recipe").setValue(recipeInstructions);
-                                recipesRef.child(recipeID).child(userName).child("recipePicture").setValue(result.toString());
+                                result.addOnSuccessListener(uri -> {
+                                    Log.w("TAG","old value:"+recipeImageURL);
+                                    newValue = uri.toString();
+                                    Log.w("TAG","new value:"+newValue);
+                                    recipesRef.child(recipeID).child(userName).child("recipeName").setValue(recipeTitle);
+                                    recipesRef.child(recipeID).child(userName).child("recipeIngredients").setValue(recipeIngredients);
+                                    recipesRef.child(recipeID).child(userName).child("recipe").setValue(recipeInstructions);
+                                    recipesRef.child(recipeID).child(userName).child("recipePicture").setValue(result.toString());
+                                }).addOnFailureListener(e -> Log.w("TAG","Error:"+e.getMessage()));
                                 progressDialog.dismiss();
                                 finish();
                             }
