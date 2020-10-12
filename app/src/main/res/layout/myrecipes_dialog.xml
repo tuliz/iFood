@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@drawable/background3"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textView2"
@@ -28,11 +27,21 @@
         <Button
             style="?android:attr/buttonBarButtonStyle"
             android:layout_margin="5dp"
+            android:id="@+id/btnEdit"
+            android:textStyle="italic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit" />
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_margin="5dp"
             android:id="@+id/btnDelete"
             android:textStyle="italic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/delete" />
+
+
 
     </LinearLayout>
 

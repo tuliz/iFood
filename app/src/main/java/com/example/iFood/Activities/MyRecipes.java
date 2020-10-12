@@ -4,12 +4,15 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,6 +53,7 @@ public class MyRecipes extends AppCompatActivity {
     FloatingActionButton addIcon;
     String activity = this.getClass().getName();
     String userName,userRole;
+    TextView totalCount,notApprovedCount;
     MyRecipesAdapter myAdapter;
     RecyclerView myrecyclerView;
     private List<Recipes> myRecipes = new ArrayList<>();
@@ -97,6 +101,8 @@ public class MyRecipes extends AppCompatActivity {
             addIcon.show(getSupportFragmentManager(),"TAG");
         });
 
+        totalCount = findViewById(R.id.tvMyRecipesCount);
+        notApprovedCount = findViewById(R.id.tvNotApprovedCount);
 
          getList();
 
@@ -116,18 +122,35 @@ public class MyRecipes extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 myRecipes.clear();
+                int i=0;
                 for(DataSnapshot dst : dataSnapshot.getChildren()){
                     for(DataSnapshot userRecipes : dst.getChildren())
                             // check  the user name and add to his list
                         if (Objects.equals(userRecipes.getKey(), userName)) {
                             Recipes userRec = userRecipes.getValue(Recipes.class);
                             myRecipes.add(userRec);
+                            assert userRec != null;
+                            if(!userRec.isApproved()){
+                                i++;
+                            }
                             refresh_lv();
 
                         }
                 }
-                if(myRecipes.size()<1)
+                if(myRecipes.size()<1) {
                     myRecipesSize();
+                    totalCount.setText(0);
+                }else{
+                    totalCount.setText(String.valueOf(myRecipes.size()));
+                    String notApproved = "("+i+")";
+                    notApprovedCount.setText(notApproved);
+                    notApprovedCount.setTextColor(Color.RED);
+                    notApprovedCount.setOnClickListener(v -> {
+                        Toast.makeText(MyRecipes.this,"Number of recipes waiting for review",Toast.LENGTH_SHORT)
+                                .show();
+                    });
+
+                }
 
             }
 
@@ -151,7 +174,7 @@ public class MyRecipes extends AppCompatActivity {
         myrecyclerView.setAdapter(myAdapter);
     }
 
-    @Override
+
     /**
      * Register our Broadcast Receiver when opening the app.
      */

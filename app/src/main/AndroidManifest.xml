@@ -20,6 +20,7 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateVisible|adjustResize"
         tools:targetApi="q">
+        <activity android:name=".Activities.EditRecipeActivity"></activity>
         <activity
             android:name=".Activities.RejectedRecipeActivity"
             android:screenOrientation="portrait" />
@@ -38,7 +39,7 @@
         <activity
             android:name=".Activities.AdminActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/adminTheme"/>
+            android:theme="@style/adminTheme" />
         <activity
             android:name=".Activities.ModActivity"
             android:screenOrientation="portrait" />

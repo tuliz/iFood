@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.example.iFood.Activities.Add_Recipe.addRecipe_New;
+import com.example.iFood.Activities.EditRecipeActivity;
 import com.example.iFood.Activities.ProfileActivity;
 import com.example.iFood.Activities.SignUpActivity;
 import com.example.iFood.Activities.oldActivities.AddRecipe;
@@ -51,20 +52,17 @@ public class EditItemImage {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("Select an image");
-        builder.setItems(imageOptions, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        openCamera();
-                        break;
-                    case 1:
-                        openGallery();
-                        break;
-                    case 2:
-                        clearImage();
-                        break;
-                }
+        builder.setItems(imageOptions, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    openCamera();
+                    break;
+                case 1:
+                    openGallery();
+                    break;
+                case 2:
+                    clearImage();
+                    break;
             }
         }).show();
     }
@@ -132,8 +130,8 @@ public class EditItemImage {
                     if(n.equals("ProfileActivity")) {
                         ((ProfileActivity) mContext).startActivityForResult(takePictureIntent, TAKE_PICTURE);
                     }
-                    if(n.equals("addRecipe_New")){
-                        ((addRecipe_New) mContext).startActivityForResult(takePictureIntent, TAKE_PICTURE);
+                    if(n.equals("EditRecipeActivity")){
+                        ((EditRecipeActivity) mContext).startActivityForResult(takePictureIntent, TAKE_PICTURE);
                     }
                     if(n.equals("AddRecipe")){
                         ((AddRecipe) mContext).startActivityForResult(takePictureIntent, TAKE_PICTURE);
@@ -157,8 +155,8 @@ public class EditItemImage {
                 if(n.equals("ProfileActivity")) {
                     ((ProfileActivity) mContext).startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE);
                 }
-                if(n.equals("addRecipe_New")){
-                    ((addRecipe_New) mContext).startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE);
+                if(n.equals("EditRecipeActivity")){
+                    ((EditRecipeActivity) mContext).startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE);
                 }
                 if(n.equals("AddRecipe")){
                     ((AddRecipe) mContext).startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE);
@@ -185,6 +183,9 @@ public class EditItemImage {
         }
         if(n.equals("SignUpActivity")){
             ((SignUpActivity) mContext).clearImage();
+        }
+        if(n.equals("EditRecipeActivity")){
+            ((EditRecipeActivity) mContext).clearImage();
         }
       }
 
