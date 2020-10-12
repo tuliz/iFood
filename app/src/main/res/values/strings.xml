@@ -106,6 +106,8 @@
     <string name="already_verified">Email already verified.</string>
     <string name="resend_verification_email">Resend verification Email</string>
     <string name="password_star" translatable="false">****************</string>
+    <string name="save">Save</string>
+    <string name="recipe_edit">Recipe Edit :</string>
 
 
 </resources>
