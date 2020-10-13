@@ -119,10 +119,20 @@ public class EditRecipeActivity extends AppCompatActivity {
                                     Log.w("TAG","old value:"+recipeImageURL);
                                     newValue = uri.toString();
                                     Log.w("TAG","new value:"+newValue);
-                                    recipesRef.child(recipeID).child(userName).child("recipeName").setValue(recipeTitle);
-                                    recipesRef.child(recipeID).child(userName).child("recipeIngredients").setValue(recipeIngredients);
-                                    recipesRef.child(recipeID).child(userName).child("recipe").setValue(recipeInstructions);
-                                    recipesRef.child(recipeID).child(userName).child("recipePicture").setValue(newValue);
+
+                        String storageUrl = recipeImageURL;
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
+                        storageReference.delete().addOnSuccessListener(aVoid -> {
+                            // File deleted successfully so now change to the new file in main DB and update other values the user changed
+                            recipesRef.child(recipeID).child(userName).child("recipeName").setValue(recipeTitle);
+                            recipesRef.child(recipeID).child(userName).child("recipeIngredients").setValue(recipeIngredients);
+                            recipesRef.child(recipeID).child(userName).child("recipe").setValue(recipeInstructions);
+                            recipesRef.child(recipeID).child(userName).child("recipePicture").setValue(newValue);
+                        }).addOnFailureListener(exception -> {
+                            // Couldn't delete file so didn't update anything.
+                            Toast.makeText(EditRecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
+                        });
+
                                 }).addOnFailureListener(e -> Log.w("TAG","Error:"+e.getMessage()));
                                 progressDialog.dismiss();
                                 finish();

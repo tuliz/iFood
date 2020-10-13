@@ -308,6 +308,7 @@ public class addRecipe_New extends AppCompatActivity {
                         resetRecipe();
                         // Dismiss Dialog.
                         progressDialog.dismiss();
+                        Toast.makeText(addRecipe_New.this,"A moderator will review your recipe as soon as possible, thank you.",Toast.LENGTH_LONG).show();
                     });
                 }
             }
