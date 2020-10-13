@@ -104,11 +104,11 @@ public class EditRecipeActivity extends AppCompatActivity {
                 if(imageBitmap!=null){
                     StorageReference photoRef = mStorage.getReferenceFromUrl(recipeImageURL);
                     String recipePhotoName = photoRef.getName();
-                    Log.w("TAG","recipePhotoName:"+recipePhotoName);
+                    Log.w("TAG","recipePhotoName: Photos/"+recipePhotoName);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     final byte[] data = baos.toByteArray();
-                    final UploadTask uploadTask = photoRef.child("Photos/"+ recipePhotoName).putBytes(data);
+                    final UploadTask uploadTask = photoRef.child("Photos/"+recipePhotoName).putBytes(data);
                     uploadTask.addOnFailureListener(e -> {
 
                     }).addOnSuccessListener(taskSnapshot -> {
@@ -122,7 +122,7 @@ public class EditRecipeActivity extends AppCompatActivity {
                                     recipesRef.child(recipeID).child(userName).child("recipeName").setValue(recipeTitle);
                                     recipesRef.child(recipeID).child(userName).child("recipeIngredients").setValue(recipeIngredients);
                                     recipesRef.child(recipeID).child(userName).child("recipe").setValue(recipeInstructions);
-                                    recipesRef.child(recipeID).child(userName).child("recipePicture").setValue(result.toString());
+                                    recipesRef.child(recipeID).child(userName).child("recipePicture").setValue(newValue);
                                 }).addOnFailureListener(e -> Log.w("TAG","Error:"+e.getMessage()));
                                 progressDialog.dismiss();
                                 finish();

@@ -108,6 +108,7 @@
     <string name="password_star" translatable="false">****************</string>
     <string name="save">Save</string>
     <string name="recipe_edit">Recipe Edit :</string>
+    <string name="edit_delete_view_my_recipes">Do you want to Edit,View or Delete your Recipe?</string>
 
 
 </resources>

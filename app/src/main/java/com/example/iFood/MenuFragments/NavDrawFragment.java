@@ -131,35 +131,24 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Exit Application");
                     builder.setMessage("Are you sure you want to Exit?");
-                    builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                    builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+                    builder.setPositiveButton(R.string.yes, (dialog, which) -> {
 
-                            //mContext.stopService(new Intent(mContext.getApplicationContext(),AppService.class));
-                            SharedPreferences.Editor delData = mContext.getSharedPreferences("userData",MODE_PRIVATE).edit();
-                            delData.clear();
-                            delData.apply();
-                            Objects.requireNonNull(getActivity()).finishAffinity();
-                        }
+                        //mContext.stopService(new Intent(mContext.getApplicationContext(),AppService.class));
+                        SharedPreferences.Editor delData = mContext.getSharedPreferences("userData",MODE_PRIVATE).edit();
+                        delData.clear();
+                        delData.apply();
+                        Objects.requireNonNull(getActivity()).finishAffinity();
                     });
                     final  AlertDialog alertExit = builder.create();
-                    alertExit.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface dialog) {
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                                    LinearLayout.LayoutParams.WRAP_CONTENT
-                            );
-                            params.setMargins(20,0,0,0);
-                            Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
-                            button.setLayoutParams(params);
-                        }
+                    alertExit.setOnShowListener(dialog -> {
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                        );
+                        params.setMargins(20,0,0,0);
+                        Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+                        button.setLayoutParams(params);
                     });
 
                     alertExit.show();

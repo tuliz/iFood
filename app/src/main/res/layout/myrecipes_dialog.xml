@@ -25,6 +25,7 @@
             android:text="@string/view"
             android:textStyle="italic" />
         <Button
+            android:visibility="gone"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_margin="5dp"
             android:id="@+id/btnEdit"

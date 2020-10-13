@@ -42,6 +42,7 @@ import java.util.Objects;
 public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHolder> {
     Button btnView,btnDelete,btnEdit;
     Dialog myDialog;
+    TextView dialogMessage;
     String id,userName,userRole,check;
     private String activity;
     ProgressDialog progressDialog;
@@ -88,9 +89,28 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
             myDialog = new Dialog(mContext);
             myDialog.setContentView(R.layout.myrecipes_dialog);
             myDialog.setTitle("View or Delete?");
+            dialogMessage = myDialog.findViewById(R.id.textView2);
             btnDelete = myDialog.findViewById(R.id.btnDelete);
             btnView = myDialog.findViewById(R.id.btnView);
             btnEdit = myDialog.findViewById(R.id.btnEdit);
+            if(!mData.get(i).isApproved()){
+               //Log.w("TAG","Inside if");
+
+                dialogMessage.setText(R.string.edit_delete_view_my_recipes);
+               btnEdit.setVisibility(View.VISIBLE);
+                btnEdit.setOnClickListener(v13 -> {
+                    Intent edit = new Intent(mContext, EditRecipeActivity.class);
+                    edit.putExtra("RecipeName",mData.get(i).getRecipeName());
+                    edit.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
+                    edit.putExtra("Recipe",mData.get(i).getRecipe());
+                    edit.putExtra("Thumbnail",mData.get(i).getRecipePicture());
+                    edit.putExtra("recipeID",mData.get(i).getId());
+                    edit.putExtra("userName",userName);
+                    edit.putExtra("userRole",userRole);
+                    myDialog.dismiss();
+                    mContext.startActivity(edit);
+                });
+            }
             btnView.setOnClickListener(v1 -> {
                 Intent intent1 = new Intent(mContext, RecipeActivity.class);
                 intent1.putExtra("activity",activity);
@@ -133,18 +153,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
                     myDialog.cancel();
                 }
                     });
-            btnEdit.setOnClickListener(v13 -> {
-                Intent edit = new Intent(mContext, EditRecipeActivity.class);
-                edit.putExtra("RecipeName",mData.get(i).getRecipeName());
-                edit.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
-                edit.putExtra("Recipe",mData.get(i).getRecipe());
-                edit.putExtra("Thumbnail",mData.get(i).getRecipePicture());
-                edit.putExtra("recipeID",mData.get(i).getId());
-                edit.putExtra("userName",userName);
-                edit.putExtra("userRole",userRole);
-                myDialog.dismiss();
-                mContext.startActivity(edit);
-            });
+
 
             myDialog.show();
         });
