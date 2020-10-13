@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,20 +17,18 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.iFood.Classes.Recipes;
+
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
 import com.example.iFood.Utils.EditItemImage;
 import com.example.iFood.Utils.FileUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -45,7 +44,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class EditRecipeActivity extends AppCompatActivity {
     ConnectionBCR bcr = new ConnectionBCR();
@@ -60,6 +58,7 @@ public class EditRecipeActivity extends AppCompatActivity {
 
     FirebaseStorage mStorage = FirebaseStorage.getInstance();
     DatabaseReference recipesRef = FirebaseDatabase.getInstance().getReference().child("Recipes");
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
