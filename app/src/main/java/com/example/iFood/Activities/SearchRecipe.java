@@ -191,9 +191,8 @@ public class SearchRecipe extends AppCompatActivity {
                           Recipes results = searchedResults.getValue(Recipes.class);
                         for (String s : userInput) {
                             assert results != null;
-                            if (results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved()) {
-                                allMatch=true;
-                            }
+                            Log.w("TAG","Rec name: "+results.recipeName+", isApproved:"+results.isApproved());
+                            allMatch= results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved();
                         }
                         if(allMatch){
                             searchResultArray.add(results);
