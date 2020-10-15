@@ -29,8 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.mannan.translateapi.Language;
-import com.mannan.translateapi.TranslateAPI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +46,6 @@ public class SearchRecipe extends AppCompatActivity {
     EditText et_search;
     String activity = this.getClass().getName();
     String[] userInput = {};
-    int i;
     List<Recipes> searchResultArray = new ArrayList<>();
     RecyclerView myrecyclerView;
     RecipeAdapter myAdapter;

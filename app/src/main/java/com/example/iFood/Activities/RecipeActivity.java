@@ -29,16 +29,12 @@ import com.example.iFood.Classes.Recipes;
 import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -142,41 +138,37 @@ public class RecipeActivity extends AppCompatActivity {
 
 
 
-        btnShare.setOnClickListener(v -> {
+        btnShare.setOnClickListener(v -> new Thread(() -> {
 
+            Intent shareRecipe = new Intent(Intent.ACTION_SEND);
+            shareRecipe.setType("image/*");
+            image = getUrltoBitMap(recipeImage);
+            imageToSend  = getLocalBitmapUri(image);
+            File file = new File(Objects.requireNonNull(imageToSend.getPath()));
+            Uri uriToSend = FileProvider.getUriForFile(RecipeActivity.this,getApplicationContext().getPackageName()+".provider",file);
+            String ingredients = mRecipeIngredients.getTextContent().toString();
+            String recipeContent = mRecipe.getTextContent().toString();
+            shareRecipe.putExtra(Intent.EXTRA_SUBJECT,mRecipeName.getText().toString());
+            String text = getResources().getString(R.string.ingredients)+
+                    System.getProperty("line.separator")+
+                    System.getProperty("line.separator")+
+                    ingredients+
+                    System.getProperty("line.separator")+
+                    System.getProperty("line.separator")+
+                    getResources().getString(R.string.method)+
+                    System.getProperty("line.separator")+
+                    System.getProperty("line.separator")+
+                    recipeContent+
+                    System.getProperty("line.separator")+
+                    System.getProperty("line.separator")+
+                    "Shared from iFood app, look for the app on the Play Store!";
+            shareRecipe.putExtra(Intent.EXTRA_TEXT,text);
+            shareRecipe.putExtra(Intent.EXTRA_STREAM,uriToSend);
+            shareRecipe.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            shareRecipe.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(shareRecipe,"Share this Recipe via"));
 
-            new Thread(() -> {
-
-                Intent shareRecipe = new Intent(Intent.ACTION_SEND);
-                shareRecipe.setType("image/*");
-                image = getUrltoBitMap(recipeImage);
-                imageToSend  = getLocalBitmapUri(image);
-                File file = new File(Objects.requireNonNull(imageToSend.getPath()));
-                Uri uriToSend = FileProvider.getUriForFile(RecipeActivity.this,getApplicationContext().getPackageName()+".provider",file);
-                String ingredients = mRecipeIngredients.getTextContent().toString();
-                String recipeContent = mRecipe.getTextContent().toString();
-                shareRecipe.putExtra(Intent.EXTRA_SUBJECT,mRecipeName.getText().toString());
-                String text = getResources().getString(R.string.ingredients)+
-                        System.getProperty("line.separator")+
-                        System.getProperty("line.separator")+
-                        ingredients+
-                        System.getProperty("line.separator")+
-                        System.getProperty("line.separator")+
-                        getResources().getString(R.string.method)+
-                        System.getProperty("line.separator")+
-                        System.getProperty("line.separator")+
-                        recipeContent+
-                        System.getProperty("line.separator")+
-                        System.getProperty("line.separator")+
-                        "Shared from iFood app, look for the app on the Play Store!";
-                shareRecipe.putExtra(Intent.EXTRA_TEXT,text);
-                shareRecipe.putExtra(Intent.EXTRA_STREAM,uriToSend);
-                shareRecipe.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                shareRecipe.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(shareRecipe,"Share this Recipe via"));
-
-            }).start();
-        });
+        }).start());
 
         handleButtons();
     } // onCreate ends

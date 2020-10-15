@@ -251,8 +251,8 @@ public class Inbox_new extends AppCompatActivity {
 
     private static class viewPagerAdapter extends FragmentPagerAdapter {
 
-        private List<Fragment> fragments = new ArrayList<>();
-        private List<String> fragmentsTitle = new ArrayList<>();
+        private final List<Fragment> fragments = new ArrayList<>();
+        private final List<String> fragmentsTitle = new ArrayList<>();
 
 
 

@@ -37,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -180,7 +181,7 @@ public class SendMessage extends AppCompatActivity {
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         String refreshToken= FirebaseInstanceId.getInstance().getToken();
         Token token= new Token(refreshToken);
-        FirebaseDatabase.getInstance().getReference("Tokens").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+        FirebaseDatabase.getInstance().getReference("Tokens").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
     }
     /**
      * Function is responsible for saving the messages and the information in the Database.
@@ -237,6 +238,7 @@ public class SendMessage extends AppCompatActivity {
                 if (response.code() == 200) {
                     //Log.w("TAG","code:"+response.code());
                     //Log.w("TAG","body:"+response.body().success);
+                    assert response.body() != null;
                     if (response.body().success != 1) {
                         Toast.makeText(SendMessage.this, "Failed ", Toast.LENGTH_LONG).show();
                     }

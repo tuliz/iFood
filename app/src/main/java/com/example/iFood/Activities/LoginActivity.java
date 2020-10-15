@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     Dialog myDialog;
     TextView reset_password,resend_authEmail,signupText;
     SwitchCompat rmbMe;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     Dialog sendEmailDialog;
     EditText etUser,etPass;
     Users u;

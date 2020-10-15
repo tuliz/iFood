@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     // Connect to DB
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference DB = database.getReference();
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -170,7 +170,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                                             addUser(Username, Fname, Phone, Lname, Email);
                                                                             mAuth.signInWithEmailAndPassword(Email, password1).addOnCompleteListener(task1 -> {
                                                                                AuthResult authResult = task1.getResult();
-                                                                               FirebaseUser firebaseUser = authResult.getUser();
+                                                                                assert authResult != null;
+                                                                                FirebaseUser firebaseUser = authResult.getUser();
+                                                                                assert firebaseUser != null;
                                                                                 firebaseUser.sendEmailVerification();
                                                                             });
                                                                             // Log.i("URL", "Image URL:" + picUrl);

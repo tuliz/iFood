@@ -44,10 +44,10 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
     Dialog myDialog;
     TextView dialogMessage;
     String id,userName,userRole,check;
-    private String activity;
+    private final String activity;
     ProgressDialog progressDialog;
-    private Context mContext;
-    private List<Recipes> mData;
+    private final Context mContext;
+    private final List<Recipes> mData;
     DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child("Recipes");
 
     public MyRecipesAdapter(Context mContext, List<Recipes> mData,String activity){

@@ -19,8 +19,8 @@ import java.util.List;
 
 public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> {
     String userName,userRole;
-    private Context mContext;
-    private List<RejectedRecipe> mData;
+    private final Context mContext;
+    private final List<RejectedRecipe> mData;
 
 
     public RejectAdapter(Context mContext, List<RejectedRecipe> mData){
@@ -77,7 +77,7 @@ public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> 
         return mData.size();
     }
 
-    public class MyHolder extends RecyclerView.ViewHolder {
+    public static class MyHolder extends RecyclerView.ViewHolder {
 
         TextView recipeTitle;
         CardView cardView;

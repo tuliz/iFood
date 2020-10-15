@@ -1,14 +1,11 @@
 package com.example.iFood.Activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,8 +52,8 @@ public class MyRecipes extends AppCompatActivity {
     TextView totalCount,notApprovedCount;
     MyRecipesAdapter myAdapter;
     RecyclerView myrecyclerView;
-    private List<Recipes> myRecipes = new ArrayList<>();
-    private DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Recipes");
+    private final List<Recipes> myRecipes = new ArrayList<>();
+    private final DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Recipes");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,10 +141,8 @@ public class MyRecipes extends AppCompatActivity {
                     String notApproved = "("+i+")";
                     notApprovedCount.setText(notApproved);
                     notApprovedCount.setTextColor(Color.RED);
-                    notApprovedCount.setOnClickListener(v -> {
-                        Toast.makeText(MyRecipes.this,"Number of recipes waiting for review",Toast.LENGTH_SHORT)
-                                .show();
-                    });
+                    notApprovedCount.setOnClickListener(v -> Toast.makeText(MyRecipes.this,"Number of recipes waiting for review",Toast.LENGTH_SHORT)
+                            .show());
 
                 }
 

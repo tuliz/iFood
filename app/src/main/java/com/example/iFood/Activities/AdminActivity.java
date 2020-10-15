@@ -1,7 +1,6 @@
 package com.example.iFood.Activities;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -22,20 +21,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.iFood.Activities.Add_Recipe.addRecipe_New;
 import com.example.iFood.Activities.Inbox.Inbox_new;
-import com.example.iFood.Activities.oldActivities.AddRecipe;
-import com.example.iFood.Activities.oldActivities.Inbox;
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.Classes.Users;
-import com.example.iFood.MenuFragments.AddDrawFragment;
-import com.example.iFood.MenuFragments.NavDrawFragment;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
-import com.google.android.gms.common.util.ArrayUtils;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +34,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 import lecho.lib.hellocharts.model.PieChartData;
@@ -399,6 +388,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                         @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
                         try {
                             to = formatter.parse(toDate.getText().toString());
+                            assert to != null;
                             Log.d(TAG, "onClick: toDate:"+to.getTime());
                         } catch (ParseException e) {
                             e.printStackTrace();
@@ -422,6 +412,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                         @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
                         try {
                            from = formatter.parse(fromDate.getText().toString());
+                            assert from != null;
                             Log.d(TAG, "onClick: fromDate:"+from.getTime());
                         } catch (ParseException e) {
                             e.printStackTrace();

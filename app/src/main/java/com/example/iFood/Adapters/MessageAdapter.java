@@ -4,10 +4,7 @@ package com.example.iFood.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +39,8 @@ import static com.example.iFood.Activities.Inbox.Inbox_new.msgList;
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyHolder> {
     String userName,userRole,msgID;
     DatabaseReference messagesRef = FirebaseDatabase.getInstance().getReference().child("Messages");
-    private Context mContext;
-    private List<Message> mData;
+    private final Context mContext;
+    private final List<Message> mData;
 
 
     public MessageAdapter(Context mContext, List<Message> mData){
@@ -75,44 +72,38 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyHolder
         myHolder.userName.setText(mData.get(i).getFromUser());
         Picasso.get().load(mData.get(i).getUserImageUrl()).into(myHolder.userImg);
 
-        myHolder.msgView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, MessageActivity.class);
-                changeMsgState();
-                intent.putExtra("username",userName);
-                intent.putExtra("userRole",userRole);
-                intent.putExtra("Message Title",mData.get(i).getTitle());
-                intent.putExtra("Message Content",mData.get(i).getMessage());
-                intent.putExtra("From User",mData.get(i).getFromUser());
-                intent.putExtra("Message Date",mData.get(i).getSentDate());
-                intent.putExtra("To User",mData.get(i).getToUser());
-                intent.putExtra("msgID",msgID);
-                mContext.startActivity(intent);
-            }
+        myHolder.msgView.setOnClickListener(v -> {
+            Intent intent1 = new Intent(mContext, MessageActivity.class);
+            changeMsgState();
+            intent1.putExtra("username",userName);
+            intent1.putExtra("userRole",userRole);
+            intent1.putExtra("Message Title",mData.get(i).getTitle());
+            intent1.putExtra("Message Content",mData.get(i).getMessage());
+            intent1.putExtra("From User",mData.get(i).getFromUser());
+            intent1.putExtra("Message Date",mData.get(i).getSentDate());
+            intent1.putExtra("To User",mData.get(i).getToUser());
+            intent1.putExtra("msgID",msgID);
+            mContext.startActivity(intent1);
         });
 
-        myHolder.userImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!mData.get(i).isMarked) {
-                   // Toast.makeText(mContext, "Clicked on" + mData.get(i).title, Toast.LENGTH_SHORT).show();
-                    Drawable d = AppCompatResources.getDrawable(mContext, R.drawable.ic_done);
-                    myHolder.userImg.setImageDrawable(d);
+        myHolder.userImg.setOnClickListener(v -> {
+            if(!mData.get(i).isMarked) {
+               // Toast.makeText(mContext, "Clicked on" + mData.get(i).title, Toast.LENGTH_SHORT).show();
+                Drawable d = AppCompatResources.getDrawable(mContext, R.drawable.ic_done);
+                myHolder.userImg.setImageDrawable(d);
 
-                    mData.get(i).isMarked = true;
-                    msgList.add(mData.get(i).getMsgID());
+                mData.get(i).isMarked = true;
+                msgList.add(mData.get(i).getMsgID());
 
-                  //Log.i("tag","MsgID added:"+mData.get(i).msgID+", msgList size now is:"+msgList.size());
-                }else{
-                    Picasso.get().load(mData.get(i).getUserImageUrl()).into(myHolder.userImg);
-                    mData.get(i).isMarked = false;
-                    msgList.remove(mData.get(i).msgID);
-               //   Log.i("tag","MsgID remove:"+mData.get(i).msgID+", msgList size now is:"+msgList.size());
-                }
-                checkDelList();
-
+              //Log.i("tag","MsgID added:"+mData.get(i).msgID+", msgList size now is:"+msgList.size());
+            }else{
+                Picasso.get().load(mData.get(i).getUserImageUrl()).into(myHolder.userImg);
+                mData.get(i).isMarked = false;
+                msgList.remove(mData.get(i).msgID);
+           //   Log.i("tag","MsgID remove:"+mData.get(i).msgID+", msgList size now is:"+msgList.size());
             }
+            checkDelList();
+
         });
 
     }
@@ -159,6 +150,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyHolder
             }
         });
     }
+    /*
     public Bitmap StringToBitMap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
@@ -168,6 +160,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyHolder
             e.getMessage();
             return null;
         }
-    }
+    }*/
 
 }

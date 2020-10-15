@@ -166,9 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setMessage("Are you sure you want to Exit?");
         builder.setTitle("Exit Application");
-        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-            finishAffinity();
-        });
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
         builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
 
         final AlertDialog alertExit = builder.create();

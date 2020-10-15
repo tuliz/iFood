@@ -91,102 +91,83 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
 
         navigationView.setNavigationItemSelectedListener(item -> {
 
-            switch (item.getItemId()) {
-                case R.id.menu_admin:
-                    Intent admin = new Intent(mContext.getApplicationContext(), AdminActivity.class);
-                    admin.putExtra("username",username);
-                    admin.putExtra("userRole",userRole);
-                    startActivity(admin);
+            int itemId = item.getItemId();
+            if (itemId == R.id.menu_admin) {
+                Intent admin = new Intent(mContext.getApplicationContext(), AdminActivity.class);
+                admin.putExtra("username", username);
+                admin.putExtra("userRole", userRole);
+                startActivity(admin);
+            } else if (itemId == R.id.menu_mod) {
+                Intent mod = new Intent(mContext.getApplicationContext(), ModActivity.class);
+                mod.putExtra("username", username);
+                mod.putExtra("userRole", userRole);
+                startActivity(mod);
+            } else if (itemId == R.id.menuProfile) {
+                Intent profile = new Intent(mContext.getApplicationContext(), ProfileActivity.class);
+                profile.putExtra("username", username);
+                profile.putExtra("userRole", userRole);
+                startActivity(profile);
+            } else if (itemId == R.id.menu_rejectList) {
+                Intent rejectList = new Intent(mContext.getApplicationContext(), RejectedListActivity.class);
+                rejectList.putExtra("username", username);
+                rejectList.putExtra("userRole", userRole);
+                startActivity(rejectList);
+            } else if (itemId == R.id.menuHome) {
+                Intent home = new Intent(mContext.getApplicationContext(), MainActivity.class);
+                home.putExtra("username", username);
+                home.putExtra("userRole", userRole);
+                startActivity(home);
+                Objects.requireNonNull(getActivity()).finishAffinity();
+            } else if (itemId == R.id.menu_Exit) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Exit Application");
+                builder.setMessage("Are you sure you want to Exit?");
+                builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
 
-                    break;
-                case R.id.menu_mod:
-                    Intent mod = new Intent(mContext.getApplicationContext(), ModActivity.class);
-                    mod.putExtra("username",username);
-                    mod.putExtra("userRole",userRole);
-                    startActivity(mod);
-
-                    break;
-                case R.id.menuProfile:
-                    Intent profile = new Intent(mContext.getApplicationContext(), ProfileActivity.class);
-                    profile.putExtra("username",username);
-                    profile.putExtra("userRole",userRole);
-                    startActivity(profile);
-
-                    break;
-
-                case R.id.menu_rejectList:
-                    Intent rejectList = new Intent(mContext.getApplicationContext(), RejectedListActivity.class);
-                    rejectList.putExtra("username",username);
-                    rejectList.putExtra("userRole",userRole);
-                    startActivity(rejectList);
-                    break;
-                case R.id.menuHome:
-                    Intent home = new Intent(mContext.getApplicationContext(), MainActivity.class);
-                    home.putExtra("username",username);
-                    home.putExtra("userRole",userRole);
-                    startActivity(home);
+                    //mContext.stopService(new Intent(mContext.getApplicationContext(),AppService.class));
+                    SharedPreferences.Editor delData = mContext.getSharedPreferences("userData", MODE_PRIVATE).edit();
+                    delData.clear();
+                    delData.apply();
                     Objects.requireNonNull(getActivity()).finishAffinity();
-                    break;
-                case R.id.menu_Exit:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Exit Application");
-                    builder.setMessage("Are you sure you want to Exit?");
-                    builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
-                    builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                });
+                final AlertDialog alertExit = builder.create();
+                alertExit.setOnShowListener(dialog -> {
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    params.setMargins(20, 0, 0, 0);
+                    Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setLayoutParams(params);
+                });
 
-                        //mContext.stopService(new Intent(mContext.getApplicationContext(),AppService.class));
-                        SharedPreferences.Editor delData = mContext.getSharedPreferences("userData",MODE_PRIVATE).edit();
-                        delData.clear();
-                        delData.apply();
-                        Objects.requireNonNull(getActivity()).finishAffinity();
-                    });
-                    final  AlertDialog alertExit = builder.create();
-                    alertExit.setOnShowListener(dialog -> {
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                        );
-                        params.setMargins(20,0,0,0);
-                        Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
-                        button.setLayoutParams(params);
-                    });
-
-                    alertExit.show();
-                    break;
-                case R.id.menu_AddRecepie:
-                    Intent main = new Intent(mContext.getApplicationContext(), addRecipe_New.class);
-                    main.putExtra("username",username);
-                    main.putExtra("userRole",userRole);
-                    startActivity(main);
-
-                    break;
-                case R.id.menu_MyRecepies:
-                    Intent myRecipes = new Intent(mContext.getApplicationContext(), MyRecipes.class);
-                    myRecipes.putExtra("username",username);
-                    myRecipes.putExtra("userRole",userRole);
-                    startActivity(myRecipes);
-
-                    break;
-                case R.id.menu_SearchRecepie:
-                    Intent search = new Intent(mContext.getApplicationContext(), SearchRecipe.class);
-                    search.putExtra("username",username);
-                    search.putExtra("userRole",userRole);
-                    startActivity(search);
-
-                    break;
-                case R.id.menuInbox:
-                    Intent inbox = new Intent(mContext.getApplicationContext(), Inbox_new.class);
-                    inbox.putExtra("username",username);
-                    inbox.putExtra("userRole",userRole);
-                    startActivity(inbox);
-
-                    break;
-                case R.id.menu_favRecipe:
-                    Intent fav = new Intent(mContext.getApplicationContext(), FavoriteRecipes.class);
-                    fav.putExtra("username",username);
-                    fav.putExtra("userRole",userRole);
-                    startActivity(fav);
-
+                alertExit.show();
+            } else if (itemId == R.id.menu_AddRecepie) {
+                Intent main = new Intent(mContext.getApplicationContext(), addRecipe_New.class);
+                main.putExtra("username", username);
+                main.putExtra("userRole", userRole);
+                startActivity(main);
+            } else if (itemId == R.id.menu_MyRecepies) {
+                Intent myRecipes = new Intent(mContext.getApplicationContext(), MyRecipes.class);
+                myRecipes.putExtra("username", username);
+                myRecipes.putExtra("userRole", userRole);
+                startActivity(myRecipes);
+            } else if (itemId == R.id.menu_SearchRecepie) {
+                Intent search = new Intent(mContext.getApplicationContext(), SearchRecipe.class);
+                search.putExtra("username", username);
+                search.putExtra("userRole", userRole);
+                startActivity(search);
+            } else if (itemId == R.id.menuInbox) {
+                Intent inbox = new Intent(mContext.getApplicationContext(), Inbox_new.class);
+                inbox.putExtra("username", username);
+                inbox.putExtra("userRole", userRole);
+                startActivity(inbox);
+            } else if (itemId == R.id.menu_favRecipe) {
+                Intent fav = new Intent(mContext.getApplicationContext(), FavoriteRecipes.class);
+                fav.putExtra("username", username);
+                fav.putExtra("userRole", userRole);
+                startActivity(fav);
             }
             return false;
         });
