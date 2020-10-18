@@ -4,7 +4,10 @@ package com.example.iFood.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +73,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyHolder
         //////
         myHolder.msgTitle.setText(mData.get(i).getTitle());
         myHolder.userName.setText(mData.get(i).getFromUser());
-        Picasso.get().load(mData.get(i).getUserImageUrl()).into(myHolder.userImg);
+        new Thread(() ->
+                Picasso.get().load(mData.get(i).getUserImageUrl()).into(myHolder.userImg))
+                .start();
+
+
+
 
         myHolder.msgView.setOnClickListener(v -> {
             Intent intent1 = new Intent(mContext, MessageActivity.class);

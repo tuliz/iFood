@@ -119,6 +119,7 @@ public class ProfileActivity extends AppCompatActivity {
             final EditText edittext = new EditText(ProfileActivity.this);
             alert.setTitle("Enter your first name:");
             alert.setIcon(R.drawable.ic_edit_black);
+            edittext.setText(firstName.getText().toString());
             alert.setView(edittext);
             alert.setPositiveButton(R.string.submit, (dialog, whichButton) -> {
                 String fName = edittext.getText().toString();
@@ -140,6 +141,7 @@ public class ProfileActivity extends AppCompatActivity {
             final EditText edittext = new EditText(ProfileActivity.this);
             alert.setTitle("Enter your last name:");
             alert.setIcon(R.drawable.ic_edit_black);
+            edittext.setText(lastName.getText().toString());
             alert.setView(edittext);
             alert.setPositiveButton("Submit", (dialog, whichButton) -> {
                 String lName = edittext.getText().toString();
@@ -160,6 +162,7 @@ public class ProfileActivity extends AppCompatActivity {
             final EditText edittext = new EditText(ProfileActivity.this);
             edittext.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
             alert.setTitle("Enter your phone:");
+            edittext.setText(phone.getText().toString());
             alert.setIcon(R.drawable.ic_edit_black);
             alert.setView(edittext);
 

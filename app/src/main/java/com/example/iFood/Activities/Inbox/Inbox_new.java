@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -112,16 +114,35 @@ public class Inbox_new extends AppCompatActivity {
                 messagesRef.child(userName).child(msgList.get(i)).removeValue();
 
             }
-           // Log.d("TAG","msgList size:"+msgList.size()+" and messages list sizes:"+unReadmsg.size()+","+readMsg.size());
-            msgList.clear();
-            checkDelList();
-            refresh_lvRead();
-            refresh_lvNotRead();
+
 
         });
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.w("TAG","Tab selected:"+tab.getText());
+                msgList.clear();
+                checkDelList();
+                refresh_lvRead();
+                refresh_lvNotRead();
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
 
+            }
 
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        checkDelList();
+        refresh_lvRead();
+        refresh_lvNotRead();
 
     } // onCreate ends
 
@@ -133,6 +154,7 @@ public class Inbox_new extends AppCompatActivity {
         viewPagerAdapter.addFragment(inboxOldMessages,"Old Messages");
 
         viewPager.setAdapter(viewPagerAdapter);
+
     }
 
     private void getName_Role() {
@@ -257,7 +279,9 @@ public class Inbox_new extends AppCompatActivity {
 
 
         public viewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+
             super(fm, behavior);
+
         }
 
         public void addFragment(Fragment fragment, String title){
@@ -269,6 +293,7 @@ public class Inbox_new extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
+
             return fragments.get(position);
         }
 
