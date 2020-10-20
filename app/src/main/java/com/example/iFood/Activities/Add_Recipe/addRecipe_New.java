@@ -25,6 +25,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.iFood.Activities.AdminActivity;
+import com.example.iFood.Activities.Inbox.Inbox_new;
 import com.example.iFood.Activities.MainActivity;
 import com.example.iFood.Activities.MyRecipes;
 import com.example.iFood.Activities.ProfileActivity;
@@ -213,59 +215,56 @@ public class addRecipe_New extends AppCompatActivity {
      * Manage user selection on the Menu.
      */
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int itemId = item.getItemId();
+        if(itemId ==  R.id.menu_Exit) {
+            final Dialog myDialog = new Dialog(addRecipe_New.this);
+            myDialog.setContentView(R.layout.dialog);
+            btnDismiss = myDialog.findViewById(R.id.btnDismiss);
+            btnOk = myDialog.findViewById(R.id.btnOk);
 
-            case R.id.menuProfile:
-                Intent profile = new Intent(addRecipe_New.this, ProfileActivity.class);
-                profile.putExtra("username",getIntent().getStringExtra("username"));
-                profile.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(profile);
-                finish();
-                break;
-            case R.id.menu_Exit:
-                final Dialog myDialog = new Dialog(addRecipe_New.this);
-                myDialog.setContentView(R.layout.dialog);
-                btnDismiss = myDialog.findViewById(R.id.btnDismiss);
-                btnOk =  myDialog.findViewById(R.id.btnOk);
+            // if pressed Ok will close the App
+            btnOk.setOnClickListener(v -> {
 
-               btnOk.setOnClickListener(v -> {
-                   SharedPreferences.Editor delData = getSharedPreferences("userData",MODE_PRIVATE).edit();
-                   delData.clear();
-                   delData.apply();
-                   finish();
-               });
-                btnDismiss.setOnClickListener(v -> myDialog.dismiss());
-                myDialog.show();
-                break;
-            case R.id.menu_MyRecepies:
-                Intent myRecipes = new Intent(addRecipe_New.this, MyRecipes.class);
-                myRecipes.putExtra("username",getIntent().getStringExtra("username"));
-                myRecipes.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(myRecipes);
-                finish();
-                break;
+                SharedPreferences.Editor delData = getSharedPreferences("userData", MODE_PRIVATE).edit();
+                delData.clear();
+                delData.apply();
+                finishAffinity();
+            });
+            // if pressed Dismiss will stay in the App
+            btnDismiss.setOnClickListener(v -> myDialog.dismiss());
+            myDialog.show();
+        }
 
-            case R.id.menu_SearchRecepie:
-                Intent search = new Intent(addRecipe_New.this, SearchRecipe.class);
-                search.putExtra("username",getIntent().getStringExtra("username"));
-                search.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(search);
-                finish();
-                break;
-            case R.id.menuInbox:
-                Intent inbox = new Intent(addRecipe_New.this, Inbox.class);
-                inbox.putExtra("username",getIntent().getStringExtra("username"));
-                inbox.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(inbox);
-                finish();
-                break;
-            case R.id.menuHome:
-                Intent main = new Intent(addRecipe_New.this, MainActivity.class);
-                main.putExtra("username",getIntent().getStringExtra("username"));
-                main.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(main);
-                finish();
-                break;
+        else if(itemId == R.id.menuProfile) {
+            Intent profile = new Intent(addRecipe_New.this, ProfileActivity.class);
+            profile.putExtra("username", getIntent().getStringExtra("username"));
+            profile.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(profile);
+            finish();
+        }
+        else if(itemId == R.id.menu_MyRecepies){
+            Intent myRecipes = new Intent(addRecipe_New.this, MyRecipes.class);
+            myRecipes.putExtra("username", getIntent().getStringExtra("username"));
+            myRecipes.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(myRecipes);
+        }
+        else if(itemId == R.id.menu_SearchRecepie) {
+            Intent search = new Intent(addRecipe_New.this, SearchRecipe.class);
+            search.putExtra("username", getIntent().getStringExtra("username"));
+            search.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(search);
+        }
+        else if(itemId == R.id.menuInbox) {
+            Intent inbox = new Intent(addRecipe_New.this, Inbox_new.class);
+            inbox.putExtra("username", getIntent().getStringExtra("username"));
+            inbox.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(inbox);
+        }
+        else if(itemId ==R.id.menuHome) {
+            Intent main = new Intent(addRecipe_New.this, MainActivity.class);
+            main.putExtra("username", getIntent().getStringExtra("username"));
+            main.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(main);
         }
         return super.onOptionsItemSelected(item);
     }

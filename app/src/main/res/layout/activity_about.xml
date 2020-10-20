@@ -38,6 +38,7 @@
 
         </TextView>
         <ImageView
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:id="@+id/sendEmail"
             android:src="@drawable/send_mass_email"

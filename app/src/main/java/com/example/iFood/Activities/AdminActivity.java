@@ -435,19 +435,17 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         return super.onCreateOptionsMenu(menu);
     }
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-
-            case R.id.menu_Exit:
+        int itemId = item.getItemId();
+            if(itemId ==  R.id.menu_Exit) {
                 final Dialog myDialog = new Dialog(AdminActivity.this);
                 myDialog.setContentView(R.layout.dialog);
                 btnDismiss = myDialog.findViewById(R.id.btnDismiss);
-                btnOk =  myDialog.findViewById(R.id.btnOk);
+                btnOk = myDialog.findViewById(R.id.btnOk);
 
                 // if pressed Ok will close the App
                 btnOk.setOnClickListener(v -> {
 
-                    SharedPreferences.Editor delData = getSharedPreferences("userData",MODE_PRIVATE).edit();
+                    SharedPreferences.Editor delData = getSharedPreferences("userData", MODE_PRIVATE).edit();
                     delData.clear();
                     delData.apply();
                     finishAffinity();
@@ -455,40 +453,39 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                 // if pressed Dismiss will stay in the App
                 btnDismiss.setOnClickListener(v -> myDialog.dismiss());
                 myDialog.show();
-                break;
-            case R.id.menuProfile:
+            }
+
+            else if(itemId == R.id.menuProfile) {
                 Intent profile = new Intent(AdminActivity.this, ProfileActivity.class);
-                profile.putExtra("username",getIntent().getStringExtra("username"));
-                profile.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                profile.putExtra("username", getIntent().getStringExtra("username"));
+                profile.putExtra("userRole", getIntent().getStringExtra("userRole"));
                 startActivity(profile);
                 finish();
-                break;
-            case R.id.menu_MyRecepies:
-                Intent myRecipes = new Intent(AdminActivity.this, MyRecipes.class);
-                myRecipes.putExtra("username",getIntent().getStringExtra("username"));
-                myRecipes.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(myRecipes);
-                break;
-
-            case R.id.menu_SearchRecepie:
+            }
+             else if(itemId == R.id.menu_MyRecepies){
+                    Intent myRecipes = new Intent(AdminActivity.this, MyRecipes.class);
+                    myRecipes.putExtra("username", getIntent().getStringExtra("username"));
+                    myRecipes.putExtra("userRole", getIntent().getStringExtra("userRole"));
+                    startActivity(myRecipes);
+            }
+           else if(itemId == R.id.menu_SearchRecepie) {
                 Intent search = new Intent(AdminActivity.this, SearchRecipe.class);
-                search.putExtra("username",getIntent().getStringExtra("username"));
-                search.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                search.putExtra("username", getIntent().getStringExtra("username"));
+                search.putExtra("userRole", getIntent().getStringExtra("userRole"));
                 startActivity(search);
-                break;
-            case R.id.menuInbox:
+            }
+            else if(itemId == R.id.menuInbox) {
                 Intent inbox = new Intent(AdminActivity.this, Inbox_new.class);
-                inbox.putExtra("username",getIntent().getStringExtra("username"));
-                inbox.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                inbox.putExtra("username", getIntent().getStringExtra("username"));
+                inbox.putExtra("userRole", getIntent().getStringExtra("userRole"));
                 startActivity(inbox);
-                break;
-            case R.id.menuHome:
+            }
+             else if(itemId ==R.id.menuHome) {
                 Intent main = new Intent(AdminActivity.this, MainActivity.class);
-                main.putExtra("username",getIntent().getStringExtra("username"));
-                main.putExtra("userRole",getIntent().getStringExtra("userRole"));
+                main.putExtra("username", getIntent().getStringExtra("username"));
+                main.putExtra("userRole", getIntent().getStringExtra("userRole"));
                 startActivity(main);
-                break;
-        }
+            }
         return super.onOptionsItemSelected(item);
     }
 

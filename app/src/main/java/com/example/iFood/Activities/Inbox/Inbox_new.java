@@ -120,7 +120,7 @@ public class Inbox_new extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.w("TAG","Tab selected:"+tab.getText());
+                //Log.w("TAG","Tab selected:"+tab.getText());
                 msgList.clear();
                 checkDelList();
                 refresh_lvRead();
