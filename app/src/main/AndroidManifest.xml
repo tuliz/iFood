@@ -20,7 +20,9 @@
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateVisible|adjustResize"
         tools:targetApi="q">
-        <activity android:name=".Activities.EditRecipeActivity"></activity>
+        <activity
+            android:name=".Activities.EditRecipeActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.RejectedRecipeActivity"
             android:screenOrientation="portrait" />
