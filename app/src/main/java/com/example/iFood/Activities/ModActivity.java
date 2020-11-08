@@ -130,9 +130,11 @@ public class ModActivity extends AppCompatActivity {
                         refresh_lv();
                         CoordinatorLayout coordinatorLayout = findViewById(R.id.mainLayoutMod);
                         coordinatorLayout.setBackground(getDrawable(R.drawable.all_clear_background));
+                        bottomAppBar.performShow();
                     }else{
                         CoordinatorLayout coordinatorLayout = findViewById(R.id.mainLayoutMod);
                         coordinatorLayout.setBackground(getDrawable(R.drawable.background3));
+                        bottomAppBar.performShow();
                     }
                 }
                 @Override
