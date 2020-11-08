@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,24 +32,39 @@ import com.example.iFood.Activities.MainActivity;
 import com.example.iFood.Activities.MyRecipes;
 import com.example.iFood.Activities.ProfileActivity;
 import com.example.iFood.Activities.SearchRecipe;
+import com.example.iFood.Activities.SendMessage;
 import com.example.iFood.Activities.oldActivities.Inbox;
 import com.example.iFood.Classes.Recipes;
+import com.example.iFood.Classes.Users;
+import com.example.iFood.Notification.APIService;
+import com.example.iFood.Notification.Client;
+import com.example.iFood.Notification.Data;
+import com.example.iFood.Notification.MyResponse;
+import com.example.iFood.Notification.NotificationSender;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class addRecipe_New extends AppCompatActivity {
@@ -75,7 +91,7 @@ public class addRecipe_New extends AppCompatActivity {
     Recipe_add_step2 step2;
     Recipe_add_step3 step3;
     // AppService
-
+     APIService apiService;
 
     // Broadcast Receiver
     ConnectionBCR bcr = new ConnectionBCR();
@@ -308,12 +324,78 @@ public class addRecipe_New extends AppCompatActivity {
                         // Dismiss Dialog.
                         progressDialog.dismiss();
                         Toast.makeText(addRecipe_New.this,"A moderator will review your recipe as soon as possible, thank you.",Toast.LENGTH_LONG).show();
+
+                        sendModNotification();
                     });
                 }
             }
         }); // close OnSuccessListener
     }
 
+    private void sendModNotification() {
+        DatabaseReference modUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        new Thread(() -> modUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot outerData : snapshot.getChildren()){
+                    for(DataSnapshot innerData : outerData.getChildren()){
+                        Users u = innerData.getValue(Users.class);
+                        assert u != null;
+                        if(u.userRole.equals("mod") || u.userRole.equals("admin")){
+                            apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+                            FirebaseDatabase.getInstance().getReference().child("Tokens").child(u.Email).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.getValue(String.class) != null) {
+                                        String userToken = snapshot.getValue(String.class);
+                                        //Log.w("TAG","Token:"+userToken);
+                                        sendNotifications(userToken, "New Recipe", "New Recipe been added!");
+                                        // Log.w("TAG", "Sent notification.");
+                                    } else {
+                                        Log.w("TAG", "Token not found.");
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Log.w("TAG","Error:"+error.getMessage());
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        })).start();
+    }
+
+    public void sendNotifications(String usertoken, String title, String message) {
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(data, usertoken);
+        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    //Log.w("TAG","code:"+response.code());
+                    //Log.w("TAG","body:"+response.body().success);
+                    assert response.body() != null;
+                    if (response.body().success != 1) {
+                       Log.d("Error",response.message());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+                Log.w("TAG","Error:"+t.getMessage());
+            }
+        });
+    }
     /**
      * This function responsible for Camera and Storage permissions.
      */

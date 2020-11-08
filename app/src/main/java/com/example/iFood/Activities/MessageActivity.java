@@ -43,7 +43,6 @@ public class MessageActivity extends AppCompatActivity {
         msgTitle = findViewById(R.id.tvMessageTitle);
         msgContent = findViewById(R.id.tvMessageContent);
         msgDate = findViewById(R.id.tvMessageDate);
-
         btnClose = findViewById(R.id.btnCloseMessage);
         btnReplay = findViewById(R.id.btnReplayMessage);
 

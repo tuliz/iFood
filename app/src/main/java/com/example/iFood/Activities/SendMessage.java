@@ -155,15 +155,15 @@ public class SendMessage extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                    // Log.i("message","key is:"+dataSnapshot.getKey());
-                    Users u = dataSnapshot.getValue(Users.class);
+                Users u = dataSnapshot.getValue(Users.class);
                 assert u != null;
                 url = u.getPic_url();
                  //   Log.d("TAG","URL is:"+u.getPic_url());
-                        if(url==null){
-                        storageRef.child("Photos").child("noImage").getDownloadUrl().addOnSuccessListener(uri -> {
-                        Log.d("TAG","url:"+uri.toString());
-                        url = uri.toString();
-                        userRef.child(userName).child("pic_url").setValue(url);
+                if(url==null){
+                       storageRef.child("Photos").child("noImage").getDownloadUrl().addOnSuccessListener(uri -> {
+                       Log.d("TAG","url:"+uri.toString());
+                       url = uri.toString();
+                       userRef.child(userName).child("pic_url").setValue(url);
                     });
                 }
 
