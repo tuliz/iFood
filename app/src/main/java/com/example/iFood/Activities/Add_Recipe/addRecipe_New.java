@@ -332,6 +332,9 @@ public class addRecipe_New extends AppCompatActivity {
         }); // close OnSuccessListener
     }
 
+    /**
+     * Sending notification to mod/admin users for each new recipe added in the app to approve it.
+     */
     private void sendModNotification() {
         DatabaseReference modUsers = FirebaseDatabase.getInstance().getReference().child("Users");
 
@@ -356,7 +359,6 @@ public class addRecipe_New extends AppCompatActivity {
                                         Log.w("TAG", "Token not found.");
                                     }
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
                                     Log.w("TAG","Error:"+error.getMessage());
@@ -374,6 +376,12 @@ public class addRecipe_New extends AppCompatActivity {
         })).start();
     }
 
+    /**
+     * Function deliver the information to send to the API class
+     * @param usertoken user device token.
+     * @param title notification title.
+     * @param message notification message.
+     */
     public void sendNotifications(String usertoken, String title, String message) {
         Data data = new Data(title, message);
         NotificationSender sender = new NotificationSender(data, usertoken);
