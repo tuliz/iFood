@@ -102,7 +102,7 @@ public class SearchRecipe extends AppCompatActivity {
             bundle.putString("username",getIntent().getStringExtra("username"));
             bundle.putString("userRole",getIntent().getStringExtra("userRole"));
             bottomNavFrag.setArguments(bundle);
-            bottomNavFrag.show(getSupportFragmentManager(),"TAG");
+            bottomNavFrag.show(getSupportFragmentManager(),"bottomNav");
 
         });
         ///////////////////////////////
@@ -122,7 +122,7 @@ public class SearchRecipe extends AppCompatActivity {
             bundle.putString("username",getIntent().getStringExtra("username"));
             bundle.putString("userRole",getIntent().getStringExtra("userRole"));
             addIcon.setArguments(bundle);
-            addIcon.show(getSupportFragmentManager(),"TAG");
+            addIcon.show(getSupportFragmentManager(),"addIconNav");
         });
 
 

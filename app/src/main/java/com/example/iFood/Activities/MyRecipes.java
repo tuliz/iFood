@@ -75,7 +75,7 @@ public class MyRecipes extends AppCompatActivity {
             bundle.putString("username",userName);
             bundle.putString("userRole",userRole);
             bottomNavFrag.setArguments(bundle);
-            bottomNavFrag.show(getSupportFragmentManager(),"TAG");
+            bottomNavFrag.show(getSupportFragmentManager(),"bottomNav");
 
         });
         ///////////////////////////////
@@ -94,7 +94,7 @@ public class MyRecipes extends AppCompatActivity {
             bundle.putString("username",userName);
             bundle.putString("userRole",userRole);
             addIcon.setArguments(bundle);
-            addIcon.show(getSupportFragmentManager(),"TAG");
+            addIcon.show(getSupportFragmentManager(),"addIconNav");
         });
 
         totalCount = findViewById(R.id.tvMyRecipesCount);
