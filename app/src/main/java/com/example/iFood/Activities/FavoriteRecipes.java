@@ -194,7 +194,6 @@ public class FavoriteRecipes extends AppCompatActivity {
         if(myFavList.size() < 1){
 
             AlertDialog.Builder builder = new AlertDialog.Builder(FavoriteRecipes.this);
-
             builder.setMessage(R.string.NoFavFound);
             builder.setTitle(R.string.FavRecipes);
             builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());

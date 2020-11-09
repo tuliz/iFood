@@ -135,7 +135,7 @@ public class MyRecipes extends AppCompatActivity {
                 }
                 if(myRecipes.size()<1) {
                     myRecipesSize();
-                    totalCount.setText(0);
+                    totalCount.setText(String.valueOf(0));
                 }else{
                     totalCount.setText(String.valueOf(myRecipes.size()));
                     String notApproved = "("+i+")";
