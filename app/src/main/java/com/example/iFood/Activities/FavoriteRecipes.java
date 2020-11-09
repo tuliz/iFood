@@ -203,6 +203,7 @@ public class FavoriteRecipes extends AppCompatActivity {
                 moveToSearch.putExtra("username",userName);
                 moveToSearch.putExtra("userRole",userRole);
                 startActivity(moveToSearch);
+                finishAffinity();
             });
             final AlertDialog alertFav = builder.create();
             alertFav.setOnShowListener(dialog -> {

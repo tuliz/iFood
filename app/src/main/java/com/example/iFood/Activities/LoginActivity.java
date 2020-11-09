@@ -1,5 +1,6 @@
 package com.example.iFood.Activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -229,7 +230,6 @@ public class LoginActivity extends AppCompatActivity {
                                                     break;
                                                 }
                                             }
-
                                             if (foundUser) {
 
                                                 if (rmbMe.isChecked()) {
@@ -303,7 +303,26 @@ public class LoginActivity extends AppCompatActivity {
         saveInfo.commit();
     }
 
+     public void onBackPressed(){
+         //Log.d("TAG", "onBackPressed");
+         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+         builder.setMessage("Are you sure you want to Exit?");
+         builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+         builder.setPositiveButton(R.string.yes, (dialog, which) -> finish());
 
+         final AlertDialog alertExit = builder.create();
+         alertExit.setOnShowListener(dialog -> {
+             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                     LinearLayout.LayoutParams.WRAP_CONTENT,
+                     LinearLayout.LayoutParams.WRAP_CONTENT
+             );
+             params.setMargins(20,0,0,0);
+             Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+             button.setLayoutParams(params);
+         });
+
+         alertExit.show();
+     }
 
      /**
      * Register our Broadcast Receiver when opening the app.
