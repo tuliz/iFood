@@ -188,6 +188,7 @@ public class ProfileActivity extends AppCompatActivity {
             userEmail = myDialog.findViewById(R.id.userEmailtoSend);
             userEmail.setText(email.getText().toString());
 
+
             confirm.setOnClickListener(v1 -> FirebaseAuth.getInstance().sendPasswordResetEmail(email.getText().toString())
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {

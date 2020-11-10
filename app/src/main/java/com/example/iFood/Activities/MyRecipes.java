@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iFood.Activities.Add_Recipe.addRecipe_New;
 import com.example.iFood.Activities.oldActivities.AddRecipe;
 import com.example.iFood.Adapters.MyRecipesAdapter;
 import com.example.iFood.Classes.Recipes;
@@ -210,7 +211,7 @@ public class MyRecipes extends AppCompatActivity {
             builder.setTitle(R.string.myRecipes);
             builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
             builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                Intent moveToAdd = new Intent(MyRecipes.this, AddRecipe.class);
+                Intent moveToAdd = new Intent(MyRecipes.this, addRecipe_New.class);
                 moveToAdd.putExtra("username", userName);
                 moveToAdd.putExtra("userRole",userRole);
                 startActivity(moveToAdd);
