@@ -417,11 +417,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
     private void compressImage() {
-
+        imageBitmap = scaleDown(imageBitmap,150,true);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//Compression quality, here 100 means no compression, the storage of compressed data to baos
         int options = 90;
-        while (baos.toByteArray().length / 1024 > 400) {  //Loop if compressed picture is greater than 400kb, than to compression
+        while (baos.toByteArray().length / 1024 > 150) {  //Loop if compressed picture is greater than 400kb, than do compression
             baos.reset();//Reset baos is empty baos
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//The compression options%, storing the compressed data to the baos
             options -= 10;//Every time reduced by 10
@@ -448,6 +448,24 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     /**
+     * Function to scale down Image size for better loading.
+     * @param givenImage Image provided from user camera.
+     * @param maxImageSize Maximum Image size by pixel.
+     * @return scaled Image.
+     */
+    public static Bitmap scaleDown(Bitmap givenImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / givenImage.getWidth(),
+                (float) maxImageSize / givenImage.getHeight());
+        int width = Math.round((float) ratio * givenImage.getWidth());
+        int height = Math.round((float) ratio * givenImage.getHeight());
+        if (ratio >= 1.0){
+            return givenImage;
+        }
+        return Bitmap.createScaledBitmap(givenImage, width,height, filter);
+    }
+    /**
      * This function is validate the user input in the Email EditText to make sure its an actual Email.
      * @param target is the Email the client entered
      * @return return true if the Email is valid and false if not
@@ -459,5 +477,7 @@ public class SignUpActivity extends AppCompatActivity {
         ivUserPic.setImageResource(R.drawable.no_image);
     }
     }
+
+
 
 

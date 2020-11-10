@@ -73,9 +73,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyHolder
         //////
         myHolder.msgTitle.setText(mData.get(i).getTitle());
         myHolder.userName.setText(mData.get(i).getFromUser());
-        new Thread(() ->
-                Picasso.get().load(mData.get(i).getUserImageUrl()).into(myHolder.userImg))
-                .start();
+        Picasso.get().load(mData.get(i).getUserImageUrl()).into(myHolder.userImg);
 
 
 

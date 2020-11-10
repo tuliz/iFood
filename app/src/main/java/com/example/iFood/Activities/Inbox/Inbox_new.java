@@ -2,6 +2,7 @@ package com.example.iFood.Activities.Inbox;
 
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -141,8 +142,6 @@ public class Inbox_new extends AppCompatActivity {
         });
 
         checkDelList();
-        refresh_lvRead();
-        refresh_lvNotRead();
 
     } // onCreate ends
 
