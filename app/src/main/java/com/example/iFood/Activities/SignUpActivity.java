@@ -317,7 +317,6 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(SignUpActivity.this, "Sign-up success,check your Email for verification. ", Toast.LENGTH_SHORT).show();
 
         Intent goBack = new Intent(SignUpActivity.this, LoginActivity.class);
-      //  doService();
         startActivity(goBack);
         finish();
     }
@@ -478,6 +477,10 @@ public class SignUpActivity extends AppCompatActivity {
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
+
+    /**
+     * Reset the bitmap and load a default image in the Imageview.
+     */
     public void clearImage() {
         ivUserPic.setImageResource(R.drawable.no_image);
     }
