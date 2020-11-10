@@ -417,6 +417,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
     private void compressImage() {
         imageBitmap = scaleDown(imageBitmap,150,true);
+       // Log.d("TAG","End function,Image width is:"+imageBitmap.getWidth()+",Image height is:"+imageBitmap.getHeight());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//Compression quality, here 100 means no compression, the storage of compressed data to baos
         int options = 90;
@@ -455,18 +456,18 @@ public class SignUpActivity extends AppCompatActivity {
     public static Bitmap scaleDown(Bitmap givenImage, float maxImageSize,
                                    boolean filter) {
 
-        Log.d("TAG","Function start,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
+       // Log.d("TAG","Function start,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
         float ratio = Math.min(
                 (float) maxImageSize / givenImage.getWidth(),
                 (float) maxImageSize / givenImage.getHeight());
         int width = Math.round((float) ratio * givenImage.getWidth());
         int height = Math.round((float) ratio * givenImage.getHeight());
         if (ratio >= 1.0){
-            Log.d("TAG","Return,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
+         //   Log.d("TAG","Return,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
             return givenImage;
 
         }
-        Log.d("TAG","End function,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
+
         return Bitmap.createScaledBitmap(givenImage, width,height, filter);
     }
     /**
