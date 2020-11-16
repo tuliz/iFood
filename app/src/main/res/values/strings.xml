@@ -33,7 +33,7 @@
     <string name="recpies">Recipes</string>
     <string name="favorite_list">Favorite List</string>
     <string name="search_a_recipe">Search a Recipe</string>
-    <string name="do_you_want_to_view_or_delete_your_recipe">Do you want to view or delete your recipe?</string>
+    <string name="do_you_want_to_view_or_delete_your_recipe">Do you wish to view or delete your recipe?</string>
     <string name="view">View</string>
     <string name="delete">Delete</string>
     <string name="are_you_sure_you_want_to_exit">Are you sure you want to Exit?</string>
@@ -108,7 +108,7 @@
     <string name="password_star" translatable="false">****************</string>
     <string name="save">Save</string>
     <string name="recipe_edit">Recipe Edit :</string>
-    <string name="edit_delete_view_my_recipes">Do you want to Edit,View or Delete your Recipe?</string>
+    <string name="edit_delete_view_my_recipes">Do you wish to Edit,View or Delete your Recipe?</string>
 
 
 </resources>

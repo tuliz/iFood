@@ -120,8 +120,10 @@ public class RecipeActivity extends AppCompatActivity {
         mRecipeIngredients.resetState(true);
         mRecipe.resetState(true);
 
-
         // Listeners
+        mRecipeIngredients.setOnClickListener(v -> mRecipeIngredients.animate());
+        mRecipe.setOnClickListener(v -> mRecipe.animate());
+
         btnMsg.setOnClickListener(v -> {
             Intent newMsg = new Intent(RecipeActivity.this, SendMessage.class);
             newMsg.putExtra("username",userName);

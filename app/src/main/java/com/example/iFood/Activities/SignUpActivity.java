@@ -250,13 +250,11 @@ public class SignUpActivity extends AppCompatActivity {
                         }else{
                             if(Password.length()>=8){
                                 Toast.makeText(SignUpActivity.this,"Password must contain Uppercase and numbers",Toast.LENGTH_SHORT).show();
-                                etPassword.setText("");
-                                etPassword.hasFocus();
                             }else{
                                 Toast.makeText(SignUpActivity.this,"Password must be at least 8 chars",Toast.LENGTH_SHORT).show();
-                                etPassword.setText("");
-                                etPassword.hasFocus();
                             }
+                            etPassword.setText("");
+                            etPassword.hasFocus();
                         }
                     }
                 }
@@ -458,10 +456,10 @@ public class SignUpActivity extends AppCompatActivity {
 
        // Log.d("TAG","Function start,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
         float ratio = Math.min(
-                (float) maxImageSize / givenImage.getWidth(),
-                (float) maxImageSize / givenImage.getHeight());
-        int width = Math.round((float) ratio * givenImage.getWidth());
-        int height = Math.round((float) ratio * givenImage.getHeight());
+                 maxImageSize / givenImage.getWidth(),
+                 maxImageSize / givenImage.getHeight());
+        int width = Math.round( ratio * givenImage.getWidth());
+        int height = Math.round( ratio * givenImage.getHeight());
         if (ratio >= 1.0){
          //   Log.d("TAG","Return,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
             return givenImage;

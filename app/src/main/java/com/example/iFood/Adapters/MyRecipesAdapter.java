@@ -96,7 +96,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
             if(!mData.get(i).isApproved()){
                //Log.w("TAG","Inside if");
 
-                dialogMessage.setText(R.string.edit_delete_view_my_recipes);
+               dialogMessage.setText(R.string.edit_delete_view_my_recipes);
                btnEdit.setVisibility(View.VISIBLE);
                 btnEdit.setOnClickListener(v13 -> {
                     Intent edit = new Intent(mContext, EditRecipeActivity.class);
