@@ -338,50 +338,46 @@ public class addRecipe_New extends AppCompatActivity {
      */
     private void sendModNotification() {
         DatabaseReference modUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        new Thread(new Runnable() {
+        new Thread(() -> modUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void run() {
-                modUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot outerData : snapshot.getChildren()) {
-                            Users u = outerData.getValue(Users.class);
-                            assert u != null;
-                            if (u.userRole.equals("mod") || u.userRole.equals("admin")) {
-                                Log.d("TAG", "User data:" + u.toString());
-                                apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-                                FirebaseDatabase.getInstance().getReference().child("Tokens").child(u.uid).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if (snapshot.getValue(String.class) != null) {
-                                            String userToken = snapshot.getValue(String.class);
-                                            //Log.w("TAG","Token:"+userToken);
-                                            sendNotifications(userToken, "New Recipe", "A Recipe is waiting for your approval, check it out!");
-                                            // Log.w("TAG", "Sent notification.");
-                                        } else {
-                                            Log.w("TAG", "Token not found.");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-                                        Log.w("TAG", "Error:" + error.getMessage());
-                                    }
-                                });
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot outerData : snapshot.getChildren()) {
+                    Users u = outerData.getValue(Users.class);
+                    assert u != null;
+                    if (u.userRole.equals("mod") || u.userRole.equals("admin")) {
+                        Log.d("TAG", "User data:" + u.toString());
+                        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+                        FirebaseDatabase.getInstance().getReference().child("Tokens").child(u.uid).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.getValue(String.class) != null) {
+                                    String userToken = snapshot.getValue(String.class);
+                                    //Log.w("TAG","Token:"+userToken);
+                                    sendNotifications(userToken, "New Recipe", "A Recipe is waiting for your approval, check it out!");
+                                    // Log.w("TAG", "Sent notification.");
+                                } else {
+                                    Log.w("TAG", "Token not found.");
+                                }
                             }
 
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.w("TAG", "Error:" + error.getMessage());
+                            }
+                        });
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                }
             }
-        }).start();
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        })).start();
 
     }
+
 
     /**
      * Function deliver the information to send to the API class
