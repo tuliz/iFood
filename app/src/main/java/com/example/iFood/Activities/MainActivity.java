@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+        
         ///////////////////////////////
         addIcon.setOnClickListener(v -> {
             AddDrawFragment addIcon = new AddDrawFragment();
