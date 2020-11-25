@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,11 +59,12 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     Random rnd = new Random();
     int color;
     // Button
-    Button btnSearch,btnOk,btnDismiss;
+    ImageButton btnSearch;
+    Button btnOk,btnDismiss;
 
     // Date Variables
     Date to,from;
-    long userTime,recipeTime;
+    long userTime,recipeTime,rejectRecipeTime;
     int mYear, mMonth, mDay;
 
     // PieChart
@@ -87,7 +89,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
         setVariables();
         setCurrentDateonOpen();
-        getDB_Data();
+
 
 
         // onClick Listeners
@@ -197,7 +199,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
             }
-
+            getDB_Data();
         });
         // more onClick listeners with override their onClick method
         fromDate.setOnClickListener(this);
@@ -283,20 +285,24 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                    for(DataSnapshot dst2 : dst.getChildren()){
                        RejectedRecipe rejectedRecipe =  dst2.getValue(RejectedRecipe.class);
                        assert rejectedRecipe != null;
-
-                       Log.w("TAG","Reasons:"+rejectedRecipe.rejectReasons);
-                           if(rejectedRecipe.rejectReasons.contains("Spam")) spam++;
-                           if(rejectedRecipe.rejectReasons.contains("Missing info")) missingInfo++;
-                           if(rejectedRecipe.rejectReasons.contains("Bad Picture")) badPicture++;
-                           if(rejectedRecipe.rejectReasons.contains("Bad Desc")) badDesc++;
-                           if(rejectedRecipe.rejectReasons.contains("Bad Title")) badTitle++;
-                           if(rejectedRecipe.rejectReasons.contains("Missing Ingredients")) missingIngredients++;
-                           if(!rejectedRecipe.rejectReasons.contains("Spam") &&
-                              !rejectedRecipe.rejectReasons.contains("Missing info") &&
-                              !rejectedRecipe.rejectReasons.contains("Bad Picture") &&
-                              !rejectedRecipe.rejectReasons.contains("Bad Title") &&
-                              !rejectedRecipe.rejectReasons.contains("Missing Ingredients"))other++;
-
+                       Range<Long> recipeRejectTimeRange = Range.create(from.getTime(),to.getTime());
+                       rejectRecipeTime = rejectedRecipe.timestamp;
+                       if(recipeRejectTimeRange.contains(rejectRecipeTime)) {
+                           //  Log.w("TAG","Reasons:"+rejectedRecipe.rejectReasons);
+                           if (rejectedRecipe.rejectReasons.contains("Spam")) spam++;
+                           if (rejectedRecipe.rejectReasons.contains("Missing info")) missingInfo++;
+                           if (rejectedRecipe.rejectReasons.contains("Bad Picture")) badPicture++;
+                           if (rejectedRecipe.rejectReasons.contains("Bad Desc")) badDesc++;
+                           if (rejectedRecipe.rejectReasons.contains("Bad Title")) badTitle++;
+                           if (rejectedRecipe.rejectReasons.contains("Missing Ingredients"))
+                               missingIngredients++;
+                           if (!rejectedRecipe.rejectReasons.contains("Spam") &&
+                                   !rejectedRecipe.rejectReasons.contains("Missing info") &&
+                                   !rejectedRecipe.rejectReasons.contains("Bad Picture") &&
+                                   !rejectedRecipe.rejectReasons.contains("Bad Title") &&
+                                   !rejectedRecipe.rejectReasons.contains("Missing Ingredients"))
+                               other++;
+                       }
 
 
 
