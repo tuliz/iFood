@@ -160,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Declaring Dialog variables
                 Button confirm, cancel;
-                EditText userEmail;
+                TextView userEmail;
             // Attaching variables to XML layout
                 myDialog = new Dialog(LoginActivity.this);
                 myDialog.setContentView(R.layout.reset_password_dialog);
@@ -168,6 +168,8 @@ public class LoginActivity extends AppCompatActivity {
                 confirm = myDialog.findViewById(R.id.btnConfirm);
                 cancel = myDialog.findViewById(R.id.btnCancel);
                 userEmail = myDialog.findViewById(R.id.userEmailtoSend);
+
+                userEmail.setText(etUser.getText().toString());
 
 
             // onClickLisnters
@@ -183,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                     }else{
-                        Toast.makeText(LoginActivity.this,"Please enter an Email address",
+                        Toast.makeText(LoginActivity.this,"Please enter a valid Email address",
                                 Toast.LENGTH_SHORT).show();
 
                     }
@@ -208,6 +210,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage(getString(R.string.connecting_login));
                 progressDialog.show();
+                progressDialog.setCancelable(false);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {

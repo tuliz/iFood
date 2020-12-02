@@ -204,6 +204,7 @@ public class SendMessage extends AppCompatActivity {
         Message msg;
         uniqueID = String.valueOf(ref.push().getKey());
         msg = new Message(title,userImageUrl,message,toUser,formattedDate,userName, uniqueID,"false");
+        Log.w("TAG","Message: "+msg.toString());
         ref.child(toUser).child(uniqueID).setValue(msg);
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 

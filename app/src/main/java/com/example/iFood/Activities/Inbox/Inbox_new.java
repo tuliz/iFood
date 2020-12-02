@@ -113,8 +113,11 @@ public class Inbox_new extends AppCompatActivity {
         delIcon.setOnClickListener(v -> {
             for(int i =0 ; msgList.size()>i;i++) {
                 messagesRef.child(userName).child(msgList.get(i)).removeValue();
-
+                refresh_lvRead();
+                refresh_lvNotRead();
             }
+            delIcon.hide();
+            msgList.clear();
 
 
         });
