@@ -111,6 +111,10 @@ public class Inbox_new extends AppCompatActivity {
             addIcon.show(getSupportFragmentManager(),"TAG");
         });
         delIcon.setOnClickListener(v -> {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Deleting messages..");
+            progressDialog.show();
             for(int i =0 ; msgList.size()>i;i++) {
                 messagesRef.child(userName).child(msgList.get(i)).removeValue();
                 refresh_lvRead();
@@ -118,13 +122,13 @@ public class Inbox_new extends AppCompatActivity {
             }
             delIcon.hide();
             msgList.clear();
-
+            progressDialog.dismiss();
 
         });
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                //Log.w("TAG","Tab selected:"+tab.getText());
+                Log.w("TAG","Tab selected:"+tab.getText());
                 msgList.clear();
                 checkDelList();
                 refresh_lvRead();

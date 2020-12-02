@@ -94,6 +94,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
         // onClick Listeners
         btnSearch.setOnClickListener(v -> {
+
             if(to==null || from==null){
 
                 @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));

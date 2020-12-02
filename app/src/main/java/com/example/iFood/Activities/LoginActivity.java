@@ -210,7 +210,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage(getString(R.string.connecting_login));
                 progressDialog.show();
-                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
