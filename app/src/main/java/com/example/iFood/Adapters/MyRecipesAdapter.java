@@ -40,12 +40,12 @@ import java.util.Objects;
  * and allow the user to move to Recipe Activity to view all the information regarding the recipe.
  */
 public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHolder> {
-    Button btnView,btnDelete,btnEdit;
-    Dialog myDialog;
-    TextView dialogMessage;
-    String id,userName,userRole,check;
+    private Button btnView,btnDelete,btnEdit;
+    private Dialog myDialog;
+    private TextView dialogMessage;
+    private String id,userName,userRole,check;
     private final String activity;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     private final Context mContext;
     private final List<Recipes> mData;
     DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child("Recipes");
@@ -86,7 +86,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
         myHolder.recipeTitle.setText(mData.get(i).getRecipeName());
         myHolder.cardView.setOnClickListener(v -> {
             progressDialog = new ProgressDialog(mContext);
-
+            progressDialog.setCanceledOnTouchOutside(false);
             myDialog = new Dialog(mContext);
             myDialog.setContentView(R.layout.myrecipes_dialog);
             myDialog.setTitle("View or Delete?");
@@ -129,6 +129,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
                 if(mData.size()>0){
                     progressDialog.setMessage("Delete in progress");
                     progressDialog.show();
+
                     Query dbQuery = myRef.orderByKey();
                     id = mData.get(i).getId();
                     dbQuery.addValueEventListener(new ValueEventListener() {

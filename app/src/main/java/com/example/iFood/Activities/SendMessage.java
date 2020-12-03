@@ -49,12 +49,12 @@ import retrofit2.Response;
  *
  */
 public class SendMessage extends AppCompatActivity {
-    ConnectionBCR bcr = new ConnectionBCR();
+    private ConnectionBCR bcr = new ConnectionBCR();
     String formattedDate,userName, uniqueID,toUser,url,activity;
     TextView etFrom,etTo;
-    EditText etTitle,etContent;
+    private EditText etTitle,etContent;
     Button btnSend,btnClose;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     //
     // Connect to DB
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Messages");
