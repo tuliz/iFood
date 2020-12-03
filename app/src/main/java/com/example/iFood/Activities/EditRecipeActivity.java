@@ -93,6 +93,7 @@ public class EditRecipeActivity extends AppCompatActivity {
                 ProgressDialog progressDialog = new ProgressDialog(EditRecipeActivity.this);
                 progressDialog.setMessage("Applying Changes..");
                 progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
                  recipeTitle = etTitle.getText().toString();
                  recipeIngredients = etIngredients.getText().toString();
                  recipeInstructions = etContent.getText().toString();

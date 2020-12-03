@@ -87,7 +87,7 @@ public class SendMessage extends AppCompatActivity {
 
         // Progress bar
         progressDialog = new ProgressDialog(SendMessage.this);
-
+        progressDialog.setCanceledOnTouchOutside(false);
         // Call function to get the user image.
         getUserURL();
         getUserID();

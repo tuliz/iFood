@@ -97,6 +97,7 @@ public class RejectedListActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(RejectedListActivity.this);
         progressDialog.setMessage("Fetching information");
         progressDialog.show();
+        progressDialog.setCanceledOnTouchOutside(false);
         new Thread(() -> {
             Query dbQuery = deleted_list.orderByKey();
             dbQuery.addValueEventListener(new ValueEventListener() {

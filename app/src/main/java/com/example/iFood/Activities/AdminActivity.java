@@ -116,8 +116,11 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(AdminActivity.this,"Search credentials are not valid",Toast.LENGTH_SHORT).show();
             }
             else {
+
                 usersPieData.clear();
                 recipesPieData.clear();
+                usersPieChart.getValues().clear();
+                recipesPieChart.getValues().clear();
                 refUsers.orderByKey();
                 refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -207,6 +210,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         toDate.setOnClickListener(this);
     } // onCreate ends
 
+
+
     private void setChart(){
         recipesPieChart = new PieChartData(recipesPieData);
         usersPieChart = new PieChartData(usersPieData);
@@ -272,6 +277,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         });
         rejectReasonPieData.clear();
         topModPieData.clear();
+        rejectReasonPieChart.getValues().clear();
+        topModPieChart.getValues().clear();
        Query dbDelList = deleted_list.orderByKey();
        dbDelList.addListenerForSingleValueEvent(new ValueEventListener() {
              @Override
@@ -336,6 +343,14 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
         chartTopMod.setPieChartData(topModPieChart);
         chartRejectReasons.setPieChartData(rejectReasonPieChart);
+
+        spam=0;
+        missingIngredients=0;
+        missingInfo=0;
+        badDesc=0;
+        badPicture=0;
+        badTitle=0;
+        other=0;
 
     }
 

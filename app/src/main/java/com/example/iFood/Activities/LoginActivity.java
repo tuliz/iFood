@@ -158,46 +158,48 @@ public class LoginActivity extends AppCompatActivity {
         });
         reset_password.setOnClickListener(v -> {
 
-            // Declaring Dialog variables
-                Button confirm, cancel;
-                TextView userEmail;
+            if (etUser.getText().toString().isEmpty() || !isValidEmail(etUser.getText().toString())) {
+                    etUser.setError("must enter a valid email address");
+                    etUser.requestFocus();
+            } else{
+                // Declaring Dialog variables
+            Button confirm, cancel;
+            TextView userEmail;
             // Attaching variables to XML layout
-                myDialog = new Dialog(LoginActivity.this);
-                myDialog.setContentView(R.layout.reset_password_dialog);
-                myDialog.setTitle(R.string.reset_password);
-                confirm = myDialog.findViewById(R.id.btnConfirm);
-                cancel = myDialog.findViewById(R.id.btnCancel);
-                userEmail = myDialog.findViewById(R.id.userEmailtoSend);
-
-                userEmail.setText(etUser.getText().toString());
-
-
+            myDialog = new Dialog(LoginActivity.this);
+            myDialog.setContentView(R.layout.reset_password_dialog);
+            myDialog.setTitle(R.string.reset_password);
+            confirm = myDialog.findViewById(R.id.btnConfirm);
+            cancel = myDialog.findViewById(R.id.btnCancel);
+            userEmail = myDialog.findViewById(R.id.userEmailtoSend);
+            userEmail.setText(etUser.getText().toString());
             // onClickLisnters
-                confirm.setOnClickListener(v1 -> {
-                    if(!userEmail.getText().toString().isEmpty() && isValidEmail(userEmail.getText().toString())) {
-                        FirebaseAuth.getInstance().sendPasswordResetEmail(userEmail.getText().toString())
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        //Log.d("TAG", "Email Sent.");
-                                        Toast.makeText(LoginActivity.this, R.string.psd_link_sent, Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, R.string.cant_send_email, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }else{
-                        Toast.makeText(LoginActivity.this,"Please enter a valid Email address",
-                                Toast.LENGTH_SHORT).show();
+            confirm.setOnClickListener(v1 -> {
+                if (!userEmail.getText().toString().isEmpty() && isValidEmail(userEmail.getText().toString())) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(userEmail.getText().toString())
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    //Log.d("TAG", "Email Sent.");
+                                    Toast.makeText(LoginActivity.this, R.string.psd_link_sent, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, R.string.cant_send_email, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please enter a valid Email address",
+                            Toast.LENGTH_SHORT).show();
 
-                    }
-                });
-                cancel.setOnClickListener(v12 -> myDialog.dismiss());
-                myDialog.show();
+                }
+            });
+            cancel.setOnClickListener(v12 -> myDialog.dismiss());
+            myDialog.show();
 
-                // Expand the width of dialog to maximum screen width
-                Window window = myDialog.getWindow();
-                // Make sure the given window is not null
-                assert window != null;
-                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            // Expand the width of dialog to maximum screen width
+            Window window = myDialog.getWindow();
+            // Make sure the given window is not null
+            assert window != null;
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
 
         });
         btnSignIn.setOnClickListener(v -> {

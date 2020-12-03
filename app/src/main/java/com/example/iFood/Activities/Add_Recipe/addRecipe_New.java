@@ -177,6 +177,7 @@ public class addRecipe_New extends AppCompatActivity {
                   {
                   // create our recipe with the information we need from our global variables
                   progressDialog.setMessage("Creating Recipe");
+                  progressDialog.setCanceledOnTouchOutside(false);
                   progressDialog.show();
                   createRecipe();
                   //Log.i("image2","Image is:"+bitmapImage);

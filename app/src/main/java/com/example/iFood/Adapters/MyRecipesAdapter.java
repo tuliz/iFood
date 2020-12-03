@@ -86,6 +86,7 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
         myHolder.recipeTitle.setText(mData.get(i).getRecipeName());
         myHolder.cardView.setOnClickListener(v -> {
             progressDialog = new ProgressDialog(mContext);
+
             myDialog = new Dialog(mContext);
             myDialog.setContentView(R.layout.myrecipes_dialog);
             myDialog.setTitle("View or Delete?");

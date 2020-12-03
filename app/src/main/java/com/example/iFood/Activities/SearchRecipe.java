@@ -175,6 +175,7 @@ public class SearchRecipe extends AppCompatActivity {
     public void searchRecipe(){
         ProgressDialog progressDialog = new ProgressDialog(SearchRecipe.this);
         progressDialog.setMessage("Searching for your recipe..");
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
         Query dbQuery = ref.orderByKey();
         dbQuery.addValueEventListener(new ValueEventListener() {
