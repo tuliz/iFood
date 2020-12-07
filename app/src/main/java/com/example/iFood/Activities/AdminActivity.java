@@ -93,7 +93,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         // onClick Listeners
         btnSearch.setOnClickListener(v -> {
             getUsersRecipesData();
-            getDB_Data();
+            getRejectData();
         });
         // more onClick listeners with override their onClick method
         fromDate.setOnClickListener(this);
@@ -242,7 +242,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
      * Get general data from the DB.
      */
 
-    private void getDB_Data(){
+    private void getRejectData(){
         rejectReasonPieData.clear();
         topModPieData.clear();
         Query dbQuery = refRecipes.orderByKey();
