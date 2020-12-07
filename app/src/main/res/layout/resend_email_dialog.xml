@@ -10,7 +10,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:text="We didn't find any user registered with this phone, please enter your Email address to send the
+        android:text="We didn't find any user registered with this phone, please enter your credentials address to send the
                       Verification Email."
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

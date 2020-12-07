@@ -112,24 +112,32 @@ public class SignUpActivity extends AppCompatActivity {
             Fname = etFname.getText().toString();
             Password = etPassword.getText().toString();
             Username = etUsername.getText().toString();
-            isValidEmail(Email);
+           // isValidEmail(Email);
             Lname = etLname.getText().toString();
             Email = etEmail.getText().toString();
-
+            Phone = etPhone.getText().toString();
             // check if mandatory fields are filled
             if (!tookPic) {
                 imageBitmap = BitmapFactory.decodeResource(getResources(),
                         R.drawable.no_image);
             }
-            if (!Username.isEmpty() && !Password.isEmpty() && !Fname.isEmpty() && !Email.isEmpty() && !etPhone.getText().toString().isEmpty())
+            if (!Username.isEmpty() && !Password.isEmpty() && !Fname.isEmpty() && !Email.isEmpty() && !Phone.isEmpty())
             {
-
-                Phone = etPhone.getText().toString();
                 if (!isValidEmail(Email)) {
                         Toast.makeText(SignUpActivity.this, "Email is not illegal,please enter valid Email address.", Toast.LENGTH_SHORT).show();
                         etEmail.setText("");
-                        etEmail.hasFocus();
-                    } else {
+                        etPassword.setText("");
+                        etEmail.requestFocus();
+                    }
+                else if(!validateTelAndMobileNo(Phone)){
+                    Toast.makeText(SignUpActivity.this, "Phone must be minimum of 8 numbers", Toast.LENGTH_SHORT).show();
+                    etPhone.setText("");
+                    etPassword.setText("");
+                    etPhone.requestFocus();
+
+                }
+                else {
+                    Log.w("TAG","Email:"+isValidEmail(Email)+",Phone:"+validateTelAndMobileNo(Phone));
                         if (checkPassword()) {
                             {
                                 ref.child(Username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -140,7 +148,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             Toast.makeText(SignUpActivity.this, "Username already found in DB, try different Username", Toast.LENGTH_SHORT).show();
                                             etUsername.setText("");
                                             etPassword.setText("");
-                                            etUsername.hasFocus();
+                                            etUsername.requestFocus();
                                         } else {
                                             final String email = etEmail.getText().toString();
                                             String password = etPassword.getText().toString();
@@ -149,8 +157,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                         if (task.isSuccessful()) {
                                                             uid = Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid();
                                                             // Sign in success, update UI with the signed-in user's information
-                                                            Log.d("TAG", "createUserWithEmail:success");
+                                                            //Log.d("TAG", "createUserWithEmail:success");
                                                             progressDialog.setMessage("Registering..");
+                                                            progressDialog.setCanceledOnTouchOutside(false);
                                                             progressDialog.show();
                                                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                                             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -254,7 +263,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(SignUpActivity.this,"Password must be at least 8 chars",Toast.LENGTH_SHORT).show();
                             }
                             etPassword.setText("");
-                            etPassword.hasFocus();
+                            etPassword.requestFocus();
                         }
                     }
                 }
@@ -262,22 +271,22 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "One or more of required fields are empty", Toast.LENGTH_SHORT).show();
                     // Put focus on the empty variable
                     if (Username.isEmpty()) {
-                        etUsername.hasFocus();
+                        etUsername.requestFocus();
                         etPassword.setText("");
                     }
                     if (Password.isEmpty()) {
-                        etPassword.hasFocus();
+                        etPassword.requestFocus();
                     }
                     if (Fname.isEmpty()) {
-                        etFname.hasFocus();
+                        etFname.requestFocus();
                         etPassword.setText("");
                     }
                     if (Email.isEmpty()) {
-                        etEmail.hasFocus();
+                        etEmail.requestFocus();
                         etPassword.setText("");
                     }
-                    if(etPhone.getText().toString().isEmpty()){
-                        etPhone.hasFocus();
+                    if(Phone.isEmpty()){
+                        etPhone.requestFocus();
                         etPassword.setText("");
 
                     }
@@ -312,8 +321,7 @@ public class SignUpActivity extends AppCompatActivity {
         newUser.pic_url = picUrl;
         DB.child("Users").child(newUser.getUsername()).setValue(newUser);
         progressDialog.dismiss();
-        Toast.makeText(SignUpActivity.this, "Sign-up success,check your Email for verification. ", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(SignUpActivity.this, "Sign-up success,check your Email for verification.. ", Toast.LENGTH_SHORT).show();
         Intent goBack = new Intent(SignUpActivity.this, LoginActivity.class);
         startActivity(goBack);
         finish();
@@ -475,6 +483,10 @@ public class SignUpActivity extends AppCompatActivity {
      */
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
+
+    public static boolean validateTelAndMobileNo(String mobileNo){
+        return mobileNo.matches("^[+]?[0-9]{8,15}$");
     }
 
     /**

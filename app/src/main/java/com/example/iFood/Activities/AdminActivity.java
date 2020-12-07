@@ -119,8 +119,6 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
                 usersPieData.clear();
                 recipesPieData.clear();
-                usersPieChart.getValues().clear();
-                recipesPieChart.getValues().clear();
                 refUsers.orderByKey();
                 refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -277,8 +275,6 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         });
         rejectReasonPieData.clear();
         topModPieData.clear();
-        rejectReasonPieChart.getValues().clear();
-        topModPieChart.getValues().clear();
        Query dbDelList = deleted_list.orderByKey();
        dbDelList.addListenerForSingleValueEvent(new ValueEventListener() {
              @Override

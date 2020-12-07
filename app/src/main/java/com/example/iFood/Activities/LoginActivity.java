@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             // If user is null meaning he never signed up before in this device
             if(user!= null) {
+                Log.w("TAG","User verified:"+user.isEmailVerified());
                 if (!user.isEmailVerified()) {
                     Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
                     user.sendEmailVerification();
@@ -101,7 +102,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }else{
                 // Bring up a dialog to the user to enter his details
-
                 // Declare variables
                 Button input_ok,input_cancel;
                 TextView emailInput,pwdInput;
@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
         reset_password.setOnClickListener(v -> {
 
             if (etUser.getText().toString().isEmpty() || !isValidEmail(etUser.getText().toString())) {
-                    etUser.setError("must enter a valid email address");
+                    etUser.setError("Must enter a valid email address");
                     etUser.requestFocus();
             } else{
                 // Declaring Dialog variables
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Log.d("TAG", "signInWithEmail:success");
+                                //Log.d("TAG", "signInWithEmail:success");
                                 final FirebaseUser user = mAuth.getCurrentUser();
                                 assert user != null;
                                 if (user.isEmailVerified()) {
