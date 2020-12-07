@@ -85,23 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        mEditItemImage = new EditItemImage(SignUpActivity.this);
-        progressDialog = new ProgressDialog(SignUpActivity.this);
-
-        ivUserPic = findViewById(R.id.ivUserPic);
-
-        btnUserPic = findViewById(R.id.btnUserPic);
-        btnSignup = findViewById(R.id.btn);
-        btnBack = findViewById(R.id.btnBack);
-
-        etFname = findViewById(R.id.etFname);
-        etLname = findViewById(R.id.etLname);
-        etPhone = findViewById(R.id.etPhone);
-        etUsername = findViewById(R.id.etUser);
-        etPassword = findViewById(R.id.etPass);
-        etEmail = findViewById(R.id.etEmail);
-
-
+        initData();
         btnBack.setOnClickListener(v -> {
             Intent back = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(back);
@@ -109,13 +93,8 @@ public class SignUpActivity extends AppCompatActivity {
         btnUserPic.setOnClickListener(v -> mEditItemImage.openDialog());
         btnSignup.setOnClickListener(v -> {
             // get values the user entered
-            Fname = etFname.getText().toString();
-            Password = etPassword.getText().toString();
-            Username = etUsername.getText().toString();
-           // isValidEmail(Email);
-            Lname = etLname.getText().toString();
-            Email = etEmail.getText().toString();
-            Phone = etPhone.getText().toString();
+            initUiViews();
+
             // check if mandatory fields are filled
             if (!tookPic) {
                 imageBitmap = BitmapFactory.decodeResource(getResources(),
@@ -295,6 +274,35 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     } // OnCreate ends
+
+    private void initUiViews() {
+        Fname = etFname.getText().toString();
+        Password = etPassword.getText().toString();
+        Username = etUsername.getText().toString();
+        // isValidEmail(Email);
+        Lname = etLname.getText().toString();
+        Email = etEmail.getText().toString();
+        Phone = etPhone.getText().toString();
+    }
+
+    private void initData() {
+
+        mEditItemImage = new EditItemImage(SignUpActivity.this);
+        progressDialog = new ProgressDialog(SignUpActivity.this);
+
+        ivUserPic = findViewById(R.id.ivUserPic);
+
+        btnUserPic = findViewById(R.id.btnUserPic);
+        btnSignup = findViewById(R.id.btn);
+        btnBack = findViewById(R.id.btnBack);
+
+        etFname = findViewById(R.id.etFname);
+        etLname = findViewById(R.id.etLname);
+        etPhone = findViewById(R.id.etPhone);
+        etUsername = findViewById(R.id.etUser);
+        etPassword = findViewById(R.id.etPass);
+        etEmail = findViewById(R.id.etEmail);
+    }
 
     /**
      * This function make sure Password not short ( for security )
