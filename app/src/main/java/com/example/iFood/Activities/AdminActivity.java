@@ -90,117 +90,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         setVariables();
         setCurrentDateonOpen();
 
-
-
         // onClick Listeners
         btnSearch.setOnClickListener(v -> {
-
-            if(to==null || from==null){
-
-                @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
-                try {
-                    if(to==null) to = formatter.parse(toDate.getText().toString());
-                    if(from==null)from = formatter.parse(toDate.getText().toString());
-                    else{
-                        from = formatter.parse(toDate.getText().toString());
-                        to = formatter.parse(toDate.getText().toString());
-                    }
-
-                  //  Log.d(TAG, "onClick: toDate:"+to.getTime());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            else if (to.getTime() < from.getTime()) {
-                Toast.makeText(AdminActivity.this,"Search credentials are not valid",Toast.LENGTH_SHORT).show();
-            }
-            else {
-
-                usersPieData.clear();
-                recipesPieData.clear();
-                refUsers.orderByKey();
-                refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for(DataSnapshot ds : snapshot.getChildren()){
-                          Users u = ds.getValue(Users.class);
-                          assert u != null;
-                          userTime = (Long)u.timestamp;
-                         //   @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
-                         //   String c = simpleDateFormat.format(userTime);
-                            //Log.d("TAG","user date: "+c);
-                          Range<Long> timeRange = Range.create(from.getTime(),
-                                  to.getTime());
-                          if(timeRange.contains(userTime)){
-
-                           //   c = simpleDateFormat.format(userTime);
-                              //Log.d("TAG","Found user match to date: "+c);
-                              userCount++;
-                              Log.d("TAG","User count is:"+userCount);
-                          }
-                      }
-                        if(userCount>0) {
-                            if (userCount != userTotalCount){
-                                usersPieData.add(new SliceValue(userCount, Color.GREEN).setLabel("Users :" + userCount));
-                            }
-                            usersPieData.add(new SliceValue(userTotalCount, Color.parseColor("#FF5252")).setLabel("Total Users :"+userTotalCount));
-                            userCount=0;
-                        }else{
-                            usersPieData.add(new SliceValue(userTotalCount, Color.parseColor("#FF5252")).setLabel("Total Users :"+userTotalCount));
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-                refRecipes.orderByKey();
-                refRecipes.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for(DataSnapshot ds : snapshot.getChildren()) {
-                            for (DataSnapshot dsResult : ds.getChildren()) {
-                                Recipes rec = dsResult.getValue(Recipes.class);
-                                assert rec != null;
-
-                                recipeTime = (Long) rec.timestamp;
-                              //  @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
-                                //String c = simpleDateFormat.format(recipeTime);
-                               // Log.d("TAG"," recipe date: "+c);
-                                Range<Long> recipeTimeRange = Range.create(from.getTime(),
-                                        to.getTime());
-                                if (recipeTimeRange.contains(recipeTime)) {
-
-                                 //  c = simpleDateFormat.format(recipeTime);
-                                  //  Log.d("TAG","Found recipe match to date: "+c);
-                                    recipeCount++;
-                                   Log.d("TAG","Recipe count is:"+recipeCount);
-                                }
-                            }
-
-                        }
-                        if(recipeCount>0) {
-                            if (recipeCount != recipeTotalCount) {
-                                recipesPieData.add(new SliceValue(recipeCount, Color.RED).setLabel("Recipes :" + recipeCount));
-                            }
-                            recipesPieData.add(new SliceValue(recipeTotalCount, Color.parseColor("#3F51B5")).setLabel("Total Recipes :"+recipeTotalCount));
-                            recipeCount = 0;
-                        }else{
-                            recipesPieData.add(new SliceValue(recipeTotalCount, Color.parseColor("#3F51B5")).setLabel("Total Recipes :"+recipeTotalCount));
-                        }
-                        setChart();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
+            getUsersRecipesData();
             getDB_Data();
         });
         // more onClick listeners with override their onClick method
@@ -208,6 +100,115 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         toDate.setOnClickListener(this);
     } // onCreate ends
 
+    private void getUsersRecipesData() {
+
+        if(to==null || from==null){
+
+            @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
+            try {
+                if(to==null) to = formatter.parse(toDate.getText().toString());
+                if(from==null)from = formatter.parse(toDate.getText().toString());
+                else{
+                    from = formatter.parse(toDate.getText().toString());
+                    to = formatter.parse(toDate.getText().toString());
+                }
+
+                //  Log.d(TAG, "onClick: toDate:"+to.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        else if (to.getTime() < from.getTime()) {
+            Toast.makeText(AdminActivity.this,"Search credentials are not valid",Toast.LENGTH_SHORT).show();
+        }
+        else {
+
+            usersPieData.clear();
+            recipesPieData.clear();
+            refUsers.orderByKey();
+            refUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    for(DataSnapshot ds : snapshot.getChildren()){
+                        Users u = ds.getValue(Users.class);
+                        assert u != null;
+                        userTime = (Long)u.timestamp;
+                        //   @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
+                        //   String c = simpleDateFormat.format(userTime);
+                        //Log.d("TAG","user date: "+c);
+                        Range<Long> timeRange = Range.create(from.getTime(),
+                                to.getTime());
+                        if(timeRange.contains(userTime)){
+
+                            //   c = simpleDateFormat.format(userTime);
+                            //Log.d("TAG","Found user match to date: "+c);
+                            userCount++;
+                            Log.d("TAG","User count is:"+userCount);
+                        }
+                    }
+                    if(userCount>0) {
+                        if (userCount != userTotalCount){
+                            usersPieData.add(new SliceValue(userCount, Color.GREEN).setLabel("Users :" + userCount));
+                        }
+                        usersPieData.add(new SliceValue(userTotalCount, Color.parseColor("#FF5252")).setLabel("Total Users :"+userTotalCount));
+                        userCount=0;
+                    }else{
+                        usersPieData.add(new SliceValue(userTotalCount, Color.parseColor("#FF5252")).setLabel("Total Users :"+userTotalCount));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+            refRecipes.orderByKey();
+            refRecipes.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        for (DataSnapshot dsResult : ds.getChildren()) {
+                            Recipes rec = dsResult.getValue(Recipes.class);
+                            assert rec != null;
+
+                            recipeTime = (Long) rec.timestamp;
+                            //  @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.date_format));
+                            //String c = simpleDateFormat.format(recipeTime);
+                            // Log.d("TAG"," recipe date: "+c);
+                            Range<Long> recipeTimeRange = Range.create(from.getTime(),
+                                    to.getTime());
+                            if (recipeTimeRange.contains(recipeTime)) {
+
+                                //  c = simpleDateFormat.format(recipeTime);
+                                //  Log.d("TAG","Found recipe match to date: "+c);
+                                recipeCount++;
+                                //Log.d("TAG","Recipe count is:"+recipeCount);
+                            }
+                        }
+
+                    }
+                    if(recipeCount>0) {
+                        if (recipeCount != recipeTotalCount) {
+                            recipesPieData.add(new SliceValue(recipeCount, Color.RED).setLabel("Recipes :" + recipeCount));
+                        }
+                        recipesPieData.add(new SliceValue(recipeTotalCount, Color.parseColor("#3F51B5")).setLabel("Total Recipes :"+recipeTotalCount));
+                        recipeCount = 0;
+                    }else{
+                        recipesPieData.add(new SliceValue(recipeTotalCount, Color.parseColor("#3F51B5")).setLabel("Total Recipes :"+recipeTotalCount));
+                    }
+                    setChart();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    }
 
 
     private void setChart(){
@@ -242,6 +243,8 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
      */
 
     private void getDB_Data(){
+        rejectReasonPieData.clear();
+        topModPieData.clear();
         Query dbQuery = refRecipes.orderByKey();
         dbQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -273,16 +276,15 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
             }
         });
-        rejectReasonPieData.clear();
-        topModPieData.clear();
+
        Query dbDelList = deleted_list.orderByKey();
        dbDelList.addListenerForSingleValueEvent(new ValueEventListener() {
              @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
                for(DataSnapshot dst : snapshot.getChildren()){
-                   Log.w("TAG","Value is:" +dst.getKey());
+                  //Log.w("TAG","Value is:" +dst.getKey());
                    int count =  Integer.parseInt(String.valueOf(dst.getChildrenCount()));
-                   Log.w("TAG","Count is:" +count);
+                 //  Log.w("TAG","Count is:" +count);
                    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
                    // recipesPieData.add(new SliceValue(recipeCount, Color.RED).setLabel("Recipes :" + recipeCount));
                    topModPieData.add(new SliceValue(count,color ).setLabel(""+dst.getKey()+": "+count));
