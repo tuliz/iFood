@@ -97,21 +97,25 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                 admin.putExtra("username", username);
                 admin.putExtra("userRole", userRole);
                 startActivity(admin);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menu_mod) {
                 Intent mod = new Intent(mContext.getApplicationContext(), ModActivity.class);
                 mod.putExtra("username", username);
                 mod.putExtra("userRole", userRole);
                 startActivity(mod);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menuProfile) {
                 Intent profile = new Intent(mContext.getApplicationContext(), ProfileActivity.class);
                 profile.putExtra("username", username);
                 profile.putExtra("userRole", userRole);
                 startActivity(profile);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menu_rejectList) {
                 Intent rejectList = new Intent(mContext.getApplicationContext(), RejectedListActivity.class);
                 rejectList.putExtra("username", username);
                 rejectList.putExtra("userRole", userRole);
                 startActivity(rejectList);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menuHome) {
                 Intent home = new Intent(mContext.getApplicationContext(), MainActivity.class);
                 home.putExtra("username", username);
@@ -148,26 +152,31 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                 main.putExtra("username", username);
                 main.putExtra("userRole", userRole);
                 startActivity(main);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menu_MyRecepies) {
                 Intent myRecipes = new Intent(mContext.getApplicationContext(), MyRecipes.class);
                 myRecipes.putExtra("username", username);
                 myRecipes.putExtra("userRole", userRole);
                 startActivity(myRecipes);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menu_SearchRecepie) {
                 Intent search = new Intent(mContext.getApplicationContext(), SearchRecipe.class);
                 search.putExtra("username", username);
                 search.putExtra("userRole", userRole);
                 startActivity(search);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menuInbox) {
                 Intent inbox = new Intent(mContext.getApplicationContext(), Inbox_new.class);
                 inbox.putExtra("username", username);
                 inbox.putExtra("userRole", userRole);
                 startActivity(inbox);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             } else if (itemId == R.id.menu_favRecipe) {
                 Intent fav = new Intent(mContext.getApplicationContext(), FavoriteRecipes.class);
                 fav.putExtra("username", username);
                 fav.putExtra("userRole", userRole);
                 startActivity(fav);
+                Objects.requireNonNull(getActivity()).finishAffinity();
             }
             return false;
         });

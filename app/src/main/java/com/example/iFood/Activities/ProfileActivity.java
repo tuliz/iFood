@@ -17,6 +17,7 @@ import android.text.method.DigitsKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -249,6 +250,28 @@ public class ProfileActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    public void onBackPressed() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProfileActivity.this);
+
+        builder.setMessage("Are you sure you want to Exit?");
+        builder.setTitle("Exit Application");
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+        final android.app.AlertDialog alertExit = builder.create();
+        alertExit.setOnShowListener(dialog -> {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(20,0,0,0);
+            Button button = alertExit.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+            button.setLayoutParams(params);
+        });
+        alertExit.show();
+
+    }
     /**
      * When user click the refresh button, pull the data again from DB.
      */

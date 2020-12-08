@@ -97,7 +97,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (!user.isEmailVerified()) {
                     Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
                     user.sendEmailVerification();
-                } else {
+                }
+                else {
                     Toast.makeText(LoginActivity.this, R.string.already_verified, Toast.LENGTH_SHORT).show();
                 }
             }else{

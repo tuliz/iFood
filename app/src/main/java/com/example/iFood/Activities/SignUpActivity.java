@@ -154,7 +154,6 @@ public class SignUpActivity extends AppCompatActivity {
                                                                         result.addOnSuccessListener(uri -> {
                                                                             picUrl = uri.toString();
                                                                             String password1 = etPassword.getText().toString();
-
                                                                             addUser(Username, Fname, Phone, Lname, Email);
                                                                             mAuth.signInWithEmailAndPassword(Email, password1).addOnCompleteListener(task1 -> {
                                                                                AuthResult authResult = task1.getResult();

@@ -1,16 +1,20 @@
 package com.example.iFood.Activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.iFood.Classes.Recipes;
+import com.example.iFood.Classes.RejectedRecipe;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -72,8 +76,6 @@ public class RejectedRecipeActivity extends AppCompatActivity {
         });
         ///////////////
     } // onCreate Ends
-
-
 
     private void pullIntentInformation() {
         final Intent intent = getIntent();

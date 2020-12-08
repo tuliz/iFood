@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.iFood.Adapters.RejectAdapter;
 import com.example.iFood.Classes.RejectedRecipe;
@@ -140,7 +143,28 @@ public class RejectedListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RejectedListActivity.this);
 
+        builder.setMessage("Are you sure you want to Exit?");
+        builder.setTitle("Exit Application");
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+        final AlertDialog alertExit = builder.create();
+        alertExit.setOnShowListener(dialog -> {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(20,0,0,0);
+            Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setLayoutParams(params);
+        });
+        alertExit.show();
+
+    }
     /**
      * This function is responsible for refreshing our Listview with our customer Adapter.
      * spanCount controls on the amount of items on each row.

@@ -1,6 +1,7 @@
 package com.example.iFood.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -209,7 +211,28 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
             });
         }
     }
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AdminActivity.this);
 
+        builder.setMessage("Are you sure you want to Exit?");
+        builder.setTitle("Exit Application");
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+        final AlertDialog alertExit = builder.create();
+        alertExit.setOnShowListener(dialog -> {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(20,0,0,0);
+            Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setLayoutParams(params);
+        });
+        alertExit.show();
+
+    }
 
     private void setChart(){
         recipesPieChart = new PieChartData(recipesPieData);
