@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     // Connect to DB
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference DB = database.getReference();
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -85,23 +85,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        mEditItemImage = new EditItemImage(SignUpActivity.this);
-        progressDialog = new ProgressDialog(SignUpActivity.this);
-
-        ivUserPic = findViewById(R.id.ivUserPic);
-
-        btnUserPic = findViewById(R.id.btnUserPic);
-        btnSignup = findViewById(R.id.btn);
-        btnBack = findViewById(R.id.btnBack);
-
-        etFname = findViewById(R.id.etFname);
-        etLname = findViewById(R.id.etLname);
-        etPhone = findViewById(R.id.etPhone);
-        etUsername = findViewById(R.id.etUser);
-        etPassword = findViewById(R.id.etPass);
-        etEmail = findViewById(R.id.etEmail);
-
-
+        initData();
         btnBack.setOnClickListener(v -> {
             Intent back = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(back);
@@ -109,27 +93,30 @@ public class SignUpActivity extends AppCompatActivity {
         btnUserPic.setOnClickListener(v -> mEditItemImage.openDialog());
         btnSignup.setOnClickListener(v -> {
             // get values the user entered
-            Fname = etFname.getText().toString();
-            Password = etPassword.getText().toString();
-            Username = etUsername.getText().toString();
-            isValidEmail(Email);
-            Lname = etLname.getText().toString();
-            Email = etEmail.getText().toString();
+            initUiViews();
 
             // check if mandatory fields are filled
             if (!tookPic) {
                 imageBitmap = BitmapFactory.decodeResource(getResources(),
                         R.drawable.no_image);
             }
-            if (!Username.isEmpty() && !Password.isEmpty() && !Fname.isEmpty() && !Email.isEmpty() && !etPhone.getText().toString().isEmpty())
+            if (!Username.isEmpty() && !Password.isEmpty() && !Fname.isEmpty() && !Email.isEmpty() && !Phone.isEmpty())
             {
-
-                Phone = etPhone.getText().toString();
                 if (!isValidEmail(Email)) {
                         Toast.makeText(SignUpActivity.this, "Email is not illegal,please enter valid Email address.", Toast.LENGTH_SHORT).show();
                         etEmail.setText("");
-                        etEmail.hasFocus();
-                    } else {
+                        etPassword.setText("");
+                        etEmail.requestFocus();
+                    }
+                else if(!validateTelAndMobileNo(Phone)){
+                    Toast.makeText(SignUpActivity.this, "Phone must be minimum of 8 numbers", Toast.LENGTH_SHORT).show();
+                    etPhone.setText("");
+                    etPassword.setText("");
+                    etPhone.requestFocus();
+
+                }
+                else {
+                    Log.w("TAG","Email:"+isValidEmail(Email)+",Phone:"+validateTelAndMobileNo(Phone));
                         if (checkPassword()) {
                             {
                                 ref.child(Username).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -140,7 +127,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             Toast.makeText(SignUpActivity.this, "Username already found in DB, try different Username", Toast.LENGTH_SHORT).show();
                                             etUsername.setText("");
                                             etPassword.setText("");
-                                            etUsername.hasFocus();
+                                            etUsername.requestFocus();
                                         } else {
                                             final String email = etEmail.getText().toString();
                                             String password = etPassword.getText().toString();
@@ -149,8 +136,9 @@ public class SignUpActivity extends AppCompatActivity {
                                                         if (task.isSuccessful()) {
                                                             uid = Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getUser()).getUid();
                                                             // Sign in success, update UI with the signed-in user's information
-                                                            Log.d("TAG", "createUserWithEmail:success");
+                                                            //Log.d("TAG", "createUserWithEmail:success");
                                                             progressDialog.setMessage("Registering..");
+                                                            progressDialog.setCanceledOnTouchOutside(false);
                                                             progressDialog.show();
                                                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                                             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -166,11 +154,12 @@ public class SignUpActivity extends AppCompatActivity {
                                                                         result.addOnSuccessListener(uri -> {
                                                                             picUrl = uri.toString();
                                                                             String password1 = etPassword.getText().toString();
-
                                                                             addUser(Username, Fname, Phone, Lname, Email);
                                                                             mAuth.signInWithEmailAndPassword(Email, password1).addOnCompleteListener(task1 -> {
                                                                                AuthResult authResult = task1.getResult();
-                                                                               FirebaseUser firebaseUser = authResult.getUser();
+                                                                                assert authResult != null;
+                                                                                FirebaseUser firebaseUser = authResult.getUser();
+                                                                                assert firebaseUser != null;
                                                                                 firebaseUser.sendEmailVerification();
                                                                             });
                                                                             // Log.i("URL", "Image URL:" + picUrl);
@@ -248,13 +237,11 @@ public class SignUpActivity extends AppCompatActivity {
                         }else{
                             if(Password.length()>=8){
                                 Toast.makeText(SignUpActivity.this,"Password must contain Uppercase and numbers",Toast.LENGTH_SHORT).show();
-                                etPassword.setText("");
-                                etPassword.hasFocus();
                             }else{
                                 Toast.makeText(SignUpActivity.this,"Password must be at least 8 chars",Toast.LENGTH_SHORT).show();
-                                etPassword.setText("");
-                                etPassword.hasFocus();
                             }
+                            etPassword.setText("");
+                            etPassword.requestFocus();
                         }
                     }
                 }
@@ -262,22 +249,22 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "One or more of required fields are empty", Toast.LENGTH_SHORT).show();
                     // Put focus on the empty variable
                     if (Username.isEmpty()) {
-                        etUsername.hasFocus();
+                        etUsername.requestFocus();
                         etPassword.setText("");
                     }
                     if (Password.isEmpty()) {
-                        etPassword.hasFocus();
+                        etPassword.requestFocus();
                     }
                     if (Fname.isEmpty()) {
-                        etFname.hasFocus();
+                        etFname.requestFocus();
                         etPassword.setText("");
                     }
                     if (Email.isEmpty()) {
-                        etEmail.hasFocus();
+                        etEmail.requestFocus();
                         etPassword.setText("");
                     }
-                    if(etPhone.getText().toString().isEmpty()){
-                        etPhone.hasFocus();
+                    if(Phone.isEmpty()){
+                        etPhone.requestFocus();
                         etPassword.setText("");
 
                     }
@@ -286,6 +273,35 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     } // OnCreate ends
+
+    private void initUiViews() {
+        Fname = etFname.getText().toString();
+        Password = etPassword.getText().toString();
+        Username = etUsername.getText().toString();
+        // isValidEmail(Email);
+        Lname = etLname.getText().toString();
+        Email = etEmail.getText().toString();
+        Phone = etPhone.getText().toString();
+    }
+
+    private void initData() {
+
+        mEditItemImage = new EditItemImage(SignUpActivity.this);
+        progressDialog = new ProgressDialog(SignUpActivity.this);
+
+        ivUserPic = findViewById(R.id.ivUserPic);
+
+        btnUserPic = findViewById(R.id.btnUserPic);
+        btnSignup = findViewById(R.id.btn);
+        btnBack = findViewById(R.id.btnBack);
+
+        etFname = findViewById(R.id.etFname);
+        etLname = findViewById(R.id.etLname);
+        etPhone = findViewById(R.id.etPhone);
+        etUsername = findViewById(R.id.etUser);
+        etPassword = findViewById(R.id.etPass);
+        etEmail = findViewById(R.id.etEmail);
+    }
 
     /**
      * This function make sure Password not short ( for security )
@@ -312,10 +328,8 @@ public class SignUpActivity extends AppCompatActivity {
         newUser.pic_url = picUrl;
         DB.child("Users").child(newUser.getUsername()).setValue(newUser);
         progressDialog.dismiss();
-        Toast.makeText(SignUpActivity.this, "Sign-up success,check your Email for verification. ", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(SignUpActivity.this, "Sign-up success,check your Email for verification.. ", Toast.LENGTH_SHORT).show();
         Intent goBack = new Intent(SignUpActivity.this, LoginActivity.class);
-      //  doService();
         startActivity(goBack);
         finish();
     }
@@ -415,11 +429,12 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
     private void compressImage() {
-
+        imageBitmap = scaleDown(imageBitmap,150,true);
+       // Log.d("TAG","End function,Image width is:"+imageBitmap.getWidth()+",Image height is:"+imageBitmap.getHeight());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//Compression quality, here 100 means no compression, the storage of compressed data to baos
         int options = 90;
-        while (baos.toByteArray().length / 1024 > 400) {  //Loop if compressed picture is greater than 400kb, than to compression
+        while (baos.toByteArray().length / 1024 > 150) {  //Loop if compressed picture is greater than 400kb, than do compression
             baos.reset();//Reset baos is empty baos
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//The compression options%, storing the compressed data to the baos
             options -= 10;//Every time reduced by 10
@@ -446,6 +461,29 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     /**
+     * Function to scale down Image size for better loading.
+     * @param givenImage Image provided from user camera.
+     * @param maxImageSize Maximum Image size by pixel.
+     * @return scaled Image.
+     */
+    public static Bitmap scaleDown(Bitmap givenImage, float maxImageSize,
+                                   boolean filter) {
+
+       // Log.d("TAG","Function start,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
+        float ratio = Math.min(
+                 maxImageSize / givenImage.getWidth(),
+                 maxImageSize / givenImage.getHeight());
+        int width = Math.round( ratio * givenImage.getWidth());
+        int height = Math.round( ratio * givenImage.getHeight());
+        if (ratio >= 1.0){
+         //   Log.d("TAG","Return,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
+            return givenImage;
+
+        }
+
+        return Bitmap.createScaledBitmap(givenImage, width,height, filter);
+    }
+    /**
      * This function is validate the user input in the Email EditText to make sure its an actual Email.
      * @param target is the Email the client entered
      * @return return true if the Email is valid and false if not
@@ -453,9 +491,19 @@ public class SignUpActivity extends AppCompatActivity {
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
+
+    public static boolean validateTelAndMobileNo(String mobileNo){
+        return mobileNo.matches("^[+]?[0-9]{8,15}$");
+    }
+
+    /**
+     * Reset the bitmap and load a default image in the Imageview.
+     */
     public void clearImage() {
         ivUserPic.setImageResource(R.drawable.no_image);
     }
     }
+
+
 
 

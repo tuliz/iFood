@@ -38,6 +38,7 @@
 
         </TextView>
         <ImageView
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:id="@+id/sendEmail"
             android:src="@drawable/send_mass_email"
@@ -105,14 +106,23 @@
 
 <LinearLayout
     android:gravity="center|bottom"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="fill_parent">
+    <TextView
+        android:gravity="center"
+        android:textStyle="bold|italic"
+        android:text="@string/rights"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
     <TextView
         android:textStyle="bold|italic"
         android:id="@+id/tvCreatedBy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom">
+        android:gravity="center">
 
     </TextView>
 </LinearLayout>

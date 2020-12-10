@@ -1,9 +1,14 @@
 package com.example.iFood.Activities.Inbox;
 
+
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +18,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
-
 import com.example.iFood.Activities.About;
 import com.example.iFood.Adapters.MessageAdapter;
 import com.example.iFood.Classes.Message;
@@ -29,7 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +48,7 @@ import static com.example.iFood.Activities.Inbox.Inbox_Old_Messages.readMsg;
 public class Inbox_new extends AppCompatActivity {
     ConnectionBCR bcr = new ConnectionBCR();
     String userName,userRole;
+
     public static BottomAppBar bottomAppBar;
     public static FloatingActionButton addIcon,delIcon;
     public static ArrayList<String> msgList = new ArrayList<>();
@@ -107,20 +111,44 @@ public class Inbox_new extends AppCompatActivity {
             addIcon.show(getSupportFragmentManager(),"TAG");
         });
         delIcon.setOnClickListener(v -> {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Deleting messages..");
+            progressDialog.show();
             for(int i =0 ; msgList.size()>i;i++) {
                 messagesRef.child(userName).child(msgList.get(i)).removeValue();
-
+                refresh_lvRead();
+                refresh_lvNotRead();
             }
-           // Log.d("TAG","msgList size:"+msgList.size()+" and messages list sizes:"+unReadmsg.size()+","+readMsg.size());
+            delIcon.hide();
             msgList.clear();
-            checkDelList();
-            refresh_lvRead();
-            refresh_lvNotRead();
+            progressDialog.dismiss();
 
         });
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.w("TAG","Tab selected:"+tab.getText());
+                msgList.clear();
+                checkDelList();
+                refresh_lvRead();
+                refresh_lvNotRead();
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
 
+            }
 
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        checkDelList();
 
     } // onCreate ends
 
@@ -132,6 +160,7 @@ public class Inbox_new extends AppCompatActivity {
         viewPagerAdapter.addFragment(inboxOldMessages,"Old Messages");
 
         viewPager.setAdapter(viewPagerAdapter);
+
     }
 
     private void getName_Role() {
@@ -166,9 +195,11 @@ public class Inbox_new extends AppCompatActivity {
      * This function responsible on fetching information regarding the user messages
      */
     private void getMessages(){
-        messagesRef.orderByKey().addValueEventListener(new ValueEventListener() {
+        new Thread(() -> messagesRef.orderByKey().addValueEventListener(new ValueEventListener() {
+            @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 unReadmsg.clear();
                 readMsg.clear();
                 for(DataSnapshot dst : dataSnapshot.getChildren()) {
@@ -179,7 +210,7 @@ public class Inbox_new extends AppCompatActivity {
                             assert m != null;
                             if (m.isRead.equals("true")) {
                                 readMsg.add(m);
-                                 refresh_lvRead();
+                                refresh_lvRead();
                             } else {
                                 unReadmsg.add(m);
                                 refresh_lvNotRead();
@@ -187,15 +218,27 @@ public class Inbox_new extends AppCompatActivity {
                         }
                     }
                 }
+                 if(unReadmsg.size()<1){
+                     Objects.requireNonNull(inboxNewMessages.getView()).setBackground(getDrawable(R.drawable.all_clear_background));
+                 }else{
+                     Objects.requireNonNull(inboxNewMessages.getView()).setBackground(getDrawable(R.drawable.background3));
+                 }
+                 if(readMsg.size()<1){
+                     Objects.requireNonNull(inboxOldMessages.getView()).setBackground(getDrawable(R.drawable.all_clear_background));
+                 }else{
+                     Objects.requireNonNull(inboxOldMessages.getView()).setBackground(getDrawable(R.drawable.background3));
+                 }
 
             }
 
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.w("TAG","Error:"+databaseError.getMessage());
 
             }
-        });
+        })).start();
+
 
     }
 
@@ -236,13 +279,15 @@ public class Inbox_new extends AppCompatActivity {
 
     private static class viewPagerAdapter extends FragmentPagerAdapter {
 
-        private List<Fragment> fragments = new ArrayList<>();
-        private List<String> fragmentsTitle = new ArrayList<>();
+        private final List<Fragment> fragments = new ArrayList<>();
+        private final List<String> fragmentsTitle = new ArrayList<>();
 
 
 
         public viewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+
             super(fm, behavior);
+
         }
 
         public void addFragment(Fragment fragment, String title){
@@ -254,6 +299,7 @@ public class Inbox_new extends AppCompatActivity {
         @NonNull
         @Override
         public Fragment getItem(int position) {
+
             return fragments.get(position);
         }
 

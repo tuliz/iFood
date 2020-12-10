@@ -47,13 +47,26 @@
             </TextView>
 
             <TextView
+
+                android:layout_marginStart="2dp"
                 android:id="@+id/tvMyRecipesCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="200dp"
                 android:layout_toEndOf="@id/tvMyRecipes"
                 android:gravity="center"
                 android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold">
+
+            </TextView>
+            <TextView
+
+                android:layout_marginStart="2dp"
+                android:id="@+id/tvNotApprovedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/tvMyRecipesCount"
+                android:gravity="center"
                 android:textSize="20sp"
                 android:textStyle="bold">
 

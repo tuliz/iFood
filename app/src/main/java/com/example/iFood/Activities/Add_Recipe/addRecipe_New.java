@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,27 +26,45 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.iFood.Activities.AdminActivity;
+import com.example.iFood.Activities.Inbox.Inbox_new;
 import com.example.iFood.Activities.MainActivity;
 import com.example.iFood.Activities.MyRecipes;
+import com.example.iFood.Activities.ProfileActivity;
 import com.example.iFood.Activities.SearchRecipe;
+import com.example.iFood.Activities.SendMessage;
 import com.example.iFood.Activities.oldActivities.Inbox;
 import com.example.iFood.Classes.Recipes;
+import com.example.iFood.Classes.Users;
+import com.example.iFood.Notification.APIService;
+import com.example.iFood.Notification.Client;
+import com.example.iFood.Notification.Data;
+import com.example.iFood.Notification.MyResponse;
+import com.example.iFood.Notification.NotificationSender;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class addRecipe_New extends AppCompatActivity {
@@ -72,7 +91,7 @@ public class addRecipe_New extends AppCompatActivity {
     Recipe_add_step2 step2;
     Recipe_add_step3 step3;
     // AppService
-
+     APIService apiService;
 
     // Broadcast Receiver
     ConnectionBCR bcr = new ConnectionBCR();
@@ -110,6 +129,9 @@ public class addRecipe_New extends AppCompatActivity {
        tabLayout.setupWithViewPager(viewPager);
        btnPrevious.setOnClickListener(v -> {
 
+           if(stepPosition==0){
+              this.finish();
+           }
            if(stepPosition>0){
 
                stepPosition--;
@@ -158,6 +180,7 @@ public class addRecipe_New extends AppCompatActivity {
                   {
                   // create our recipe with the information we need from our global variables
                   progressDialog.setMessage("Creating Recipe");
+                  progressDialog.setCanceledOnTouchOutside(false);
                   progressDialog.show();
                   createRecipe();
                   //Log.i("image2","Image is:"+bitmapImage);
@@ -212,53 +235,56 @@ public class addRecipe_New extends AppCompatActivity {
      * Manage user selection on the Menu.
      */
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        int itemId = item.getItemId();
+        if(itemId ==  R.id.menu_Exit) {
+            final Dialog myDialog = new Dialog(addRecipe_New.this);
+            myDialog.setContentView(R.layout.dialog);
+            btnDismiss = myDialog.findViewById(R.id.btnDismiss);
+            btnOk = myDialog.findViewById(R.id.btnOk);
 
+            // if pressed Ok will close the App
+            btnOk.setOnClickListener(v -> {
 
-            case R.id.menu_Exit:
-                final Dialog myDialog = new Dialog(addRecipe_New.this);
-                myDialog.setContentView(R.layout.dialog);
-                btnDismiss = myDialog.findViewById(R.id.btnDismiss);
-                btnOk =  myDialog.findViewById(R.id.btnOk);
+                SharedPreferences.Editor delData = getSharedPreferences("userData", MODE_PRIVATE).edit();
+                delData.clear();
+                delData.apply();
+                finishAffinity();
+            });
+            // if pressed Dismiss will stay in the App
+            btnDismiss.setOnClickListener(v -> myDialog.dismiss());
+            myDialog.show();
+        }
 
-               btnOk.setOnClickListener(v -> {
-                   SharedPreferences.Editor delData = getSharedPreferences("userData",MODE_PRIVATE).edit();
-                   delData.clear();
-                   delData.apply();
-                   finish();
-               });
-                btnDismiss.setOnClickListener(v -> myDialog.dismiss());
-                myDialog.show();
-                break;
-            case R.id.menu_MyRecepies:
-                Intent myRecipes = new Intent(addRecipe_New.this, MyRecipes.class);
-                myRecipes.putExtra("username",getIntent().getStringExtra("username"));
-                myRecipes.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(myRecipes);
-                finish();
-                break;
-
-            case R.id.menu_SearchRecepie:
-                Intent search = new Intent(addRecipe_New.this, SearchRecipe.class);
-                search.putExtra("username",getIntent().getStringExtra("username"));
-                search.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(search);
-                finish();
-                break;
-            case R.id.menuInbox:
-                Intent inbox = new Intent(addRecipe_New.this, Inbox.class);
-                inbox.putExtra("username",getIntent().getStringExtra("username"));
-                inbox.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(inbox);
-                finish();
-                break;
-            case R.id.menuHome:
-                Intent main = new Intent(addRecipe_New.this, MainActivity.class);
-                main.putExtra("username",getIntent().getStringExtra("username"));
-                main.putExtra("userRole",getIntent().getStringExtra("userRole"));
-                startActivity(main);
-                finish();
-                break;
+        else if(itemId == R.id.menuProfile) {
+            Intent profile = new Intent(addRecipe_New.this, ProfileActivity.class);
+            profile.putExtra("username", getIntent().getStringExtra("username"));
+            profile.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(profile);
+            finish();
+        }
+        else if(itemId == R.id.menu_MyRecepies){
+            Intent myRecipes = new Intent(addRecipe_New.this, MyRecipes.class);
+            myRecipes.putExtra("username", getIntent().getStringExtra("username"));
+            myRecipes.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(myRecipes);
+        }
+        else if(itemId == R.id.menu_SearchRecepie) {
+            Intent search = new Intent(addRecipe_New.this, SearchRecipe.class);
+            search.putExtra("username", getIntent().getStringExtra("username"));
+            search.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(search);
+        }
+        else if(itemId == R.id.menuInbox) {
+            Intent inbox = new Intent(addRecipe_New.this, Inbox_new.class);
+            inbox.putExtra("username", getIntent().getStringExtra("username"));
+            inbox.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(inbox);
+        }
+        else if(itemId ==R.id.menuHome) {
+            Intent main = new Intent(addRecipe_New.this, MainActivity.class);
+            main.putExtra("username", getIntent().getStringExtra("username"));
+            main.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            startActivity(main);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -300,13 +326,91 @@ public class addRecipe_New extends AppCompatActivity {
                         // Reset all the variables to empty.
                         resetRecipe();
                         // Dismiss Dialog.
+                        sendModNotification();
                         progressDialog.dismiss();
+                        Toast.makeText(addRecipe_New.this,"A moderator will review your recipe as soon as possible, thank you.",Toast.LENGTH_LONG).show();
+
+
                     });
                 }
             }
         }); // close OnSuccessListener
     }
 
+    /**
+     * Sending notification to mod/admin users for each new recipe added in the app to approve it.
+     */
+    private void sendModNotification() {
+        DatabaseReference modUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        new Thread(() -> modUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot outerData : snapshot.getChildren()) {
+                    Users u = outerData.getValue(Users.class);
+                    assert u != null;
+                    if (u.userRole.equals("mod") || u.userRole.equals("admin")) {
+                        Log.d("TAG", "User data:" + u.toString());
+                        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+                        FirebaseDatabase.getInstance().getReference().child("Tokens").child(u.uid).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.getValue(String.class) != null) {
+                                    String userToken = snapshot.getValue(String.class);
+                                    //Log.w("TAG","Token:"+userToken);
+                                    sendNotifications(userToken, "New Recipe", "A Recipe is waiting for your approval, check it out!");
+                                    // Log.w("TAG", "Sent notification.");
+                                } else {
+                                    Log.w("TAG", "Token not found.");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.w("TAG", "Error:" + error.getMessage());
+                            }
+                        });
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        })).start();
+
+    }
+
+
+    /**
+     * Function deliver the information to send to the API class
+     * @param usertoken user device token.
+     * @param title notification title.
+     * @param message notification message.
+     */
+    public void sendNotifications(String usertoken, String title, String message) {
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(data, usertoken);
+        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    //Log.w("TAG","code:"+response.code());
+                    //Log.w("TAG","body:"+response.body().success);
+                    assert response.body() != null;
+                    if (response.body().success != 1) {
+                       Log.d("Error",response.message());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+                Log.w("TAG","Error:"+t.getMessage());
+            }
+        });
+    }
     /**
      * This function responsible for Camera and Storage permissions.
      */

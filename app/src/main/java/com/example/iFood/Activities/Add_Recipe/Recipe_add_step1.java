@@ -15,6 +15,9 @@ import com.example.iFood.R;
 import static com.example.iFood.Activities.Add_Recipe.addRecipe_New.recipeIngredients;
 import static com.example.iFood.Activities.Add_Recipe.addRecipe_New.recipeName;
 
+/**
+ * Step 1 of the adding a recipe ( Recipe name & ingredients )
+ */
 
 public class Recipe_add_step1 extends Fragment {
     EditText etRecipeName,etRecipeIngredients;

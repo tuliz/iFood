@@ -2,7 +2,6 @@ package com.example.iFood.Activities.Add_Recipe;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -36,6 +35,9 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.example.iFood.Activities.Add_Recipe.addRecipe_New.bitmapImage;
 
+/**
+ * Recipe step 3, adding a photo to the recipe itself.
+ */
 
 public class Recipe_add_step3 extends Fragment {
 
@@ -56,19 +58,8 @@ public class Recipe_add_step3 extends Fragment {
         ivRecipeImage = view.findViewById(R.id.ivRecipeImage);
         btnCamera = view.findViewById(R.id.btnCamera);
         ivRecipeImage.setDrawingCacheEnabled(true);
-        ivRecipeImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage(getContext());
-            }
-        });
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage(getContext());
-
-            }
-        });
+        ivRecipeImage.setOnClickListener(v -> selectImage(getContext()));
+        btnCamera.setOnClickListener(v -> selectImage(getContext()));
 
         return view;
     }
@@ -80,30 +71,26 @@ public class Recipe_add_step3 extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Choose your picture");
 
-        builder.setItems(options, new DialogInterface.OnClickListener() {
+        builder.setItems(options, (dialog, item) -> {
+           if(hasCameraPermission()){
+            if (options[item].equals("Take Photo")) {
 
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-               if(hasCameraPermission()){
-                if (options[item].equals("Take Photo")) {
+                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, 0);
 
-                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
+            }else if (options[item].equals("Choose from Gallery")) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhoto , 1);
 
-                }else if (options[item].equals("Choose from Gallery")) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto , 1);
-
-                }else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
+            }else if (options[item].equals("Cancel")) {
+                dialog.dismiss();
             }
-            }
+        }
         });
         builder.show();
     }
     private boolean hasCameraPermission() {
-        Context mContext = getContext().getApplicationContext();
+        Context mContext = Objects.requireNonNull(getContext()).getApplicationContext();
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
@@ -188,8 +175,5 @@ public class Recipe_add_step3 extends Fragment {
         bitmapImage = BitmapFactory.decodeStream(isBm, null, null);//The ByteArrayInputStream data generation
     }
 
-    public void clearImage() {
-        ivRecipeImage.setImageResource(R.drawable.no_image);
-        bitmapImage=null;
-    }
+
 }

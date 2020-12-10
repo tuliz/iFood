@@ -12,11 +12,14 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.DigitsKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +67,6 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView userProfileImage,editPass,editFname,editLname,editPhone;
     // Camera Handling
     private EditItemImage mEditItemImage;
-
     // Broadcast Receiver
     ConnectionBCR bcr = new ConnectionBCR();
 
@@ -108,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
         editPass = findViewById(R.id.editPass);
 
         // progress dialog
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(ProfileActivity.this);
         // function
         pullUserData();
         // Listeners
@@ -119,6 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
             final EditText edittext = new EditText(ProfileActivity.this);
             alert.setTitle("Enter your first name:");
             alert.setIcon(R.drawable.ic_edit_black);
+            edittext.setText(firstName.getText().toString());
             alert.setView(edittext);
             alert.setPositiveButton(R.string.submit, (dialog, whichButton) -> {
                 String fName = edittext.getText().toString();
@@ -140,6 +143,7 @@ public class ProfileActivity extends AppCompatActivity {
             final EditText edittext = new EditText(ProfileActivity.this);
             alert.setTitle("Enter your last name:");
             alert.setIcon(R.drawable.ic_edit_black);
+            edittext.setText(lastName.getText().toString());
             alert.setView(edittext);
             alert.setPositiveButton("Submit", (dialog, whichButton) -> {
                 String lName = edittext.getText().toString();
@@ -160,6 +164,7 @@ public class ProfileActivity extends AppCompatActivity {
             final EditText edittext = new EditText(ProfileActivity.this);
             edittext.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
             alert.setTitle("Enter your phone:");
+            edittext.setText(phone.getText().toString());
             alert.setIcon(R.drawable.ic_edit_black);
             alert.setView(edittext);
 
@@ -185,6 +190,7 @@ public class ProfileActivity extends AppCompatActivity {
             userEmail = myDialog.findViewById(R.id.userEmailtoSend);
             userEmail.setText(email.getText().toString());
 
+
             confirm.setOnClickListener(v1 -> FirebaseAuth.getInstance().sendPasswordResetEmail(email.getText().toString())
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -199,40 +205,51 @@ public class ProfileActivity extends AppCompatActivity {
         });
         userProfileImage.setOnClickListener(v -> mEditItemImage.openDialog());
     }
-    private void pullUserData(){
 
-        Query q = ref.child("Users").orderByValue();
-                q.addValueEventListener(new ValueEventListener() {
+    private void pullUserData() {
 
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        progressDialog.setMessage("Loading User data..");
-                        progressDialog.show();
-                        for(DataSnapshot dbAnswer : dataSnapshot.getChildren()){
-                            if(Objects.equals(dbAnswer.getKey(), userName)){
-                                u = dbAnswer.getValue(Users.class);
-                                assert  u != null ;
-                                tvUsername.setText(String.format("%s",u.getUsername()));
-                                firstName.setText(String.format("%s", u.Fname));
-                                lastName.setText(String.format("%s", u.Lname));
-                                phone.setText(u.Phone);
-                                email.setText(String.format("%s", u.Email));
-                                Picasso.get().load(u.getPic_url()).into(userProfileImage);
-                                break;
+        progressDialog.setMessage("Loading User data..");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        final Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            // Delay for 2seconds
+            Query q = ref.child("Users").orderByValue();
+            q.addValueEventListener(new ValueEventListener() {
 
-                            }
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                    for (DataSnapshot dbAnswer : dataSnapshot.getChildren()) {
+                        if (Objects.equals(dbAnswer.getKey(), userName)) {
+                            u = dbAnswer.getValue(Users.class);
+                            assert u != null;
+                            tvUsername.setText(String.format("%s", u.getUsername()));
+                            firstName.setText(String.format("%s", u.Fname));
+                            lastName.setText(String.format("%s", u.Lname));
+                            phone.setText(u.Phone);
+                            email.setText(String.format("%s", u.Email));
+                            Picasso.get().load(u.getPic_url()).into(userProfileImage);
+                            break;
+
+
                         }
-                        progressDialog.dismiss();
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
 
-                    }
-                });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                }
+            });
+        }, 2000);
+
+        progressDialog.dismiss();
     }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onResume() {
@@ -244,6 +261,32 @@ public class ProfileActivity extends AppCompatActivity {
         }
         super.onResume();
     }
+
+    @Override
+    public void onBackPressed() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProfileActivity.this);
+
+        builder.setMessage("Are you sure you want to Exit?");
+        builder.setTitle("Exit Application");
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+        final android.app.AlertDialog alertExit = builder.create();
+        alertExit.setOnShowListener(dialog -> {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(20,0,0,0);
+            Button button = alertExit.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+            button.setLayoutParams(params);
+        });
+        alertExit.show();
+
+    }
+    /**
+     * When user click the refresh button, pull the data again from DB.
+     */
     private void refreshPage(){
         pullUserData();
     }
@@ -274,6 +317,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     public void setImage(int requestCode, Intent data) {
         String mPath = EditItemImage.mPath;
           switch (requestCode) {
@@ -328,6 +372,12 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    /**
+     * @param source Source Image to rotate
+     * @param angle the angle to rotate the Image
+     * @return Rotated Image
+     */
     public Bitmap rotateImage(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -351,9 +401,17 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Clear the image was taken by the User and replace it with noImage.png
+     */
     public void clearImage() {
         userProfileImage.setImageResource(R.drawable.no_image);
     }
+
+    /**
+     * Function that send the new photo to our Firebase Storage
+     */
     private void updatePhoto() {
 
         new Thread(() -> {

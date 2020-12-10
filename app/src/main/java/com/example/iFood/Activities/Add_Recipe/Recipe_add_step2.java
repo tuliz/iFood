@@ -14,6 +14,9 @@ import com.example.iFood.R;
 
 import static com.example.iFood.Activities.Add_Recipe.addRecipe_New.recipeInstructions;
 
+/**
+ * Step 2 of adding a recipe, Explaining how to prepare the recipe.
+ */
 public class Recipe_add_step2 extends Fragment {
 
     EditText etRecipeMethod;

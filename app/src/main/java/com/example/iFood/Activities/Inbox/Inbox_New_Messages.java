@@ -24,9 +24,6 @@ public class Inbox_New_Messages extends Fragment {
         View view = inflater.inflate(R.layout.fragment_inbox__new__messages, container, false);
 
        unReadList = view.findViewById(R.id.unread_message);
-       if(unReadmsg.size() < 1){
-
-       }
 
         return view;
     }

@@ -1,5 +1,6 @@
 package com.example.iFood.Activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import com.example.iFood.Classes.Users;
 import com.example.iFood.Notification.MyFireBaseMessagingService;
 import com.example.iFood.R;
 import com.example.iFood.Utils.ConnectionBCR;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +33,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 /**
  *
@@ -46,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
     Dialog myDialog;
     TextView reset_password,resend_authEmail,signupText;
     SwitchCompat rmbMe;
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    Dialog sendEmailDialog;
     EditText etUser,etPass;
     Users u;
 
@@ -62,11 +67,12 @@ public class LoginActivity extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-        pref = getSharedPreferences("userData",MODE_PRIVATE);
+
         // Declare variables ( function at the end )
         setVars();
 
         // Check if the user did asked to be remembered last time he logged in the Application
+        pref = getSharedPreferences("userData",MODE_PRIVATE);
         if(pref.contains("username")&&pref.contains("userRole")){
 
             Intent main = new Intent(LoginActivity.this, MainActivity.class);
@@ -74,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             main.putExtra("userRole",pref.getString("userRole",null));
           //  Log.i("userRole","role in shared pref is:"+pref.getString("userRole",null));
             startActivity(main);
+            finish();
         }
 
 
@@ -84,58 +91,116 @@ public class LoginActivity extends AppCompatActivity {
         resend_authEmail.setOnClickListener(v -> {
             // Getting user from Firebase
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // If user is null meaning he never signed up before
+            // If user is null meaning he never signed up before in this device
             if(user!= null) {
+                Log.w("TAG","User verified:"+user.isEmailVerified());
                 if (!user.isEmailVerified()) {
                     Toast.makeText(LoginActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
                     user.sendEmailVerification();
-                } else {
+                }
+                else {
                     Toast.makeText(LoginActivity.this, R.string.already_verified, Toast.LENGTH_SHORT).show();
                 }
             }else{
-                Toast.makeText(LoginActivity.this, "Please sign up before trying to validate your account.", Toast.LENGTH_SHORT).show();
+                // Bring up a dialog to the user to enter his details
+                // Declare variables
+                Button input_ok,input_cancel;
+                TextView emailInput,pwdInput;
+                sendEmailDialog = new Dialog(LoginActivity.this);
+                // Set Layout to Dialog
+                sendEmailDialog.setContentView(R.layout.resend_email_dialog);
+                // Set Title to Dialog
+                sendEmailDialog.setTitle("verification email");
+                // Set Variables
+                input_cancel = sendEmailDialog.findViewById(R.id.input_cancel);
+                input_ok = sendEmailDialog.findViewById(R.id.input_ok);
+                emailInput = sendEmailDialog.findViewById(R.id.email_input);
+                pwdInput = sendEmailDialog.findViewById(R.id.pwd_input);
+                // OnClickListeners
+                input_cancel.setOnClickListener(v13 -> sendEmailDialog.dismiss());
+                input_ok.setOnClickListener(v14 -> {
+                    // if one of the fields is empty, promote a toast to the user
+                    if(emailInput.getText().toString().isEmpty() || pwdInput.getText().toString().isEmpty()){
+                        Toast.makeText(LoginActivity.this, "Please enter your email and password", Toast.LENGTH_SHORT).show();
+                    }
+                    // Check if the give email is actually registered in our DB
+                   else {
+                        mAuth.fetchSignInMethodsForEmail(emailInput.getText().toString()).addOnCompleteListener(task -> {
+                            // if there is values, mean user registered this email to our DB before, so we could make a sign in and send a verification email
+                            if (!Objects.requireNonNull(Objects.requireNonNull(task.getResult()).getSignInMethods()).isEmpty()) {
+                                mAuth.signInWithEmailAndPassword(emailInput.getText().toString(), pwdInput.getText().toString()).addOnCompleteListener(taskSignIn -> {
+                                    AuthResult authResult = taskSignIn.getResult();
+                                    assert authResult != null;
+                                    FirebaseUser firebaseUser = authResult.getUser();
+                                    assert firebaseUser != null;
+                                    firebaseUser.sendEmailVerification();
+                                    //Log.w("TAG", "Email sent to:" + emailInput.getText().toString());
+                                    sendEmailDialog.dismiss();
+                                }).addOnFailureListener(e ->
+                                        //Log.w("TAG", "Exception:" + e.getMessage()));
+                                Toast.makeText(LoginActivity.this, "Wrong Email/Password", Toast.LENGTH_SHORT).show());
+                            } else {
+                                Toast.makeText(LoginActivity.this, "No user found with this email address", Toast.LENGTH_SHORT).show();
+                                sendEmailDialog.dismiss();
+                            }
+                        }).addOnFailureListener(e -> {
+                            //Log.w("TAG", "Error:" + e.getMessage());
+                        });
+
+                    }
+                });
+                sendEmailDialog.show();
+                // Expand the width of dialog to maximum screen width
+                Window window = sendEmailDialog.getWindow();
+                // Make sure the given window is not null
+                assert window != null;
+                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             }
         });
         reset_password.setOnClickListener(v -> {
 
-            // Declaring Dialog variables
-                Button confirm, cancel;
-                EditText userEmail;
+            if (etUser.getText().toString().isEmpty() || !isValidEmail(etUser.getText().toString())) {
+                    etUser.setError("Must enter a valid email address");
+                    etUser.requestFocus();
+            } else{
+                // Declaring Dialog variables
+            Button confirm, cancel;
+            TextView userEmail;
             // Attaching variables to XML layout
-                myDialog = new Dialog(LoginActivity.this);
-                myDialog.setContentView(R.layout.reset_password_dialog);
-                myDialog.setTitle(R.string.reset_password);
-                confirm = myDialog.findViewById(R.id.btnConfirm);
-                cancel = myDialog.findViewById(R.id.btnCancel);
-                userEmail = myDialog.findViewById(R.id.userEmailtoSend);
-
-
+            myDialog = new Dialog(LoginActivity.this);
+            myDialog.setContentView(R.layout.reset_password_dialog);
+            myDialog.setTitle(R.string.reset_password);
+            confirm = myDialog.findViewById(R.id.btnConfirm);
+            cancel = myDialog.findViewById(R.id.btnCancel);
+            userEmail = myDialog.findViewById(R.id.userEmailtoSend);
+            userEmail.setText(etUser.getText().toString());
             // onClickLisnters
-                confirm.setOnClickListener(v1 -> {
-                    if(!userEmail.getText().toString().isEmpty() && isValidEmail(userEmail.getText().toString())) {
-                        FirebaseAuth.getInstance().sendPasswordResetEmail(userEmail.getText().toString())
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        //Log.d("TAG", "Email Sent.");
-                                        Toast.makeText(LoginActivity.this, R.string.psd_link_sent, Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, R.string.cant_send_email, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }else{
-                        Toast.makeText(LoginActivity.this,"Please enter an Email address",
-                                Toast.LENGTH_SHORT).show();
+            confirm.setOnClickListener(v1 -> {
+                if (!userEmail.getText().toString().isEmpty() && isValidEmail(userEmail.getText().toString())) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(userEmail.getText().toString())
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    //Log.d("TAG", "Email Sent.");
+                                    Toast.makeText(LoginActivity.this, R.string.psd_link_sent, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, R.string.cant_send_email, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please enter a valid Email address",
+                            Toast.LENGTH_SHORT).show();
 
-                    }
-                });
-                cancel.setOnClickListener(v12 -> myDialog.dismiss());
-                myDialog.show();
+                }
+            });
+            cancel.setOnClickListener(v12 -> myDialog.dismiss());
+            myDialog.show();
 
-                // Expand the width of dialog to maximum screen width
-                Window window = myDialog.getWindow();
-                // Make sure the given window is not null
-                assert window != null;
-                window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            // Expand the width of dialog to maximum screen width
+            Window window = myDialog.getWindow();
+            // Make sure the given window is not null
+            assert window != null;
+            window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        }
 
         });
         btnSignIn.setOnClickListener(v -> {
@@ -148,12 +213,14 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage(getString(R.string.connecting_login));
                 progressDialog.show();
+                progressDialog.setCanceledOnTouchOutside(false);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Log.d("TAG", "signInWithEmail:success");
+                                //Log.d("TAG", "signInWithEmail:success");
                                 final FirebaseUser user = mAuth.getCurrentUser();
+                                assert user != null;
                                 if (user.isEmailVerified()) {
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                                     ref.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -169,25 +236,24 @@ public class LoginActivity extends AppCompatActivity {
                                                     break;
                                                 }
                                             }
-
                                             if (foundUser) {
 
                                                 if (rmbMe.isChecked()) {
                                                     saveData();
-
                                                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", u.userRole);
                                                     startActivity(main);
-                                                    progressDialog.dismiss();
-                                                } else {
 
+                                                } else {
                                                     Intent main = new Intent(LoginActivity.this, MainActivity.class);
                                                     main.putExtra("username", u.getUsername());
                                                     main.putExtra("userRole", userRole);
                                                     startActivity(main);
-                                                    progressDialog.dismiss();
+
                                                 }
+                                                progressDialog.dismiss();
+                                                finish();
                                             }
                                         }
 
@@ -214,68 +280,6 @@ public class LoginActivity extends AppCompatActivity {
                             // ...
                         });
             }
-            /*
-            if(!etUser.getText().toString().isEmpty() && !etPass.getText().toString().isEmpty()){
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-                Query q = ref.child("Users").orderByValue();
-                q.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        boolean foundUser = false;
-                        for(DataSnapshot dbAnswer : dataSnapshot.getChildren()) {
-                            u = dbAnswer.getValue(Users.class);
-                            assert u != null;
-                            String passWord = etPass.getText().toString();
-                            passWord = checkPass();
-                            if (u.getUsername().equals(etUser.getText().toString()) && u.getPassword().equals(passWord)) {
-                                foundUser=true;
-                                userRole = u.userRole;
-                                break;
-                            }
-                        }
-                        if(foundUser){
-
-                           if(rmbMe.isChecked()) {
-                                saveData();
-                               // doService();
-                                Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                                main.putExtra("username", etUser.getText().toString());
-                                main.putExtra("userRole",userRole);
-                                startActivity(main);
-                            }else{
-                                //doService();
-                                Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                                main.putExtra("username", etUser.getText().toString());
-                                main.putExtra("userRole",userRole);
-                                startActivity(main);
-                            }
-                           }else {
-                            Toast.makeText(LoginActivity.this, "Incorrect username and/or password, check again", Toast.LENGTH_SHORT).show();
-                            etPass.setText("");
-                            etUser.setText("");
-                            etUser.hasFocus();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                            // Handle error here
-                    }
-                });
-            }else{
-                if(etUser.getText().toString().isEmpty()){
-                 //   Toast.makeText(LoginActivity.this,"Username cannot be empty",Toast.LENGTH_SHORT).show();
-                    etUser.hasFocus();
-                    etUser.setError("Username cannot be empty");
-                    etPass.setText("");
-                }
-                if(etPass.getText().toString().isEmpty()){
-                  //  Toast.makeText(LoginActivity.this,"Password cannot be empty",Toast.LENGTH_SHORT).show();
-                    etPass.setError("Password cannot be empty");
-                    etPass.hasFocus();
-
-                }
-            }*/
         });
     } // onCreate ends
 
@@ -305,8 +309,26 @@ public class LoginActivity extends AppCompatActivity {
         saveInfo.commit();
     }
 
+     public void onBackPressed(){
+         //Log.d("TAG", "onBackPressed");
+         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+         builder.setMessage("Are you sure you want to Exit?");
+         builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+         builder.setPositiveButton(R.string.yes, (dialog, which) -> finish());
 
+         final AlertDialog alertExit = builder.create();
+         alertExit.setOnShowListener(dialog -> {
+             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                     LinearLayout.LayoutParams.WRAP_CONTENT,
+                     LinearLayout.LayoutParams.WRAP_CONTENT
+             );
+             params.setMargins(20,0,0,0);
+             Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+             button.setLayoutParams(params);
+         });
 
+         alertExit.show();
+     }
 
      /**
      * Register our Broadcast Receiver when opening the app.
@@ -325,6 +347,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onStop();
         unregisterReceiver(bcr);
     }
+
+    /**
+     * Check if the Email address is valid with the expression of example@.something.com
+     * @param target Gets Email string.
+     * @return if Email address is valid or not.
+     */
     public static boolean isValidEmail(CharSequence target) {
         return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }

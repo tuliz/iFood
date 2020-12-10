@@ -37,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,12 +49,12 @@ import retrofit2.Response;
  *
  */
 public class SendMessage extends AppCompatActivity {
-    ConnectionBCR bcr = new ConnectionBCR();
-    String formattedDate,userName,tempID,toUser,url,activity;
+    private ConnectionBCR bcr = new ConnectionBCR();
+    String formattedDate,userName, uniqueID,toUser,url,activity;
     TextView etFrom,etTo;
-    EditText etTitle,etContent;
+    private EditText etTitle,etContent;
     Button btnSend,btnClose;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
     //
     // Connect to DB
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Messages");
@@ -86,7 +87,7 @@ public class SendMessage extends AppCompatActivity {
 
         // Progress bar
         progressDialog = new ProgressDialog(SendMessage.this);
-
+        progressDialog.setCanceledOnTouchOutside(false);
         // Call function to get the user image.
         getUserURL();
         getUserID();
@@ -154,15 +155,15 @@ public class SendMessage extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                    // Log.i("message","key is:"+dataSnapshot.getKey());
-                    Users u = dataSnapshot.getValue(Users.class);
+                Users u = dataSnapshot.getValue(Users.class);
                 assert u != null;
                 url = u.getPic_url();
                  //   Log.d("TAG","URL is:"+u.getPic_url());
-                        if(url==null){
-                        storageRef.child("Photos").child("noImage").getDownloadUrl().addOnSuccessListener(uri -> {
-                        Log.d("TAG","url:"+uri.toString());
-                        url = uri.toString();
-                        userRef.child(userName).child("pic_url").setValue(url);
+                if(url==null){
+                       storageRef.child("Photos").child("noImage").getDownloadUrl().addOnSuccessListener(uri -> {
+                       Log.d("TAG","url:"+uri.toString());
+                       url = uri.toString();
+                       userRef.child(userName).child("pic_url").setValue(url);
                     });
                 }
 
@@ -180,7 +181,7 @@ public class SendMessage extends AppCompatActivity {
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         String refreshToken= FirebaseInstanceId.getInstance().getToken();
         Token token= new Token(refreshToken);
-        FirebaseDatabase.getInstance().getReference("Tokens").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+        FirebaseDatabase.getInstance().getReference("Tokens").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
     }
     /**
      * Function is responsible for saving the messages and the information in the Database.
@@ -200,12 +201,11 @@ public class SendMessage extends AppCompatActivity {
         }
         toUser = etTo.getText().toString();
         userImageUrl = url;
-    //    Log.i("value","userImageUrl is :"+url);
         Message msg;
-
-        tempID = String.valueOf(ref.push().getKey());
-        msg = new Message(title,userImageUrl,message,toUser,formattedDate,userName,tempID,"false");
-        ref.child(toUser).child(tempID).setValue(msg);
+        uniqueID = String.valueOf(ref.push().getKey());
+        msg = new Message(title,userImageUrl,message,toUser,formattedDate,userName, uniqueID,"false");
+        Log.w("TAG","Message: "+msg.toString());
+        ref.child(toUser).child(uniqueID).setValue(msg);
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
             FirebaseDatabase.getInstance().getReference().child("Tokens").child(uid).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -213,9 +213,9 @@ public class SendMessage extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.getValue(String.class) != null) {
                         String userToken = snapshot.getValue(String.class);
-                        Log.w("TAG","Token:"+userToken);
+                        //Log.w("TAG","Token:"+userToken);
                         sendNotifications(userToken, title, shortMsg);
-                        Log.w("TAG", "Sent notification.");
+                       // Log.w("TAG", "Sent notification.");
                     } else {
                         Log.w("TAG", "Token not found.");
                     }
@@ -223,7 +223,7 @@ public class SendMessage extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                              Log.w("TAG","Error:"+error.getMessage());
                 }
             });
 
@@ -237,8 +237,9 @@ public class SendMessage extends AppCompatActivity {
             @Override
             public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                 if (response.code() == 200) {
-                    Log.w("TAG","code:"+response.code());
-                    Log.w("TAG","body:"+response.body().success);
+                    //Log.w("TAG","code:"+response.code());
+                    //Log.w("TAG","body:"+response.body().success);
+                    assert response.body() != null;
                     if (response.body().success != 1) {
                         Toast.makeText(SendMessage.this, "Failed ", Toast.LENGTH_LONG).show();
                     }
@@ -247,12 +248,11 @@ public class SendMessage extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MyResponse> call, Throwable t) {
-
+                     Log.w("TAG","Error:"+t.getMessage());
             }
         });
     }
-    @Override
-    /**
+     /**
      * Register our Broadcast Receiver when opening the app.
      */
     protected void onStart() {

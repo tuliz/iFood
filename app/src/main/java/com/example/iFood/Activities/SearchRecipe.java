@@ -1,20 +1,21 @@
 package com.example.iFood.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.iFood.Adapters.RecipeAdapter;
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.MenuFragments.AddDrawFragment;
@@ -29,9 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
 
@@ -50,6 +51,8 @@ public class SearchRecipe extends AppCompatActivity {
     RecyclerView myrecyclerView;
     RecipeAdapter myAdapter;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Recipes");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,8 @@ public class SearchRecipe extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
+
+
 
         // Buttons
         btnSearch = findViewById(R.id.search_Recipe);
@@ -76,6 +81,7 @@ public class SearchRecipe extends AppCompatActivity {
         // Listeners
         btnSearch.setOnClickListener(v -> {
             // call a function to search for what user entered
+
             getInput();
             searchRecipe();
         });
@@ -97,7 +103,7 @@ public class SearchRecipe extends AppCompatActivity {
             bundle.putString("username",getIntent().getStringExtra("username"));
             bundle.putString("userRole",getIntent().getStringExtra("userRole"));
             bottomNavFrag.setArguments(bundle);
-            bottomNavFrag.show(getSupportFragmentManager(),"TAG");
+            bottomNavFrag.show(getSupportFragmentManager(),"bottomNav");
 
         });
         ///////////////////////////////
@@ -117,7 +123,7 @@ public class SearchRecipe extends AppCompatActivity {
             bundle.putString("username",getIntent().getStringExtra("username"));
             bundle.putString("userRole",getIntent().getStringExtra("userRole"));
             addIcon.setArguments(bundle);
-            addIcon.show(getSupportFragmentManager(),"TAG");
+            addIcon.show(getSupportFragmentManager(),"addIconNav");
         });
 
 
@@ -126,11 +132,62 @@ public class SearchRecipe extends AppCompatActivity {
 
     } // onCreate ends
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SearchRecipe.this);
+
+        builder.setMessage("Are you sure you want to Exit?");
+        builder.setTitle("Exit Application");
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+        final AlertDialog alertExit = builder.create();
+        alertExit.setOnShowListener(dialog -> {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(20,0,0,0);
+            Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setLayoutParams(params);
+        });
+        alertExit.show();
+
+    }
     /**
-     * This function divides the user input into multiple variables to be used in search.
+     * This function divides the user input into multiple variables to be used in search
+     * and translate the input to English to bring up results from the Database.
      */
     private void getInput(){
         userInput = et_search.getText().toString().split("\n");
+
+        /*
+        Log.w("TAG","userInput length:"+userInput.length);
+             for(i=0;i<userInput.length;i++){
+            Log.w("TAG","input:"+userInput[i]);
+        }
+
+        for(i=0;i<userInput.length;i++) {
+            TranslateAPI translateAPI = new TranslateAPI(
+                    Language.AUTO_DETECT,
+                    Language.ENGLISH,
+                    userInput[i]);
+
+            translateAPI.setTranslateListener(new TranslateAPI.TranslateListener() {
+                @Override
+                public void onSuccess(String translatedText) {
+                    Log.w("TAG", "Translated:" + translatedText);
+                    userInput[i]=translatedText;
+                    Log.w("TAG","userInput in pos: "+i+" value now is:"+userInput[i]);
+
+                }
+
+                @Override
+                public void onFailure(String s) {
+
+                }
+            });
+        }*/
     }
     /**
      * This function is called each time a user hits the "Search" button.
@@ -139,6 +196,10 @@ public class SearchRecipe extends AppCompatActivity {
      * Will also called "refresh_lv" on each result.
      */
     public void searchRecipe(){
+        ProgressDialog progressDialog = new ProgressDialog(SearchRecipe.this);
+        progressDialog.setMessage("Searching for your recipe..");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         Query dbQuery = ref.orderByKey();
         dbQuery.addValueEventListener(new ValueEventListener() {
             @SuppressLint("UseCompatLoadingForDrawables")
@@ -151,9 +212,8 @@ public class SearchRecipe extends AppCompatActivity {
                           Recipes results = searchedResults.getValue(Recipes.class);
                         for (String s : userInput) {
                             assert results != null;
-                            if (results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved()) {
-                                allMatch=true;
-                            }
+                            //Log.w("TAG","Rec name: "+results.recipeName+", isApproved:"+results.isApproved());
+                            allMatch= results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved();
                         }
                         if(allMatch){
                             searchResultArray.add(results);
@@ -161,6 +221,7 @@ public class SearchRecipe extends AppCompatActivity {
                         }
                         }
                     }
+                progressDialog.dismiss();
                 if(searchResultArray.size()<1)
                 {
                     LinearLayout linearLayout = findViewById(R.id.resultsLayout);
@@ -184,6 +245,7 @@ public class SearchRecipe extends AppCompatActivity {
      */
     private void refresh_lv(){
 
+        //Log.w("tag","activity:"+activity);
         myAdapter = new RecipeAdapter(this,searchResultArray,activity);
 
         myrecyclerView.setLayoutManager(new GridLayoutManager(this,3));
@@ -206,4 +268,6 @@ public class SearchRecipe extends AppCompatActivity {
         super.onStop();
         unregisterReceiver(bcr);
     }
+
+
 } // class ends

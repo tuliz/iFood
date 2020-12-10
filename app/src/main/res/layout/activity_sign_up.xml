@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="5dp"
     tools:context=".Activities.SignUpActivity"
     android:background="@drawable/background3"
     android:orientation="vertical"
     android:gravity="center">
 
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
     <ImageView
+        android:layout_marginTop="10dp"
         android:layout_width="250dp"
         android:layout_height="110dp"
         android:src="@drawable/logo"
@@ -18,20 +26,25 @@
 
     </ImageView>
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:gravity="center">
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="5"
             android:text="@string/first_name">
         </TextView>
         <EditText
+            android:maxLines="1"
             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:id="@+id/etFname"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/first_name"
@@ -45,6 +58,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+
         android:gravity="center">
         <TextView
             android:layout_width="wrap_content"
@@ -53,9 +69,10 @@
             android:text="@string/last_name">
         </TextView>
         <EditText
+            android:maxLines="1"
             android:digits="abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:id="@+id/etLname"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/last_name"
@@ -68,6 +85,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+
         android:orientation="horizontal"
         android:gravity="center">
         <TextView
@@ -77,8 +97,9 @@
             android:text="@string/phone">
         </TextView>
         <EditText
+            android:maxLines="1"
             android:id="@+id/etPhone"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/phone"
@@ -92,6 +113,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+
         android:gravity="center">
         <TextView
             android:layout_width="wrap_content"
@@ -102,7 +126,8 @@
         <EditText
             android:digits="0123456789 abcdefghijklmnopqrstuvwxyz @."
             android:id="@+id/etEmail"
-            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/email"
@@ -116,6 +141,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+
         android:gravity="center">
         <TextView
             android:layout_width="wrap_content"
@@ -124,9 +152,10 @@
             android:text="@string/username">
         </TextView>
         <EditText
+            android:maxLines="1"
             android:digits="0123456789 abcdefghijklmnopqrstuvwxyz"
             android:id="@+id/etUser"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/username"
@@ -139,6 +168,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+
         android:orientation="horizontal"
         android:gravity="center">
         <TextView
@@ -149,9 +181,9 @@
         </TextView>
 
         <EditText
-
+            android:maxLines="1"
             android:id="@+id/etPass"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
@@ -172,21 +204,23 @@
             android:text="@string/take_picture">
 
         </Button>
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            android:elevation="1dp"
             android:id="@+id/ivUserPic"
-            android:layout_width="250dp"
+            android:layout_width="150dp"
             android:layout_height="150dp"
             android:src="@drawable/no_image"
             android:contentDescription="user image"
             tools:ignore="HardcodedText">
 
-        </ImageView>
+        </de.hdodenhof.circleimageview.CircleImageView>
     </LinearLayout>
     <LinearLayout
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         android:gravity="center">
 
         <Button
@@ -208,4 +242,5 @@
             android:text="@string/cancel" />
 
     </LinearLayout>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

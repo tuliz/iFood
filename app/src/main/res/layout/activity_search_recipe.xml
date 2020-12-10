@@ -7,16 +7,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activities.SearchRecipe">
 <LinearLayout
+
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:layout_marginStart="10dp"
             android:paddingBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,6 +29,7 @@
             >
         </TextView>
         <EditText
+
             android:id="@+id/etSearch"
             android:hint="@string/enter_your_ingredients_here"
             android:gravity="start"
@@ -61,6 +65,7 @@
         </Button>
     </LinearLayout>
         <TextView
+            android:layout_marginStart="10dp"
             android:text="@string/results"
             android:textStyle="italic"
             android:textSize="20sp"

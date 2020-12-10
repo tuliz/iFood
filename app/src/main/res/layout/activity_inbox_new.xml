@@ -30,8 +30,7 @@
                     android:layout_height="wrap_content"
                     app:tint="@color/colorWhite"
                     android:src="@drawable/ic_delete"
-                    app:maxImageSize="35dp"
-                     />
+                    app:maxImageSize="35dp"/>
 
 
 

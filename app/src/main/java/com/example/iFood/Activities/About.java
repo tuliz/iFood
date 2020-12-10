@@ -66,13 +66,13 @@ public class About extends AppCompatActivity {
             try {
                 startActivity(Intent.createChooser(i, "Send mail..."));
             } catch (android.content.ActivityNotFoundException ex) {
-                Toast.makeText(About.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(About.this, "There are no email application installed.", Toast.LENGTH_SHORT).show();
             }
         }).start());
         sendWhatsApp.setOnClickListener(v -> openWhatsApp());
 
         formattedDate = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
-        tvDate.setText(getString(R.string.rights)+" "+ formattedDate);
+        tvDate.setText(formattedDate);
     }
 
     /**

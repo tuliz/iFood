@@ -103,4 +103,18 @@ public class Message {
         isMarked = marked;
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "title='" + title + '\'' +
+                ", userImageUrl='" + userImageUrl + '\'' +
+                ", message='" + message + '\'' +
+                ", toUser='" + toUser + '\'' +
+                ", sentDate='" + sentDate + '\'' +
+                ", fromUser='" + fromUser + '\'' +
+                ", msgID='" + msgID + '\'' +
+                ", isRead='" + isRead + '\'' +
+                ", isMarked=" + isMarked +
+                '}';
+    }
 }

@@ -15,10 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.iFood.Activities.LoginActivity;
+import com.example.iFood.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import static com.example.iFood.R.drawable.logo;
+//import static com.example.iFood.R.drawable.logo;
 
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
     String title,message;
@@ -36,7 +37,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
     {
 
         Bitmap logo_bitmap = BitmapFactory.decodeResource(this.getResources(),
-                logo);
+                R.drawable.logo);
         PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
 
         boolean isScreenOn = Build.VERSION.SDK_INT >= 20 ? pm.isInteractive() : pm.isScreenOn(); // check if screen is on
@@ -49,7 +50,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this,1,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(logo)
+                        .setSmallIcon(R.drawable.logo)
                         .setOnlyAlertOnce(true)
                          .setLargeIcon(logo_bitmap)
                         .setColor(Color.RED)

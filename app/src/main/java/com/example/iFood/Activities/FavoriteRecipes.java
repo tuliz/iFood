@@ -1,20 +1,16 @@
 package com.example.iFood.Activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This screen is responsible for showing the user his favorite lists.
@@ -57,51 +54,38 @@ public class FavoriteRecipes extends AppCompatActivity {
 
         /// get userName from intent data
         userName = getIntent().getStringExtra("username");
-        userRole = getIntent().getStringExtra("useRole");
+        userRole = getIntent().getStringExtra("userRole");
 
         /////
-        favViewList = findViewById(R.id.favList);
-        bottomAppBar = findViewById(R.id.bottomAppBar);
-        addIcon = findViewById(R.id.bottomAddIcon);
-        tvMyRecipesCount = findViewById(R.id.tvMyRecipesCount);
+        setVariables();
 
-        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavDrawFragment bottomNavFrag = new NavDrawFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("username",getIntent().getStringExtra("username"));
-                bundle.putString("userRole",getIntent().getStringExtra("userRole"));
-                bottomNavFrag.setArguments(bundle);
-                bottomNavFrag.show(getSupportFragmentManager(),"TAG");
-
-            }
-        });
-        ///////////////////////////////
-        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-
-                if(id == R.id.bottomAbout){
-                    Intent about = new Intent(FavoriteRecipes.this, About.class);
-                    startActivity(about);
-                }
-                return false;
-            }
+        bottomAppBar.setNavigationOnClickListener(v -> {
+            NavDrawFragment bottomNavFrag = new NavDrawFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("username",getIntent().getStringExtra("username"));
+            bundle.putString("userRole",getIntent().getStringExtra("userRole"));
+            bottomNavFrag.setArguments(bundle);
+            bottomNavFrag.show(getSupportFragmentManager(),"bottomNav");
 
         });
         ///////////////////////////////
-        addIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddDrawFragment addIcon = new AddDrawFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("username",getIntent().getStringExtra("username"));
-                bundle.putString("userRole",getIntent().getStringExtra("userRole"));
-                addIcon.setArguments(bundle);
-                addIcon.show(getSupportFragmentManager(),"TAG");
+        bottomAppBar.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+
+            if(id == R.id.bottomAbout){
+                Intent about = new Intent(FavoriteRecipes.this, About.class);
+                startActivity(about);
             }
+            return false;
+        });
+        ///////////////////////////////
+        addIcon.setOnClickListener(v -> {
+            AddDrawFragment addIcon = new AddDrawFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("username",getIntent().getStringExtra("username"));
+            bundle.putString("userRole",getIntent().getStringExtra("userRole"));
+            addIcon.setArguments(bundle);
+            addIcon.show(getSupportFragmentManager(),"addIconNav");
         });
 
         getFavListbyUser();
@@ -113,9 +97,19 @@ public class FavoriteRecipes extends AppCompatActivity {
 
     } // onCreate ends
 
+    /**
+     * Declaring variables.
+     */
+    private void setVariables() {
+        favViewList = findViewById(R.id.favList);
+        bottomAppBar = findViewById(R.id.bottomAppBar);
+        addIcon = findViewById(R.id.bottomAddIcon);
+        tvMyRecipesCount = findViewById(R.id.tvMyRecipesCount);
+    }
+
 
     /**
-     * This function is responsible for refreshing our Listview with our customer Adapter.
+     * This function is responsible for refreshing our ListView with our customer Adapter.
      * spanCount controls on the amount of items on each row.
      */
     private void refresh_lv(){
@@ -136,7 +130,7 @@ public class FavoriteRecipes extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 myFavList.clear();
                 for(DataSnapshot dst : dataSnapshot.getChildren()){
-                      if(dst.getKey().equals(userName))
+                      if(Objects.equals(dst.getKey(), userName))
                         for(DataSnapshot userRecipes : dst.getChildren()){
                            Recipes results = userRecipes.getValue(Recipes.class);
                            myFavList.add(results);
@@ -162,9 +156,31 @@ public class FavoriteRecipes extends AppCompatActivity {
 
     }
     @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(FavoriteRecipes.this);
+
+        builder.setMessage("Are you sure you want to Exit?");
+        builder.setTitle("Exit Application");
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+
+        final AlertDialog alertExit = builder.create();
+        alertExit.setOnShowListener(dialog -> {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(20,0,0,0);
+            Button button = alertExit.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setLayoutParams(params);
+        });
+        alertExit.show();
+
+    }
     /**
      * Register our Broadcast Receiver when opening the app.
      */
+    @Override
     protected void onStart() {
         super.onStart();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -199,36 +215,25 @@ public class FavoriteRecipes extends AppCompatActivity {
         if(myFavList.size() < 1){
 
             AlertDialog.Builder builder = new AlertDialog.Builder(FavoriteRecipes.this);
-
             builder.setMessage(R.string.NoFavFound);
             builder.setTitle(R.string.FavRecipes);
-            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent moveToSearch = new Intent(FavoriteRecipes.this, SearchRecipe.class);
-                    moveToSearch.putExtra("username",userName);
-                    moveToSearch.putExtra("userRole",userRole);
-                    startActivity(moveToSearch);
-                }
+            builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+            builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                Intent moveToSearch = new Intent(FavoriteRecipes.this, SearchRecipe.class);
+                moveToSearch.putExtra("username",userName);
+                moveToSearch.putExtra("userRole",userRole);
+                startActivity(moveToSearch);
+                finishAffinity();
             });
             final AlertDialog alertFav = builder.create();
-            alertFav.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    params.setMargins(20,0,0,0);
-                    Button button = alertFav.getButton(AlertDialog.BUTTON_POSITIVE);
-                    button.setLayoutParams(params);
-                }
+            alertFav.setOnShowListener(dialog -> {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(20,0,0,0);
+                Button button = alertFav.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setLayoutParams(params);
             });
             alertFav.show();
         }

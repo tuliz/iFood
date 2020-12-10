@@ -21,6 +21,7 @@
 
     </TextView>
     <TextView
+        android:maxLines="1"
         android:layout_marginTop="5dp"
         android:id="@+id/tvFrom"
         android:layout_width="match_parent"
@@ -43,6 +44,7 @@
 
         </TextView>
         <TextView
+            android:maxLines="1"
             android:layout_marginTop="5dp"
             android:id="@+id/tvMessageTitle"
             android:layout_width="match_parent"
@@ -65,6 +67,7 @@
 
         </TextView>
         <TextView
+            android:maxLines="1"
             android:layout_marginTop="5dp"
             android:id="@+id/tvMessageDate"
             android:layout_width="match_parent"

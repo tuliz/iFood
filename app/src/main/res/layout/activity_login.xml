@@ -2,7 +2,7 @@
 <LinearLayout
       xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
-    android:isScrollContainer="true"
+      android:isScrollContainer="true"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:context=".Activities.LoginActivity"
@@ -14,7 +14,7 @@
     <ImageView
         android:layout_marginTop="100dp"
         android:layout_marginBottom="30dp"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_gravity="center"
         android:src="@drawable/logo"
@@ -30,17 +30,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="5"
-            android:text="@string/username">
+            android:text="@string/email">
      </TextView>
      <EditText
+
             android:focusableInTouchMode="true"
             android:id="@+id/etUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:textStyle="italic"
-            android:hint="@string/username"
-            android:inputType="text"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
             android:importantForAutofill="no">
       </EditText>
 </LinearLayout>
@@ -50,6 +51,7 @@
         android:orientation="horizontal"
         android:gravity="center">
     <TextView
+
             android:textStyle="italic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

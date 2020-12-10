@@ -28,9 +28,10 @@ import java.util.List;
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> {
     String userName,userRole,check;
-    private Context mContext;
-    private List<Recipes> mData;
-    private String activity;
+    long time;
+    private final Context mContext;
+    private final List<Recipes> mData;
+    private final String activity;
 
     public RecipeAdapter(Context mContext, List<Recipes> mData,String activity){
         this.mContext = mContext;
@@ -47,7 +48,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
         View view ;
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         view = layoutInflater.inflate(R.layout.cardview_recipe,viewGroup,false);
-        return  new MyHolder(view);
+        return new MyHolder(view);
     }
 
     @Override
@@ -55,31 +56,32 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
         Intent  intent = ((Activity) mContext).getIntent();
         userName = intent.getStringExtra("username");
         userRole = intent.getStringExtra("userRole");
+        time = (Long) mData.get(i).getTimestamp();
+     //   Log.w("TAG", "onBindViewHolder: time is:"+time );
         check = String.valueOf(mData.get(i).isApproved());
         if(mData.get(i).getRecipePicture()!=null && !mData.get(i).getRecipePicture().isEmpty()) {
             Picasso.get().load(mData.get(i).getRecipePicture()).into(myHolder.img_recipe);
 
         }
         myHolder.recipeTitle.setText(mData.get(i).getRecipeName());
-        myHolder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, RecipeActivity.class);
-                intent.putExtra("activity",activity);
-                intent.putExtra("addedBy",mData.get(i).getAddedBy());
-                intent.putExtra("approved",check);
-                intent.putExtra("username",userName);
-                intent.putExtra("userRole",userRole);
-                intent.putExtra("RecipeName",mData.get(i).getRecipeName());
-                intent.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
-                intent.putExtra("RecipeMethodTitle",mData.get(i).getRecipeMethodTitle());
-                intent.putExtra("Recipe",mData.get(i).getRecipe());
-                intent.putExtra("id",mData.get(i).getId());
-                intent.putExtra("Thumbnail",mData.get(i).getRecipePicture());
+        myHolder.cardView.setOnClickListener(v -> {
+            Intent intent1 = new Intent(mContext, RecipeActivity.class);
+            intent1.putExtra("activity",activity);
+            intent1.putExtra("addedBy",mData.get(i).getAddedBy());
+            intent1.putExtra("approved",check);
+            intent1.putExtra("username",userName);
+            intent1.putExtra("userRole",userRole);
+            intent1.putExtra("RecipeName",mData.get(i).getRecipeName());
+            intent1.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
+            intent1.putExtra("RecipeMethodTitle",mData.get(i).getRecipeMethodTitle());
+            intent1.putExtra("Recipe",mData.get(i).getRecipe());
+            intent1.putExtra("id",mData.get(i).getId());
+            intent1.putExtra("Thumbnail",mData.get(i).getRecipePicture());
+            intent1.putExtra("time",time);
 
 
-                mContext.startActivity(intent);
-            }
+
+            mContext.startActivity(intent1);
         });
     }
 
@@ -88,7 +90,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
         return mData.size();
     }
 
-    public class MyHolder extends RecyclerView.ViewHolder {
+    public static class MyHolder extends RecyclerView.ViewHolder {
 
         TextView recipeTitle;
         CardView cardView;
