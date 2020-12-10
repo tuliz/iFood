@@ -51,6 +51,7 @@ public class EditRecipeActivity extends AppCompatActivity {
     ImageView ivRecipeImage;
     Button btnSave;
     String recipeID,recipeImageURL,userName,userRole,recipeTitle,recipeIngredients,recipeInstructions,newValue;
+    ProgressDialog progressDialog;
 
     // Camera Handling
     private EditItemImage mEditItemImage;
@@ -77,9 +78,12 @@ public class EditRecipeActivity extends AppCompatActivity {
         etContent.setText(getIntent().getStringExtra("Recipe"));
 
         // set the image into the Image view
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Loading..");
+        progressDialog.show();
         Picasso.get().load(recipeImageURL).into(ivRecipeImage);
-
-        Log.w("TAG","recipeID:"+recipeID+", username:"+userName);
+        progressDialog.dismiss();
+      //  Log.w("TAG","recipeID:"+recipeID+", username:"+userName);
 
         btnSave.setOnClickListener(v -> {
             if(etContent.getText().toString().isEmpty() ||
@@ -98,13 +102,13 @@ public class EditRecipeActivity extends AppCompatActivity {
                  recipeIngredients = etIngredients.getText().toString();
                  recipeInstructions = etContent.getText().toString();
 
-                 Log.w("TAG","Title:"+recipeTitle+", Ingredients:"+recipeIngredients+", Instructions:"+recipeInstructions);
+                // Log.w("TAG","Title:"+recipeTitle+", Ingredients:"+recipeIngredients+", Instructions:"+recipeInstructions);
 
                 // if Image is not null then need to upload new image to Storage and delete the old one
                 if(imageBitmap!=null){
                     StorageReference photoRef = mStorage.getReferenceFromUrl(recipeImageURL);
                     String recipePhotoName = photoRef.getName();
-                    Log.w("TAG","recipePhotoName: Photos/"+recipePhotoName);
+                   // Log.w("TAG","recipePhotoName: Photos/"+recipePhotoName);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     final byte[] data = baos.toByteArray();
@@ -116,9 +120,9 @@ public class EditRecipeActivity extends AppCompatActivity {
                             if(taskSnapshot.getMetadata().getReference()!=null){
                                 Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
                                 result.addOnSuccessListener(uri -> {
-                                    Log.w("TAG","old value:"+recipeImageURL);
+                                    //Log.w("TAG","old value:"+recipeImageURL);
                                     newValue = uri.toString();
-                                    Log.w("TAG","new value:"+newValue);
+                                    //Log.w("TAG","new value:"+newValue);
 
                         String storageUrl = recipeImageURL;
                         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
@@ -152,6 +156,7 @@ public class EditRecipeActivity extends AppCompatActivity {
     } // onCreate ends
 
     private void setVars() {
+        progressDialog = new ProgressDialog(EditRecipeActivity.this);
         mEditItemImage = new EditItemImage(EditRecipeActivity.this);
         etContent = findViewById(R.id.recipeContent);
         etIngredients = findViewById(R.id.recipeIngredients);
@@ -161,7 +166,7 @@ public class EditRecipeActivity extends AppCompatActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("RESULT_OK","RESULT_OK:"+RESULT_OK);
+       // Log.i("RESULT_OK","RESULT_OK:"+RESULT_OK);
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 default:

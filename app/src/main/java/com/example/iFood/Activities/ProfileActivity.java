@@ -12,7 +12,9 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.DigitsKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,7 +67,6 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView userProfileImage,editPass,editFname,editLname,editPhone;
     // Camera Handling
     private EditItemImage mEditItemImage;
-
     // Broadcast Receiver
     ConnectionBCR bcr = new ConnectionBCR();
 
@@ -109,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity {
         editPass = findViewById(R.id.editPass);
 
         // progress dialog
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(ProfileActivity.this);
         // function
         pullUserData();
         // Listeners
@@ -204,40 +205,51 @@ public class ProfileActivity extends AppCompatActivity {
         });
         userProfileImage.setOnClickListener(v -> mEditItemImage.openDialog());
     }
-    private void pullUserData(){
 
-        Query q = ref.child("Users").orderByValue();
-                q.addValueEventListener(new ValueEventListener() {
+    private void pullUserData() {
 
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        progressDialog.setMessage("Loading User data..");
-                        progressDialog.show();
-                        for(DataSnapshot dbAnswer : dataSnapshot.getChildren()){
-                            if(Objects.equals(dbAnswer.getKey(), userName)){
-                                u = dbAnswer.getValue(Users.class);
-                                assert  u != null ;
-                                tvUsername.setText(String.format("%s",u.getUsername()));
-                                firstName.setText(String.format("%s", u.Fname));
-                                lastName.setText(String.format("%s", u.Lname));
-                                phone.setText(u.Phone);
-                                email.setText(String.format("%s", u.Email));
-                                Picasso.get().load(u.getPic_url()).into(userProfileImage);
-                                break;
+        progressDialog.setMessage("Loading User data..");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        final Handler handler = new Handler();
+        handler.postDelayed(() -> {
+            // Delay for 2seconds
+            Query q = ref.child("Users").orderByValue();
+            q.addValueEventListener(new ValueEventListener() {
 
-                            }
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                    for (DataSnapshot dbAnswer : dataSnapshot.getChildren()) {
+                        if (Objects.equals(dbAnswer.getKey(), userName)) {
+                            u = dbAnswer.getValue(Users.class);
+                            assert u != null;
+                            tvUsername.setText(String.format("%s", u.getUsername()));
+                            firstName.setText(String.format("%s", u.Fname));
+                            lastName.setText(String.format("%s", u.Lname));
+                            phone.setText(u.Phone);
+                            email.setText(String.format("%s", u.Email));
+                            Picasso.get().load(u.getPic_url()).into(userProfileImage);
+                            break;
+
+
                         }
-                        progressDialog.dismiss();
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
 
-                    }
-                });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                }
+            });
+        }, 2000);
+
+        progressDialog.dismiss();
     }
+
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onResume() {

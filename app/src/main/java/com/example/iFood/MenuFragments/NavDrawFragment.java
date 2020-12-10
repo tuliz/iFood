@@ -109,7 +109,7 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                 profile.putExtra("username", username);
                 profile.putExtra("userRole", userRole);
                 startActivity(profile);
-                Objects.requireNonNull(getActivity()).finishAffinity();
+
             } else if (itemId == R.id.menu_rejectList) {
                 Intent rejectList = new Intent(mContext.getApplicationContext(), RejectedListActivity.class);
                 rejectList.putExtra("username", username);
