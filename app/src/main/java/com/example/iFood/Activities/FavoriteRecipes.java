@@ -54,7 +54,7 @@ public class FavoriteRecipes extends AppCompatActivity {
 
         /// get userName from intent data
         userName = getIntent().getStringExtra("username");
-        userRole = getIntent().getStringExtra("useRole");
+        userRole = getIntent().getStringExtra("userRole");
 
         /////
         setVariables();

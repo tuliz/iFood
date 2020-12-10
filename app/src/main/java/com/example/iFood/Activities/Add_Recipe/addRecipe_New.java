@@ -129,6 +129,9 @@ public class addRecipe_New extends AppCompatActivity {
        tabLayout.setupWithViewPager(viewPager);
        btnPrevious.setOnClickListener(v -> {
 
+           if(stepPosition==0){
+              this.finish();
+           }
            if(stepPosition>0){
 
                stepPosition--;

@@ -212,7 +212,7 @@ public class SearchRecipe extends AppCompatActivity {
                           Recipes results = searchedResults.getValue(Recipes.class);
                         for (String s : userInput) {
                             assert results != null;
-                            Log.w("TAG","Rec name: "+results.recipeName+", isApproved:"+results.isApproved());
+                            //Log.w("TAG","Rec name: "+results.recipeName+", isApproved:"+results.isApproved());
                             allMatch= results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved();
                         }
                         if(allMatch){
@@ -245,6 +245,7 @@ public class SearchRecipe extends AppCompatActivity {
      */
     private void refresh_lv(){
 
+        //Log.w("tag","activity:"+activity);
         myAdapter = new RecipeAdapter(this,searchResultArray,activity);
 
         myrecyclerView.setLayoutManager(new GridLayoutManager(this,3));

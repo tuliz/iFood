@@ -26,7 +26,7 @@
     </TextView>
 
     <EditText
-        android:digits="0123456789 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ."
+        android:digits="\n0123456789 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ."
         android:id="@+id/etRecipeMethod"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

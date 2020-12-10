@@ -58,7 +58,7 @@ import ru.embersoft.expandabletextview.ExpandableTextView;
   */
 public class RecipeActivity extends AppCompatActivity {
     ConnectionBCR bcr = new ConnectionBCR();
-    boolean isExists = false;
+    private boolean isExists = false;
     long time;
     Dialog myDialog;
     Bitmap image = null;
@@ -81,19 +81,19 @@ public class RecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
 
         // get information from intent
-        final Intent intent = getIntent();
+
         approved = getIntent().getStringExtra("approved");
         userRole = getIntent().getStringExtra("userRole");
         userName = getIntent().getStringExtra("username");
-        activity = intent.getStringExtra("activity");
-        addedBy = Objects.requireNonNull(intent.getExtras()).getString("addedBy");
-        Title = intent.getExtras().getString("RecipeName");
-        Ingredients = intent.getExtras().getString("RecipeIngredients");
-        MethodTitle = intent.getExtras().getString("RecipeMethodTitle");
-        Recipe = intent.getExtras().getString("Recipe");
-        recipeID = intent.getStringExtra("id");
-        recipeImage = intent.getStringExtra("Thumbnail");
-        time = intent.getLongExtra("time",0);
+        activity = getIntent().getStringExtra("activity");
+        addedBy = getIntent().getExtras().getString("addedBy");
+        Title = getIntent().getExtras().getString("RecipeName");
+        Ingredients = getIntent().getExtras().getString("RecipeIngredients");
+        MethodTitle = getIntent().getExtras().getString("RecipeMethodTitle");
+        Recipe = getIntent().getExtras().getString("Recipe");
+        recipeID = getIntent().getStringExtra("id");
+        recipeImage = getIntent().getStringExtra("Thumbnail");
+        time = getIntent().getLongExtra("time",0);
 
 
         //////////////
@@ -182,145 +182,145 @@ public class RecipeActivity extends AppCompatActivity {
      */
     public void handleButtons() {
 
-        if (activity.contains("MyRecipes") || userName.equals(getIntent().getStringExtra("addedBy"))) {
-            btnMsg.setVisibility(View.GONE);
-            btnFav.setVisibility(View.GONE);
-        }
-        if (!activity.contains("MyRecipes") && approved.equals("false") && userRole.equals("admin") || userRole.equals("mod")) {
-            if(activity.contains("ModActivity")){
-                btnShare.setVisibility(View.GONE);
-                btnFav.setVisibility(View.GONE);
+            if (activity.contains("MyRecipes") || userName.equals(getIntent().getStringExtra("addedBy"))) {
                 btnMsg.setVisibility(View.GONE);
-                FloatingActionButton btnApprove = new FloatingActionButton(this);
-                btnApprove.setId(View.generateViewId());
-                btnApprove.setImageResource(R.drawable.ic_baseline_check);
-                btnApprove.setSize(FloatingActionButton.SIZE_NORMAL);
-                btnApprove.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                btnApprove.setOnClickListener(v -> recipesRef.child(recipeID).child(addedBy).child("approved").setValue(true));
-                FloatingActionButton btnDel = new FloatingActionButton(this);
-                btnDel.setId(View.generateViewId());
-                btnDel.setImageResource(R.drawable.ic_exit);
-                btnDel.setSize(FloatingActionButton.SIZE_NORMAL);
-                btnDel.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                btnDel.setOnClickListener(v -> {
-                    myDialog = new Dialog(RecipeActivity.this);
-                    // Layout
-                    myDialog.setContentView(R.layout.delete_reason_dialog);
+                btnFav.setVisibility(View.GONE);
+            }
+            if (!activity.contains("MyRecipes") && approved.equals("false") && userRole.equals("admin") || userRole.equals("mod")) {
+                if (activity.contains("ModActivity")) {
+                    btnShare.setVisibility(View.GONE);
+                    btnFav.setVisibility(View.GONE);
+                    btnMsg.setVisibility(View.GONE);
+                    FloatingActionButton btnApprove = new FloatingActionButton(this);
+                    btnApprove.setId(View.generateViewId());
+                    btnApprove.setImageResource(R.drawable.ic_baseline_check);
+                    btnApprove.setSize(FloatingActionButton.SIZE_NORMAL);
+                    btnApprove.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                    btnApprove.setOnClickListener(v -> recipesRef.child(recipeID).child(addedBy).child("approved").setValue(true));
+                    FloatingActionButton btnDel = new FloatingActionButton(this);
+                    btnDel.setId(View.generateViewId());
+                    btnDel.setImageResource(R.drawable.ic_exit);
+                    btnDel.setSize(FloatingActionButton.SIZE_NORMAL);
+                    btnDel.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                    btnDel.setOnClickListener(v -> {
+                        myDialog = new Dialog(RecipeActivity.this);
+                        // Layout
+                        myDialog.setContentView(R.layout.delete_reason_dialog);
 
-                    // Textview options
-                    option1 = myDialog.findViewById(R.id.tv1);
-                    option2 = myDialog.findViewById(R.id.tv2);
-                    option3 = myDialog.findViewById(R.id.tv3);
-                    option4 = myDialog.findViewById(R.id.tv4);
-                    option5 = myDialog.findViewById(R.id.tv5);
-                    option6 = myDialog.findViewById(R.id.tv6);
+                        // Textview options
+                        option1 = myDialog.findViewById(R.id.tv1);
+                        option2 = myDialog.findViewById(R.id.tv2);
+                        option3 = myDialog.findViewById(R.id.tv3);
+                        option4 = myDialog.findViewById(R.id.tv4);
+                        option5 = myDialog.findViewById(R.id.tv5);
+                        option6 = myDialog.findViewById(R.id.tv6);
 
-                    // Checkbox
-                    CheckBox reason1 = myDialog.findViewById(R.id.reason1);
-                    CheckBox reason2 = myDialog.findViewById(R.id.reason2);
-                    CheckBox reason3 = myDialog.findViewById(R.id.reason3);
-                    CheckBox reason4 = myDialog.findViewById(R.id.reason4);
-                    CheckBox reason5 = myDialog.findViewById(R.id.reason5);
-                    CheckBox reason6 = myDialog.findViewById(R.id.reason6);
-                    // Edittext
-                    otherReason = myDialog.findViewById(R.id.etOtherReason);
+                        // Checkbox
+                        CheckBox reason1 = myDialog.findViewById(R.id.reason1);
+                        CheckBox reason2 = myDialog.findViewById(R.id.reason2);
+                        CheckBox reason3 = myDialog.findViewById(R.id.reason3);
+                        CheckBox reason4 = myDialog.findViewById(R.id.reason4);
+                        CheckBox reason5 = myDialog.findViewById(R.id.reason5);
+                        CheckBox reason6 = myDialog.findViewById(R.id.reason6);
+                        // Edittext
+                        otherReason = myDialog.findViewById(R.id.etOtherReason);
 
-                    // Buttons
-                    confirm = myDialog.findViewById(R.id.btnReasonConfirm);
-                    cancel = myDialog.findViewById(R.id.btnReasonCancel);
+                        // Buttons
+                        confirm = myDialog.findViewById(R.id.btnReasonConfirm);
+                        cancel = myDialog.findViewById(R.id.btnReasonCancel);
 
 
-                    // Title
-                    myDialog.setTitle("Rejection Reason");
+                        // Title
+                        myDialog.setTitle("Rejection Reason");
 
-                    // Listeners
-                    confirm.setOnClickListener(v1 -> {
-                        if(reason1.isChecked()){
-                            if(reason.isEmpty()) reason+=option1.getText().toString();
-                            else reason+=","+ option1.getText().toString();
+                        // Listeners
+                        confirm.setOnClickListener(v1 -> {
+                            if (reason1.isChecked()) {
+                                if (reason.isEmpty()) reason += option1.getText().toString();
+                                else reason += "," + option1.getText().toString();
 
-                        }
-                        if(reason2.isChecked()){
-                            if(reason.isEmpty()) reason+=option2.getText().toString();
-                            else reason+=","+ option2.getText().toString();
+                            }
+                            if (reason2.isChecked()) {
+                                if (reason.isEmpty()) reason += option2.getText().toString();
+                                else reason += "," + option2.getText().toString();
 
-                        }
-                        if(reason3.isChecked()){
-                            if(reason.isEmpty()) reason+=option3.getText().toString();
-                            else reason+=","+ option3.getText().toString();
+                            }
+                            if (reason3.isChecked()) {
+                                if (reason.isEmpty()) reason += option3.getText().toString();
+                                else reason += "," + option3.getText().toString();
 
-                        }
-                        if(reason4.isChecked()){
-                            if(reason.isEmpty()) reason+=option4.getText().toString();
-                            else reason+=","+ option4.getText().toString();
+                            }
+                            if (reason4.isChecked()) {
+                                if (reason.isEmpty()) reason += option4.getText().toString();
+                                else reason += "," + option4.getText().toString();
 
-                        }
-                        if(reason5.isChecked()){
-                            if(reason.isEmpty()) reason+=option5.getText().toString();
-                            else reason+=","+ option5.getText().toString();
+                            }
+                            if (reason5.isChecked()) {
+                                if (reason.isEmpty()) reason += option5.getText().toString();
+                                else reason += "," + option5.getText().toString();
 
-                        }
-                        if(reason6.isChecked()){
-                            if(reason.isEmpty()) reason+=option6.getText().toString();
-                            else reason+=","+ option6.getText().toString();
+                            }
+                            if (reason6.isChecked()) {
+                                if (reason.isEmpty()) reason += option6.getText().toString();
+                                else reason += "," + option6.getText().toString();
 
-                        }
-                        if(!otherReason.getText().toString().isEmpty()){
-                            if(reason.isEmpty())reason+=otherReason.getText().toString();
-                            else reason+= ","+otherReason.getText().toString();
-                        }
-                        // Log.w("TAG","Reason: "+reason);
-                        myDialog.dismiss();
-                        if(!reason.isEmpty()) {
+                            }
+                            if (!otherReason.getText().toString().isEmpty()) {
+                                if (reason.isEmpty()) reason += otherReason.getText().toString();
+                                else reason += "," + otherReason.getText().toString();
+                            }
+                            // Log.w("TAG","Reason: "+reason);
+                            myDialog.dismiss();
+                            if (!reason.isEmpty()) {
 
-                            // Get the time of declined recipe
-                            Date date = Calendar.getInstance().getTime();
-                            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                            String formattedDate = df.format(date);
+                                // Get the time of declined recipe
+                                Date date = Calendar.getInstance().getTime();
+                                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                                String formattedDate = df.format(date);
 
-                            // Get the recipe details for future review later on
-                            RejectedRecipe rejectedRecipe;
-                            rejectedRecipe = new RejectedRecipe(recipeID,Title,Recipe,MethodTitle
-                                    ,Ingredients,recipeImage,reason,addedBy,userName,false,
-                                    formattedDate,time);
+                                // Get the recipe details for future review later on
+                                RejectedRecipe rejectedRecipe;
+                                rejectedRecipe = new RejectedRecipe(recipeID, Title, Recipe, MethodTitle
+                                        , Ingredients, recipeImage, reason, addedBy, userName, false,
+                                        formattedDate, time);
 
-                            //deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe);
+                                //deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe);
 
-                            deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe).addOnSuccessListener(aVoid -> {
-                                // Remove the recipe from waiting list
-                                Log.w("TAG","Recipe added to rejected list");
-                                recipesRef.child(recipeID).removeValue();
-                                finish();
-                            }).addOnFailureListener(e -> {
-                                Toast.makeText(RecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
-                                Log.w("TAG","Error:"+e.getMessage());
-                            });
-                        }else{
-                            Toast.makeText(RecipeActivity.this,"Please choose at least 1 option.",Toast.LENGTH_SHORT).show();
-                        }
+                                deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe).addOnSuccessListener(aVoid -> {
+                                    // Remove the recipe from waiting list
+                                    Log.w("TAG", "Recipe added to rejected list");
+                                    recipesRef.child(recipeID).removeValue();
+                                    finish();
+                                }).addOnFailureListener(e -> {
+                                    Toast.makeText(RecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
+                                    Log.w("TAG", "Error:" + e.getMessage());
+                                });
+                            } else {
+                                Toast.makeText(RecipeActivity.this, "Please choose at least 1 option.", Toast.LENGTH_SHORT).show();
+                            }
+
+                        });
+                        cancel.setOnClickListener(v12 -> myDialog.dismiss());
+                        myDialog.show();
 
                     });
-                    cancel.setOnClickListener(v12 -> myDialog.dismiss());
-                    myDialog.show();
+                    LinearLayout linearLayout = findViewById(R.id.bottomLayout);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    linearLayout.setGravity(Gravity.CENTER);
+                    params.setMarginStart(15);
+                    btnApprove.setLayoutParams(params);
+                    btnDel.setLayoutParams(params);
+                    linearLayout.addView(btnApprove);
+                    linearLayout.addView(btnDel);
+                }
 
-                });
-                LinearLayout linearLayout = findViewById(R.id.bottomLayout);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-                linearLayout.setGravity(Gravity.CENTER);
-                params.setMarginStart(15);
-                btnApprove.setLayoutParams(params);
-                btnDel.setLayoutParams(params);
-                linearLayout.addView(btnApprove);
-                linearLayout.addView(btnDel);
+
             }
-
-
-
         }
-    }
+
 
     /**
      * This function responsible for converting given string to Bitmap, pulling data from our DB as image url and convert it to actual
@@ -366,27 +366,31 @@ public class RecipeActivity extends AppCompatActivity {
      */
  private void addToFav(){
 
-     ref.child(userName).orderByKey();
-     ref.addListenerForSingleValueEvent(new ValueEventListener() {
+
+     ref.child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
              for(DataSnapshot dst : dataSnapshot.getChildren()) {
-                 for(DataSnapshot dst2 : dst.getChildren()){
-                     if(Objects.equals(dst2.getKey(), recipeID)){
-                         // remove from fav list is clicked on fav the second time
-                         ref.child(userName).child(recipeID).removeValue();
-                         isExists=true;
-                         Toast.makeText(RecipeActivity.this,"Recipe removed from favorites.",Toast.LENGTH_SHORT).show();
-                         break;
-                        }
-                 }
+                 Log.w("TAG", "key(dst):" + dst.getKey());
+                         if (Objects.equals(dst.getKey(), recipeID)) {
+                             // remove from fav list is clicked on fav the second time
+                             ref.child(userName).child(recipeID).removeValue();
+                             isExists = true;
+                             Log.w("TAG", "isExists2:" + isExists);
+                             Toast.makeText(RecipeActivity.this, "Recipe removed from favorites.", Toast.LENGTH_SHORT).show();
+                             break;
+                         }
+
+
              }
+             Log.w("TAG","isExists3:"+isExists);
              if(!isExists){
                  // didn't found the ID meaning not in the list so adding to user fav list
                  Recipes r;
                  r= new Recipes(Title,Ingredients,MethodTitle,Recipe,recipeImage,recipeID,addedBy);
                  ref.child(userName).child(recipeID).setValue(r);
                  Toast.makeText(RecipeActivity.this,"Added to favorites!",Toast.LENGTH_SHORT).show();
+
              }
          }
 
