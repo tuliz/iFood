@@ -114,7 +114,7 @@ public class RejectedListActivity extends AppCompatActivity {
 
                                 RejectedRecipe rec = dst2.getValue(RejectedRecipe.class);
                                 rejectedRecipeList.add(rec);
-                                Log.d("TAG","Value:"+rec);
+                                //Log.d("TAG","Value:"+rec);
                                 // Call function to post all the recipes
                                 refresh_lv();
 

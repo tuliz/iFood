@@ -319,8 +319,10 @@ public class addRecipe_New extends AppCompatActivity {
                         rec = new Recipes(recipeName,recipeIngredients,getResources().getString(R.string.method),recipeInstructions,recipeImage,id,addBy);
                         // Set it as new recipe that waiting for approval.
                         rec.setApproved(false);
+                        assert addBy != null;
                         // Adding the recipe with all the above to DB.
-                        DB.child("Recipes").child(id).child(Objects.requireNonNull(addRecipe_New.this.getIntent().getStringExtra("username"))).setValue(rec);
+
+                        DB.child("Recipes").child(id).child(addBy).setValue(rec);
                         // Toast the User a message process is finished.
                         Toast.makeText(addRecipe_New.this,"Recipe added successfully",Toast.LENGTH_SHORT).show();
                         // Reset all the variables to empty.

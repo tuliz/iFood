@@ -53,12 +53,14 @@ public class RejectedRecipeActivity extends AppCompatActivity {
 
         ///////////// Listeners
         btnDismiss.setOnClickListener(v -> {
+            Log.w("TAG","Clicked on dismiss");
             // If Admin clicked dismiss remove record from DB completely
                         String storageUrl = recipeImage;
                         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
                         storageReference.delete().addOnSuccessListener(aVoid -> {
                             // File deleted successfully so now remove from DB
                                deleted_list.child(userRejected).child(recipeID).removeValue();
+                               finish();
                         }).addOnFailureListener(exception -> {
                             // Uh-oh, an error occurred! toast message to user
                             Toast.makeText(RejectedRecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();

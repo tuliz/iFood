@@ -303,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public void saveData(){
         SharedPreferences.Editor saveInfo = getSharedPreferences("userData",MODE_PRIVATE).edit();
-        saveInfo.putString("username",etUser.getText().toString());
+        saveInfo.putString("username",u.getUsername());
         saveInfo.putString("userRole",userRole);
         saveInfo.apply();
         saveInfo.commit();
