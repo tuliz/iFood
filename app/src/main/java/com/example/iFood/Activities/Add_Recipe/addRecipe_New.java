@@ -79,6 +79,7 @@ public class addRecipe_New extends AppCompatActivity {
     StorageReference mStorage = FirebaseStorage.getInstance().getReference();
 
     // Local variables
+    String userName,userRole;
     ProgressDialog progressDialog;
     String id;
     int stepPosition = 0;
@@ -113,7 +114,8 @@ public class addRecipe_New extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
        // Variable from Layout
-
+       userRole = getIntent().getStringExtra("userRole");
+       userName = getIntent().getStringExtra("username");
        viewPager = findViewById(R.id.viewPager);
        tabLayout = findViewById(R.id.tab_layout);
        btnNext = findViewById(R.id.btnNext);
@@ -257,33 +259,33 @@ public class addRecipe_New extends AppCompatActivity {
 
         else if(itemId == R.id.menuProfile) {
             Intent profile = new Intent(addRecipe_New.this, ProfileActivity.class);
-            profile.putExtra("username", getIntent().getStringExtra("username"));
-            profile.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            profile.putExtra("username", userName);
+            profile.putExtra("userRole", userRole);
             startActivity(profile);
             finish();
         }
         else if(itemId == R.id.menu_MyRecepies){
             Intent myRecipes = new Intent(addRecipe_New.this, MyRecipes.class);
-            myRecipes.putExtra("username", getIntent().getStringExtra("username"));
-            myRecipes.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            myRecipes.putExtra("username",userName);
+            myRecipes.putExtra("userRole", userRole);
             startActivity(myRecipes);
         }
         else if(itemId == R.id.menu_SearchRecepie) {
             Intent search = new Intent(addRecipe_New.this, SearchRecipe.class);
-            search.putExtra("username", getIntent().getStringExtra("username"));
-            search.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            search.putExtra("username", userName);
+            search.putExtra("userRole", userRole);
             startActivity(search);
         }
         else if(itemId == R.id.menuInbox) {
             Intent inbox = new Intent(addRecipe_New.this, Inbox_new.class);
-            inbox.putExtra("username", getIntent().getStringExtra("username"));
-            inbox.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            inbox.putExtra("username", userName);
+            inbox.putExtra("userRole", userRole);
             startActivity(inbox);
         }
         else if(itemId ==R.id.menuHome) {
             Intent main = new Intent(addRecipe_New.this, MainActivity.class);
-            main.putExtra("username", getIntent().getStringExtra("username"));
-            main.putExtra("userRole", getIntent().getStringExtra("userRole"));
+            main.putExtra("username", userName);
+            main.putExtra("userRole", userRole);
             startActivity(main);
         }
         return super.onOptionsItemSelected(item);
@@ -310,25 +312,26 @@ public class addRecipe_New extends AppCompatActivity {
                         // Get the URL string from the Storage of the Image that was just uploaded
                         recipeImage = uri.toString();
                         // Get the username from the Intent
-                        String addBy = getIntent().getStringExtra("username");
+
                         // Generate random unique key in the DB
                         id = String.valueOf(DB.child("Recipes").push().getKey());
                         // Declare the recipe class.
                         Recipes rec;
                         // Assign values to constructor
-                        rec = new Recipes(recipeName,recipeIngredients,getResources().getString(R.string.method),recipeInstructions,recipeImage,id,addBy);
+                        rec = new Recipes(recipeName,recipeIngredients,getResources().getString(R.string.method),recipeInstructions,recipeImage,id,userName);
                         // Set it as new recipe that waiting for approval.
                         rec.setApproved(false);
-                        assert addBy != null;
+
                         // Adding the recipe with all the above to DB.
 
-                        DB.child("Recipes").child(id).child(addBy).setValue(rec);
+                        DB.child("Recipes").child(id).child(userName).setValue(rec);
                         // Toast the User a message process is finished.
                         Toast.makeText(addRecipe_New.this,"Recipe added successfully",Toast.LENGTH_SHORT).show();
                         // Reset all the variables to empty.
                         resetRecipe();
-                        // Dismiss Dialog.
                         sendModNotification();
+
+                        // Dismiss Dialog.
                         progressDialog.dismiss();
                         Toast.makeText(addRecipe_New.this,"A moderator will review your recipe as soon as possible, thank you.",Toast.LENGTH_LONG).show();
 
@@ -350,29 +353,30 @@ public class addRecipe_New extends AppCompatActivity {
                 for (DataSnapshot outerData : snapshot.getChildren()) {
                     Users u = outerData.getValue(Users.class);
                     assert u != null;
-                    if (u.userRole.equals("mod") || u.userRole.equals("admin")) {
-                        Log.d("TAG", "User data:" + u.toString());
-                        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-                        FirebaseDatabase.getInstance().getReference().child("Tokens").child(u.uid).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.getValue(String.class) != null) {
-                                    String userToken = snapshot.getValue(String.class);
-                                    //Log.w("TAG","Token:"+userToken);
-                                    sendNotifications(userToken, "New Recipe", "A Recipe is waiting for your approval, check it out!");
-                                    // Log.w("TAG", "Sent notification.");
-                                } else {
-                                    Log.w("TAG", "Token not found.");
+                    if(!u.getUsername().equals(userName)) {
+                        if (u.userRole.equals("mod") || u.userRole.equals("admin")) {
+                            Log.d("TAG", "User data:" + u.toString());
+                            apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+                            FirebaseDatabase.getInstance().getReference().child("Tokens").child(u.uid).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.getValue(String.class) != null) {
+                                        String userToken = snapshot.getValue(String.class);
+                                        //Log.w("TAG","Token:"+userToken);
+                                        sendNotifications(userToken, "New Recipe", "A Recipe is waiting for your approval, check it out!");
+                                        // Log.w("TAG", "Sent notification.");
+                                    } else {
+                                        Log.w("TAG", "Token not found.");
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.w("TAG", "Error:" + error.getMessage());
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Log.w("TAG", "Error:" + error.getMessage());
+                                }
+                            });
+                        }
                     }
-
                 }
             }
 
