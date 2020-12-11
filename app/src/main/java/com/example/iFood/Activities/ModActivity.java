@@ -48,6 +48,7 @@ public class ModActivity extends AppCompatActivity {
     RecipeAdapter myAdapter;
     List<Recipes> unApprovedList = new ArrayList<>();
     String activity = this.getClass().getName();
+    String userName;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Recipes");
 
 
@@ -63,7 +64,7 @@ public class ModActivity extends AppCompatActivity {
 
 
         getRecipeList();
-
+        userName = getIntent().getStringExtra("username");
         ///////////////////////////////
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
@@ -117,9 +118,9 @@ public class ModActivity extends AppCompatActivity {
                     for(DataSnapshot dst : dataSnapshot.getChildren()) {
                         for(DataSnapshot dst2 : dst.getChildren()) {
                             if (dst2.exists()) {
-
+                                String addedBy = String.valueOf(dst2.child("addBy"));
                                 String check = String.valueOf(dst2.child("approved").getValue());
-                                if(check.equals("false")){
+                                if(check.equals("false") && !addedBy.equals(userName)){
                                     Recipes rec = dst2.getValue(Recipes.class);
                                     unApprovedList.add(rec);
                                     // Call function to post all the recipes
