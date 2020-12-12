@@ -196,7 +196,10 @@ public class RecipeActivity extends AppCompatActivity {
                     btnApprove.setImageResource(R.drawable.ic_baseline_check);
                     btnApprove.setSize(FloatingActionButton.SIZE_NORMAL);
                     btnApprove.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                    btnApprove.setOnClickListener(v -> recipesRef.child(recipeID).child(addedBy).child("approved").setValue(true));
+                    btnApprove.setOnClickListener(v -> {
+                        recipesRef.child(recipeID).child(addedBy).child("approved").setValue(true);
+                        finish();
+                    });
                     FloatingActionButton btnDel = new FloatingActionButton(this);
                     btnDel.setId(View.generateViewId());
                     btnDel.setImageResource(R.drawable.ic_exit);
