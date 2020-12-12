@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -83,7 +85,13 @@ public class SearchRecipe extends AppCompatActivity {
             // call a function to search for what user entered
 
             getInput();
-            searchRecipe();
+            if(!et_search.getText().toString().isEmpty()){
+                searchRecipe();
+            }else{
+                Toast.makeText(SearchRecipe.this,"Please enter ingredients",Toast.LENGTH_SHORT).show();
+                et_search.requestFocus();
+            }
+
         });
         btnReset.setOnClickListener(v -> {
             // reset everything in screen
@@ -207,18 +215,30 @@ public class SearchRecipe extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 searchResultArray.clear();
                 boolean allMatch = false;
+                int count = 0,inputSize = userInput.length;
+               // Log.w("Start","count is:"+count+",inputSize:"+inputSize);
                 for(DataSnapshot dst : dataSnapshot.getChildren()){
                     for(DataSnapshot searchedResults : dst.getChildren()){
-                          Recipes results = searchedResults.getValue(Recipes.class);
+                        Recipes results = searchedResults.getValue(Recipes.class);
+                        assert results != null;
                         for (String s : userInput) {
-                            assert results != null;
                             //Log.w("TAG","Rec name: "+results.recipeName+", isApproved:"+results.isApproved());
-                            allMatch= results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved();
+                           // Log.w("userInput","Input:"+s);
+                           // Log.w("recipe","recipe:"+results.getRecipeIngredients());
+                           // allMatch = results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved();
+                            if(results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved()){
+                                count+=1;
+                             //   Log.w("TAG","Found!,count is:"+count);
+                            }
+
                         }
-                        if(allMatch){
+                       // Log.w("TAG2","Outside for loop,count is:"+count+",inputSize:"+inputSize+",recipe name:"+results.getRecipeName());
+                        if(count==inputSize){
                             searchResultArray.add(results);
                             refresh_lv();
+
                         }
+                        count=0;
                         }
                     }
                 progressDialog.dismiss();
