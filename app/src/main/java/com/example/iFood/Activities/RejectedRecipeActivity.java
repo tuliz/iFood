@@ -75,6 +75,7 @@ public class RejectedRecipeActivity extends AppCompatActivity {
             rec = new Recipes(recipeName,recipeIngredients,recipeMethodTitle,recipeContent,recipeImage,recipeID,addedBy);
             rec.setApproved(true);
             recipesRef.child(addedBy).child(recipeID).setValue(rec);
+            finish();
         });
         ///////////////
     } // onCreate Ends
