@@ -210,29 +210,23 @@ public class SearchRecipe extends AppCompatActivity {
         progressDialog.show();
         Query dbQuery = ref.orderByKey();
         dbQuery.addValueEventListener(new ValueEventListener() {
+
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 searchResultArray.clear();
-                boolean allMatch = false;
                 int count = 0,inputSize = userInput.length;
-               // Log.w("Start","count is:"+count+",inputSize:"+inputSize);
                 for(DataSnapshot dst : dataSnapshot.getChildren()){
                     for(DataSnapshot searchedResults : dst.getChildren()){
                         Recipes results = searchedResults.getValue(Recipes.class);
                         assert results != null;
                         for (String s : userInput) {
-                            //Log.w("TAG","Rec name: "+results.recipeName+", isApproved:"+results.isApproved());
-                           // Log.w("userInput","Input:"+s);
-                           // Log.w("recipe","recipe:"+results.getRecipeIngredients());
-                           // allMatch = results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved();
                             if(results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved()){
                                 count+=1;
-                             //   Log.w("TAG","Found!,count is:"+count);
+
                             }
 
                         }
-                       // Log.w("TAG2","Outside for loop,count is:"+count+",inputSize:"+inputSize+",recipe name:"+results.getRecipeName());
                         if(count==inputSize){
                             searchResultArray.add(results);
                             refresh_lv();
