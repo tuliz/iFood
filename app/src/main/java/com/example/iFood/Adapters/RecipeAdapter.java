@@ -75,6 +75,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
             intent1.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
             intent1.putExtra("RecipeMethodTitle",mData.get(i).getRecipeMethodTitle());
             intent1.putExtra("Recipe",mData.get(i).getRecipe());
+            intent1.putExtra("recipeType",mData.get(i).getType());
+            intent1.putExtra("recipeFeature",mData.get(i).getFeature());
             intent1.putExtra("id",mData.get(i).getId());
             intent1.putExtra("Thumbnail",mData.get(i).getRecipePicture());
             intent1.putExtra("time",time);

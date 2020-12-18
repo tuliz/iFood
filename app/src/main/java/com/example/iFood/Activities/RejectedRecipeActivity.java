@@ -35,7 +35,7 @@ public class RejectedRecipeActivity extends AppCompatActivity {
     // Buttons
     FloatingActionButton btnApprove,btnDismiss;
     // Intent Information
-    String userName,userRole,addedBy,userRejected,recipeName,recipeIngredients,recipeMethodTitle,recipeContent,recipeID,recipeImage,removeDate,rejectReason;
+    String userName,userRole,addedBy,userRejected,recipeName,recipeIngredients,recipeMethodTitle,recipeContent,recipeID,recipeImage,removeDate,rejectReason,recipe_Type,recipeFeature;
     // Database
     DatabaseReference deleted_list = FirebaseDatabase.getInstance().getReference().child("Deleted List");
     DatabaseReference recipesRef = FirebaseDatabase.getInstance().getReference().child("Recipes");
@@ -53,7 +53,7 @@ public class RejectedRecipeActivity extends AppCompatActivity {
 
         ///////////// Listeners
         btnDismiss.setOnClickListener(v -> {
-            Log.w("TAG","Clicked on dismiss");
+           // Log.w("TAG","Clicked on dismiss");
             // If Admin clicked dismiss remove record from DB completely
                         String storageUrl = recipeImage;
                         StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(storageUrl);
@@ -72,7 +72,7 @@ public class RejectedRecipeActivity extends AppCompatActivity {
         btnApprove.setOnClickListener(v -> {
             // If Admin clicked Approve, add to general recipe list and set to approved
             Recipes rec;
-            rec = new Recipes(recipeName,recipeIngredients,recipeMethodTitle,recipeContent,recipeImage,recipeID,addedBy);
+            rec = new Recipes(recipeName,recipeIngredients,recipeMethodTitle,recipeContent,recipeImage,recipeID,addedBy,recipe_Type,recipeFeature);
             rec.setApproved(true);
             recipesRef.child(addedBy).child(recipeID).setValue(rec);
             finish();
@@ -86,6 +86,8 @@ public class RejectedRecipeActivity extends AppCompatActivity {
         userRole = intent.getStringExtra("userRole");
         addedBy = intent.getStringExtra("addedBy");
         recipeName = intent.getStringExtra("RecipeName");
+        recipe_Type = getIntent().getExtras().getString("recipeType");
+        recipeFeature = getIntent().getExtras().getString("recipeFeature");
         recipeIngredients = intent.getStringExtra("RecipeIngredients");
         recipeMethodTitle = intent.getStringExtra("RecipeMethodTitle");
         recipeContent = intent.getStringExtra("Recipe");

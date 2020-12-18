@@ -469,14 +469,14 @@ public class SignUpActivity extends AppCompatActivity {
     public static Bitmap scaleDown(Bitmap givenImage, float maxImageSize,
                                    boolean filter) {
 
-       // Log.d("TAG","Function start,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
+
         float ratio = Math.min(
                  maxImageSize / givenImage.getWidth(),
                  maxImageSize / givenImage.getHeight());
         int width = Math.round( ratio * givenImage.getWidth());
         int height = Math.round( ratio * givenImage.getHeight());
         if (ratio >= 1.0){
-         //   Log.d("TAG","Return,Image width is:"+givenImage.getWidth()+",Image height is:"+givenImage.getHeight());
+
             return givenImage;
 
         }
