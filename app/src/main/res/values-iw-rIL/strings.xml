@@ -2,8 +2,11 @@
 <resources>
     <string-array name="recipeFeatures">
         <item>כשר</item>
+        <item>לא כשר</item>
         <item>טבעוני</item>
+        <item>לא טבעוני</item>
         <item>צמחוני</item>
+        <item>לא צמחוני</item>
     </string-array>
 
 

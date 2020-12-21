@@ -1,8 +1,11 @@
 <resources>
     <string-array name="recipeFeatures">
         <item>Kosher</item>
+        <item>Not Vegetarian</item>
         <item>Vegan</item>
+        <item>Not Vegan</item>
         <item>Vegetarian</item>
+        <item>Not Vegetarian</item>
     </string-array>
 
     <string-array name="recipeType">

@@ -166,14 +166,20 @@ public class addRecipe_New extends AppCompatActivity {
                   viewPager.setCurrentItem(stepPosition);
                   btnNext.setVisibility(View.VISIBLE);
                   btnConfirm.setVisibility(View.GONE);
-                 Snackbar.make(v,"Recipe name / Ingredients cannot be empty", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                 Snackbar.make(v,"Recipe name / Ingredients cannot be empty.", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
               }
               else if(recipeInstructions.isEmpty()){
                   stepPosition=1;
                   viewPager.setCurrentItem(stepPosition);
                   btnNext.setVisibility(View.VISIBLE);
                   btnConfirm.setVisibility(View.GONE);
-                  Snackbar.make(v,"Please explain how to prepare this recipe", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                  Snackbar.make(v,"Please explain how to prepare this recipe.", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+              }else if(recipe_Type.isEmpty() || recipeFeature.isEmpty()){
+                  stepPosition=1;
+                  viewPager.setCurrentItem(stepPosition);
+                  btnNext.setVisibility(View.VISIBLE);
+                  btnConfirm.setVisibility(View.GONE);
+                  Snackbar.make(v,"Please enter the type and features of this recipe.", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
               }
               else if(bitmapImage == null)
               {
@@ -186,7 +192,7 @@ public class addRecipe_New extends AppCompatActivity {
                   progressDialog.setCanceledOnTouchOutside(false);
                   progressDialog.show();
                   createRecipe();
-                  //Log.i("image2","Image is:"+bitmapImage);
+
               }
 
        });
