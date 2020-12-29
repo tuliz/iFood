@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -18,9 +19,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -42,17 +45,23 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.iFood.Activities.Add_Recipe.addRecipe_New.featureList;
+import static com.example.iFood.Activities.Add_Recipe.addRecipe_New.recipeFeature;
 
 public class EditRecipeActivity extends AppCompatActivity {
     ConnectionBCR bcr = new ConnectionBCR();
     EditText etTitle,etIngredients,etContent;
+    TextView tvRecipe_features,tvRecipe_type;
     ImageView ivRecipeImage;
     Button btnSave;
-    String recipeID,recipeImageURL,userName,userRole,recipeTitle,recipeIngredients,recipeInstructions,newValue;
+    String recipeID,recipeImageURL,userName,userRole,recipeTitle,recipeIngredients,recipeInstructions,newValue,recipe_Type,recipe_Feature;
     ProgressDialog progressDialog;
-
+    List<String> edit_featureList = new ArrayList<>();
+    List<String> edit_TypeList = new ArrayList<>();
     // Camera Handling
     private EditItemImage mEditItemImage;
     Bitmap imageBitmap;
@@ -73,9 +82,15 @@ public class EditRecipeActivity extends AppCompatActivity {
         recipeID = getIntent().getStringExtra("recipeID");
         userName = getIntent().getStringExtra("userName");
         userRole = getIntent().getStringExtra("userRole");
+        recipe_Type = getIntent().getStringExtra("recipeType");
+        recipe_Feature = getIntent().getStringExtra("recipeFeature");
         etTitle.setText(getIntent().getStringExtra("RecipeName"));
         etIngredients.setText(getIntent().getStringExtra("RecipeIngredients"));
         etContent.setText(getIntent().getStringExtra("Recipe"));
+        Log.w("TAG","type:"+recipe_Type+",from intent:"+ getIntent().getStringExtra("recipeType"));
+        Log.w("TAG","feature:"+recipe_Feature+",from intent:"+ getIntent().getStringExtra("recipeFeature"));
+        tvRecipe_type.setText(recipe_Type);
+        tvRecipe_features.setText(recipe_Feature);
 
         // set the image into the Image view
         progressDialog.setCanceledOnTouchOutside(false);
@@ -101,7 +116,8 @@ public class EditRecipeActivity extends AppCompatActivity {
                  recipeTitle = etTitle.getText().toString();
                  recipeIngredients = etIngredients.getText().toString();
                  recipeInstructions = etContent.getText().toString();
-
+                 recipe_Feature = tvRecipe_features.getText().toString();
+                 recipe_Type = tvRecipe_type.getText().toString();
                 // Log.w("TAG","Title:"+recipeTitle+", Ingredients:"+recipeIngredients+", Instructions:"+recipeInstructions);
 
                 // if Image is not null then need to upload new image to Storage and delete the old one
@@ -132,6 +148,8 @@ public class EditRecipeActivity extends AppCompatActivity {
                             recipesRef.child(recipeID).child(userName).child("recipeIngredients").setValue(recipeIngredients);
                             recipesRef.child(recipeID).child(userName).child("recipe").setValue(recipeInstructions);
                             recipesRef.child(recipeID).child(userName).child("recipePicture").setValue(newValue);
+                            recipesRef.child(recipeID).child(userName).child("feature").setValue(recipe_Feature);
+                            recipesRef.child(recipeID).child(userName).child("type").setValue(recipe_Type);
                         }).addOnFailureListener(exception -> {
                             // Couldn't delete file so didn't update anything.
                             Toast.makeText(EditRecipeActivity.this, "Please try again", Toast.LENGTH_SHORT).show();
@@ -144,6 +162,8 @@ public class EditRecipeActivity extends AppCompatActivity {
                         }
                     });
                 }else{
+                    recipesRef.child(recipeID).child(userName).child("feature").setValue(recipe_Feature);
+                    recipesRef.child(recipeID).child(userName).child("type").setValue(recipe_Type);
                     recipesRef.child(""+recipeID).child(userName).child("recipeName").setValue(recipeTitle);
                     recipesRef.child(""+recipeID).child(userName).child("recipeIngredients").setValue(recipeIngredients);
                     recipesRef.child(""+recipeID).child(userName).child("recipe").setValue(recipeInstructions);
@@ -153,9 +173,75 @@ public class EditRecipeActivity extends AppCompatActivity {
             }
         });
         ivRecipeImage.setOnClickListener(v -> mEditItemImage.openDialog());
+        tvRecipe_type.setOnClickListener(v -> {
+         //   Log.d("TAG","clicked tvRecipe_type");
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditRecipeActivity.this);
+            builder.setTitle("Select Recipe Features:");
+            builder.setMultiChoiceItems(R.array.recipeType, null, (dialog, which, isChecked) -> {
+
+                String[] arr =getResources().getStringArray(R.array.recipeType);
+                if(isChecked){
+                    edit_TypeList.add(arr[which]);
+                }else if(edit_TypeList.contains(arr[which])){
+                    edit_TypeList.remove(arr[which]);
+                }
+            });
+            builder.setPositiveButton("Submit", (dialog, which) -> {
+                String data="";
+                int i = 0;
+                for(String item:edit_TypeList){
+                    if(i++ == edit_TypeList.size() - 1){
+                        data = data + item;
+                    }else {
+                        data = data + item + ",";
+                    }
+
+                }
+                recipe_Type = data;
+                tvRecipe_type.setText(data);
+                edit_TypeList.clear();
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            builder.create();
+            builder.show();
+        });
+        tvRecipe_features.setOnClickListener(v -> {
+          //  Log.d("TAG","clicked tvRecipe_features");
+            AlertDialog.Builder builder = new AlertDialog.Builder(EditRecipeActivity.this);
+            builder.setTitle("Select Recipe Features:");
+            builder.setMultiChoiceItems(R.array.recipeFeatures, null, (dialog, which, isChecked) -> {
+
+                String[] arr =getResources().getStringArray(R.array.recipeFeatures);
+                if(isChecked){
+                    edit_featureList.add(arr[which]);
+                }else if(edit_featureList.contains(arr[which])){
+                    edit_featureList.remove(arr[which]);
+                }
+            });
+            builder.setPositiveButton("Submit", (dialog, which) -> {
+                String data="";
+                int i = 0;
+                for(String item:edit_featureList){
+                    if(i++ == edit_featureList.size() - 1){
+                        data = data + item;
+                    }else {
+                        data = data + item + ",";
+                    }
+
+                }
+                recipe_Feature = data;
+                tvRecipe_features.setText(data);
+                edit_featureList.clear();
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            builder.create();
+            builder.show();
+        });
     } // onCreate ends
 
     private void setVars() {
+        tvRecipe_features = findViewById(R.id.edit_recipeFeatureSelection);
+        tvRecipe_type = findViewById(R.id.edit_recipeType);
         progressDialog = new ProgressDialog(EditRecipeActivity.this);
         mEditItemImage = new EditItemImage(EditRecipeActivity.this);
         etContent = findViewById(R.id.recipeContent);
