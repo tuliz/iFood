@@ -4,6 +4,7 @@ package com.example.iFood.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.iFood.Activities.RecipeActivity;
+import com.example.iFood.Activities.SendMessage;
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.R;
 import com.squareup.picasso.Picasso;
@@ -27,8 +29,8 @@ import java.util.List;
  * and allow the user to move to Recipe Activity to view all the information regarding the recipe.
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> {
-    String userName,userRole,check;
-    long time;
+    private String userName,userRole,check;
+    private long time;
     private final Context mContext;
     private final List<Recipes> mData;
     private final String activity;
@@ -44,7 +46,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         View view ;
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         view = layoutInflater.inflate(R.layout.cardview_recipe,viewGroup,false);
@@ -85,6 +86,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
 
             mContext.startActivity(intent1);
         });
+
     }
 
     @Override
@@ -104,6 +106,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyHolder> 
             recipeTitle = itemView.findViewById(R.id.recipe_text);
             img_recipe = itemView.findViewById(R.id.recipe_img_id);
             cardView = itemView.findViewById(R.id.cardview_id);
+
 
 
         }

@@ -166,6 +166,18 @@
             android:src="@drawable/ic_baseline_share">
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnReport"
+            app:maxImageSize="35dp"
+            app:tint="@color/colorWhite"
+            android:layout_marginStart="15dp"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_baseline_support_agent">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </LinearLayout>
 
 </LinearLayout>

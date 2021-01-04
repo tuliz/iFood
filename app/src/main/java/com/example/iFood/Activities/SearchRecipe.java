@@ -3,20 +3,26 @@ package com.example.iFood.Activities;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.iFood.Adapters.RecipeAdapter;
 import com.example.iFood.Classes.Recipes;
@@ -47,11 +53,16 @@ public class SearchRecipe extends AppCompatActivity {
     BottomAppBar bottomAppBar;
     FloatingActionButton addIcon;
     EditText et_search;
+    TextView tv_feature;
     String activity = this.getClass().getName();
+    String search_feature_data="";
+    String search_type_data="";
     String[] userInput = {};
     List<Recipes> searchResultArray = new ArrayList<>();
+    List<String> search_featureList = new ArrayList<>();
     RecyclerView myrecyclerView;
     RecipeAdapter myAdapter;
+    Spinner type_spinner;
     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Recipes");
 
 
@@ -65,7 +76,15 @@ public class SearchRecipe extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+       // Spinners
+        type_spinner = findViewById(R.id.spinner_type);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.recipeType,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        type_spinner.setAdapter(adapter);
 
+
+       // TextView
+        tv_feature = findViewById(R.id.tv_feature);
 
         // Buttons
         btnSearch = findViewById(R.id.search_Recipe);
@@ -81,11 +100,67 @@ public class SearchRecipe extends AppCompatActivity {
 
 
         // Listeners
+
+        type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                search_type_data = parent.getItemAtPosition(position).toString();
+                Log.w("TAG","Search data:"+search_type_data);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        tv_feature.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SearchRecipe.this);
+            builder.setTitle("Select Recipe Features:");
+            builder.setMultiChoiceItems(R.array.recipeFeatures, null, (dialog, which, isChecked) -> {
+
+                String[] arr = getResources().getStringArray(R.array.recipeFeatures);
+                if (isChecked) {
+                    search_featureList.add(arr[which]);
+                } else if (search_featureList.contains(arr[which])) {
+                    search_featureList.remove(arr[which]);
+                }
+            });
+            builder.setPositiveButton("Select", (dialog, which) -> {
+                String data = "";
+                int i = 0;
+                for (String item : search_featureList) {
+                    if (i++ == search_featureList.size() - 1) {
+                        data = data + item;
+                    } else {
+                        data = data + item + ",";
+                    }
+
+                }
+                search_feature_data = data;
+                tv_feature.setText(data);
+                search_featureList.clear();
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+            final AlertDialog alertFeature = builder.create();
+            alertFeature.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    params.setMargins(20,0,0,0);
+                    Button button = alertFeature.getButton(AlertDialog.BUTTON_POSITIVE);
+                    button.setLayoutParams(params);
+                }
+            });
+           alertFeature.show();
+        });
         btnSearch.setOnClickListener(v -> {
             // call a function to search for what user entered
-
             getInput();
-            if(!et_search.getText().toString().isEmpty()){
+            if(!et_search.getText().toString().isEmpty() || !tv_feature.getText().toString().isEmpty() || !type_spinner.getSelectedItem().toString().isEmpty()){
                 searchRecipe();
             }else{
                 Toast.makeText(SearchRecipe.this,"Please enter ingredients",Toast.LENGTH_SHORT).show();
@@ -96,6 +171,10 @@ public class SearchRecipe extends AppCompatActivity {
         btnReset.setOnClickListener(v -> {
             // reset everything in screen
             et_search.setText("");
+            tv_feature.setText("");
+            search_feature_data = "";
+            search_type_data = "";
+            type_spinner.setSelection(0);
             searchResultArray.clear();
             refresh_lv();
             LinearLayout linearLayout = findViewById(R.id.resultsLayout);
@@ -139,6 +218,7 @@ public class SearchRecipe extends AppCompatActivity {
 
 
     } // onCreate ends
+
 
     @Override
     public void onBackPressed() {
@@ -209,47 +289,87 @@ public class SearchRecipe extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
         Query dbQuery = ref.orderByKey();
-        dbQuery.addValueEventListener(new ValueEventListener() {
+        try {
+            dbQuery.addValueEventListener(new ValueEventListener() {
 
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                searchResultArray.clear();
-                int count = 0,inputSize = userInput.length;
-                for(DataSnapshot dst : dataSnapshot.getChildren()){
-                    for(DataSnapshot searchedResults : dst.getChildren()){
-                        Recipes results = searchedResults.getValue(Recipes.class);
-                        assert results != null;
-                        for (String s : userInput) {
-                            if(results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) && results.isApproved()){
-                                count+=1;
+                @SuppressLint("UseCompatLoadingForDrawables")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    searchResultArray.clear();
+                    int count = 0,inputSize = userInput.length;
+                    Log.w("TAG","Search type data:"+search_type_data+",search feature:"+search_feature_data);
+                    for(DataSnapshot dst : dataSnapshot.getChildren()){
+                        for(DataSnapshot searchedResults : dst.getChildren()){
+                            Recipes results = searchedResults.getValue(Recipes.class);
+                            assert results != null;
+                            for (String s : userInput) {
+                                if(!search_feature_data.isEmpty() && !search_type_data.isEmpty()){
+                                    if(results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) &&
+                                       results.isApproved() &&
+                                       results.getFeature() != null &&
+                                       results.getType() != null &&
+                                       results.getFeature().contains(search_feature_data) &&
+                                       results.getType().contains(search_type_data)
+                                    ){
+                                        count+=1;
+
+                                    }
+                                }else if(!search_type_data.isEmpty()){
+                                    if(results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) &&
+                                       results.isApproved() &&
+                                       results.getType() != null &&
+                                       results.getType().contains(search_type_data)
+                                    ){
+                                        count+=1;
+
+                                    }
+
+                                }else if(!search_feature_data.isEmpty()){
+                                    if(results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) &&
+                                       results.isApproved() &&
+                                       results.getFeature() != null &&
+                                       results.getFeature().contains(search_feature_data)
+                                    ){
+                                        count+=1;
+
+                                    }
+                                }else{
+                                    if(results.getRecipeIngredients().toLowerCase().contains(s.toLowerCase()) &&
+                                       results.isApproved()){
+                                        count+=1;
+
+                                    }
+                                }
+
 
                             }
+                            if(count==inputSize){
+                                searchResultArray.add(results);
+                                refresh_lv();
 
-                        }
-                        if(count==inputSize){
-                            searchResultArray.add(results);
-                            refresh_lv();
-
-                        }
-                        count=0;
+                            }
+                            count=0;
                         }
                     }
-                progressDialog.dismiss();
-                if(searchResultArray.size()<1)
-                {
-                    LinearLayout linearLayout = findViewById(R.id.resultsLayout);
-                    myrecyclerView.setVisibility(View.GONE);
-                    linearLayout.setBackground(getDrawable(R.drawable.no_results));
+                    progressDialog.dismiss();
+                    if(searchResultArray.size()<1)
+                    {
+                        LinearLayout linearLayout = findViewById(R.id.resultsLayout);
+                        myrecyclerView.setVisibility(View.GONE);
+                        linearLayout.setBackground(getDrawable(R.drawable.no_results));
+                    }
                 }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                 }
+            });
+        }catch(Exception e){
+            Log.w("TAG","Error:"+e.getMessage());
+        }
 
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
 
     }

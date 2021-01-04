@@ -63,7 +63,7 @@ public class RecipeActivity extends AppCompatActivity {
     Dialog myDialog;
     Bitmap image = null;
     Uri imageToSend;
-    FloatingActionButton btnMsg,btnFav,btnShare;
+    FloatingActionButton btnMsg,btnFav,btnShare,btnReport;
     String addedBy,userName,activity,Title,Ingredients,MethodTitle,Recipe,recipeID,recipeImage,userRole,approved,reason="",recipe_Type,recipeFeature;
     TextView mRecipeName,mRecipeMethodTitle;
     Button confirm, cancel;
@@ -103,6 +103,7 @@ public class RecipeActivity extends AppCompatActivity {
         btnFav = findViewById(R.id.btnFav);
         btnMsg = findViewById(R.id.btnSendMessage);
         btnShare = findViewById(R.id.btnShare);
+        btnReport = findViewById(R.id.btnReport);
 
         //////////////
         mRecipeName = findViewById(R.id.text_recipe);
@@ -144,6 +145,14 @@ public class RecipeActivity extends AppCompatActivity {
 
         });
 
+        btnReport.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("plain/text");
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "ifoodspprt@gmail.com" });
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Recipe Report: "+Title);
+            intent.putExtra(Intent.EXTRA_TEXT, "Hi, I would like to report recipe id ("+recipeID+") because...");
+            startActivity(Intent.createChooser(intent, ""));
+        });
 
 
         btnShare.setOnClickListener(v -> new Thread(() -> {
@@ -380,19 +389,19 @@ public class RecipeActivity extends AppCompatActivity {
          @Override
          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
              for(DataSnapshot dst : dataSnapshot.getChildren()) {
-                 Log.w("TAG", "key(dst):" + dst.getKey());
+              //   Log.w("TAG", "key(dst):" + dst.getKey());
                          if (Objects.equals(dst.getKey(), recipeID)) {
                              // remove from fav list is clicked on fav the second time
                              ref.child(userName).child(recipeID).removeValue();
                              isExists = true;
-                             Log.w("TAG", "isExists2:" + isExists);
+                            // Log.w("TAG", "isExists2:" + isExists);
                              Toast.makeText(RecipeActivity.this, "Recipe removed from favorites.", Toast.LENGTH_SHORT).show();
                              break;
                          }
 
 
              }
-             Log.w("TAG","isExists3:"+isExists);
+             //Log.w("TAG","isExists3:"+isExists);
              if(!isExists){
                  // didn't found the ID meaning not in the list so adding to user fav list
                  Recipes r;

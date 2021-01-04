@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="220dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    app:cardCornerRadius="4dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:id="@+id/cardview_id"
+    android:focusable="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/recipe_img_id"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            />
+        <TextView
+            android:id="@+id/recipe_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/recipe_name"
+            android:textSize="13sp"
+            android:textColor="#2d2d2d"
+            />
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/interaction_layout"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/card_like"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="13sp"
+                android:text="Like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/card_msg"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="13sp"
+                android:text="Message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/card_share"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:textSize="13sp"
+                android:text="Share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
