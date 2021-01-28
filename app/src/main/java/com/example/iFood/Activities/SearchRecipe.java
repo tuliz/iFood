@@ -76,37 +76,21 @@ public class SearchRecipe extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-       // Spinners
-        type_spinner = findViewById(R.id.spinner_type);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.recipeType,android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        type_spinner.setAdapter(adapter);
+
+        initUiParams();
+        initListeners();
 
 
-       // TextView
-        tv_feature = findViewById(R.id.tv_feature);
+    } // onCreate ends
 
-        // Buttons
-        btnSearch = findViewById(R.id.search_Recipe);
-        btnReset = findViewById(R.id.search_resetField);
-        bottomAppBar = findViewById(R.id.bottomAppBar);
-        addIcon = findViewById(R.id.bottomAddIcon);
-
-        // EditText
-        et_search = findViewById(R.id.etSearch);
-
-        // ListView
-        myrecyclerView = findViewById(R.id.searchRecipeResultsLV);
-
-
+    private void initListeners() {
         // Listeners
-
         type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 search_type_data = parent.getItemAtPosition(position).toString();
-                Log.w("TAG","Search data:"+search_type_data);
+                // Log.w("TAG","Search data:"+search_type_data);
             }
 
             @Override
@@ -155,7 +139,7 @@ public class SearchRecipe extends AppCompatActivity {
                     button.setLayoutParams(params);
                 }
             });
-           alertFeature.show();
+            alertFeature.show();
         });
         btnSearch.setOnClickListener(v -> {
             // call a function to search for what user entered
@@ -170,20 +154,9 @@ public class SearchRecipe extends AppCompatActivity {
         });
         btnReset.setOnClickListener(v -> {
             // reset everything in screen
-            et_search.setText("");
-            tv_feature.setText("");
-            search_feature_data = "";
-            search_type_data = "";
-            type_spinner.setSelection(0);
-            searchResultArray.clear();
-            refresh_lv();
-            LinearLayout linearLayout = findViewById(R.id.resultsLayout);
-            myrecyclerView.setVisibility(View.VISIBLE);
-            linearLayout.setBackground(null);
-            bottomAppBar.performShow();
+            initResetAll();
 
         });
-
         bottomAppBar.setNavigationOnClickListener(v -> {
             NavDrawFragment bottomNavFrag = new NavDrawFragment();
             Bundle bundle = new Bundle();
@@ -212,12 +185,41 @@ public class SearchRecipe extends AppCompatActivity {
             addIcon.setArguments(bundle);
             addIcon.show(getSupportFragmentManager(),"addIconNav");
         });
+    }
 
+    private void initUiParams() {
+        // TextView
+        tv_feature = findViewById(R.id.tv_feature);
+        // Buttons
+        btnSearch = findViewById(R.id.search_Recipe);
+        btnReset = findViewById(R.id.search_resetField);
+        bottomAppBar = findViewById(R.id.bottomAppBar);
+        addIcon = findViewById(R.id.bottomAddIcon);
+        // EditText
+        et_search = findViewById(R.id.etSearch);
+        // ListView
+        myrecyclerView = findViewById(R.id.searchRecipeResultsLV);
+        // Spinner
+        type_spinner = findViewById(R.id.spinner_type);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.recipeType,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        type_spinner.setAdapter(adapter);
 
+    }
 
-
-
-    } // onCreate ends
+    private void initResetAll() {
+        et_search.setText("");
+        tv_feature.setText("");
+        search_feature_data = "";
+        search_type_data = "";
+        type_spinner.setSelection(0);
+        searchResultArray.clear();
+        refresh_lv();
+        LinearLayout linearLayout = findViewById(R.id.resultsLayout);
+        myrecyclerView.setVisibility(View.VISIBLE);
+        linearLayout.setBackground(null);
+        bottomAppBar.performShow();
+    }
 
 
     @Override
