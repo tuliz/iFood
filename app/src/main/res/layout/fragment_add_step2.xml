@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
    >
 
-
     <LinearLayout
         android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
@@ -37,5 +36,45 @@
         android:importantForAutofill="no">
 
     </EditText>
+    <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:text="Recipe Features:"
+            android:textSize="20sp"
+            android:textStyle="italic|bold">
+
+    </TextView>
+    <TextView
+        android:layout_marginTop="10dp"
+        android:hint="click to set"
+        android:textSize="20sp"
+        android:id="@+id/Recipe_features"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:text="Recipe Type:"
+            android:textSize="20sp"
+            android:textStyle="italic|bold">
+
+        </TextView>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:hint="click to set"
+            android:textSize="20sp"
+            android:textStyle="italic|bold"
+            android:id="@+id/Recipe_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </TextView>
     </LinearLayout>
 </FrameLayout>

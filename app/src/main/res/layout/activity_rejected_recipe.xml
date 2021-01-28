@@ -75,6 +75,39 @@
                 android:text="@string/ingredients"
                 android:textSize="20sp"/>
 
+            <TextView
+                android:text="@string/recipe_feature"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+            <TextView
+                android:id="@+id/recipeFeatureSelection"
+                android:text="Kosher,Vegetarian"
+                android:layout_margin="18dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:text="@string/recipe_type"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+            <TextView
+                android:id="@+id/recipeType"
+                android:text="American,Fast food"
+                android:layout_margin="18dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
 
         </LinearLayout>
 

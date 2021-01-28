@@ -265,7 +265,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProfileActivity.this);
-
         builder.setMessage("Are you sure you want to Exit?");
         builder.setTitle("Exit Application");
         builder.setPositiveButton(R.string.yes, (dialog, which) -> finishAffinity());

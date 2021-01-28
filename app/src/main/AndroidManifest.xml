@@ -70,16 +70,10 @@
             android:name=".Activities.SignUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.oldActivities.Inbox"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activities.SearchRecipe"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.MyRecipes"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activities.oldActivities.AddRecipe"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.RecipeActivity"

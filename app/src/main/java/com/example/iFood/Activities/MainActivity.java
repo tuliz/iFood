@@ -6,6 +6,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.iFood.Adapters.MainRecipeAdapter;
 import com.example.iFood.Adapters.RecipeAdapter;
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.MenuFragments.AddDrawFragment;
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     BottomAppBar bottomAppBar;
     FloatingActionButton addIcon;
     RecyclerView myrecyclerView;
-    RecipeAdapter myAdapter;
+    MainRecipeAdapter myAdapter;
     SharedPreferences pref;
     List<Recipes> recipes1 = new ArrayList<>();
     String activity = this.getClass().getName(),userRole,userName;
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         getRecipeList();
+
         pref = getSharedPreferences("userData",MODE_PRIVATE);
         if(pref.contains("userRole")){
             userRole = pref.getString("userRole",null);
@@ -115,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         UpdateToken();
     } // onCreate Ends
 
+
     private void UpdateToken(){
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         String refreshToken= FirebaseInstanceId.getInstance().getToken();
@@ -130,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
     private void getRecipeList(){
         // enter all recipes fetched from DB to arrayList
         new Thread(() -> {
-
             Query dbQuery = ref.orderByKey().limitToLast(100);
             dbQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -139,11 +143,14 @@ public class MainActivity extends AppCompatActivity {
                     for(DataSnapshot dst : dataSnapshot.getChildren()) {
                         for(DataSnapshot dst2 : dst.getChildren()) {
                             if (dst2.exists()) {
-                                //Log.i("approved","Approve:"+dst2.child("approved").getValue());
                                 String check = String.valueOf(dst2.child("approved").getValue());
+                                Recipes rec = dst2.getValue(Recipes.class);
+                                assert rec != null;
                                 if(check.equals("true") && recipes1.size() <= 25){
-                                    Recipes rec = dst2.getValue(Recipes.class);
-                                    recipes1.add(rec);
+                                    // Only show user new recipes that are not his
+                                    if(!rec.addedBy.equals(userName)) {
+                                        recipes1.add(rec);
+                                    }
                                     // Call function to post all the recipes
                                     refresh_lv();
                                 }
@@ -196,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void refresh_lv(){
 
-        myAdapter = new RecipeAdapter(this,recipes1,activity);
+        myAdapter = new MainRecipeAdapter(this,recipes1,activity);
 
         myrecyclerView.setLayoutManager(new GridLayoutManager(this,1));
 

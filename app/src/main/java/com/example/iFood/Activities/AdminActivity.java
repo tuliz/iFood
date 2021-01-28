@@ -103,7 +103,6 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     } // onCreate ends
 
     private void getUsersRecipesData() {
-
         if(to==null || from==null){
 
             @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat(getString(R.string.date_format));
@@ -147,7 +146,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                             //   c = simpleDateFormat.format(userTime);
                             //Log.d("TAG","Found user match to date: "+c);
                             userCount++;
-                            Log.d("TAG","User count is:"+userCount);
+                         //   Log.d("TAG","User count is:"+userCount);
                         }
                     }
                     if(userCount>0) {
@@ -249,6 +248,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         //
         recipesChart.setPieChartData(recipesPieChart);
         usersChart.setPieChartData(usersPieChart);
+
     }
     private void setVariables() {
         usersChart = findViewById(R.id.chartUsers);
@@ -309,7 +309,6 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                    int count =  Integer.parseInt(String.valueOf(dst.getChildrenCount()));
                  //  Log.w("TAG","Count is:" +count);
                    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-                   // recipesPieData.add(new SliceValue(recipeCount, Color.RED).setLabel("Recipes :" + recipeCount));
                    topModPieData.add(new SliceValue(count,color ).setLabel(""+dst.getKey()+": "+count));
                    for(DataSnapshot dst2 : dst.getChildren()){
                        RejectedRecipe rejectedRecipe =  dst2.getValue(RejectedRecipe.class);
@@ -317,6 +316,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
                        Range<Long> recipeRejectTimeRange = Range.create(from.getTime(),to.getTime());
                        rejectRecipeTime = rejectedRecipe.timestamp;
                        if(recipeRejectTimeRange.contains(rejectRecipeTime)) {
+                           //  Can replace with a function that have a switch case based on each reason
                            //  Log.w("TAG","Reasons:"+rejectedRecipe.rejectReasons);
                            if (rejectedRecipe.rejectReasons.contains("Spam")) spam++;
                            if (rejectedRecipe.rejectReasons.contains("Missing info")) missingInfo++;

@@ -50,7 +50,7 @@
             android:text="@string/enter_recipe_ingredients" />
 
         <EditText
-            android:digits="\n0123456789 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ ."
+            android:digits="0123456789 abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ . \n"
             android:layout_marginEnd="20dp"
             android:id="@+id/etRecipeIngredients"
             android:layout_width="match_parent"

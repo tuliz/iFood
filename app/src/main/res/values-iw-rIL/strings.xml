@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="recipeFeatures">
+        <item>כשר</item>
+        <item>לא כשר</item>
+        <item>טבעוני</item>
+        <item>לא טבעוני</item>
+        <item>צמחוני</item>
+        <item>לא צמחוני</item>
+    </string-array>
+
+
+    <!-- App variables -->
     <string name="ingredients">מרכיבים</string>
     <string name="register">הירשם</string>
     <string name="recipe_name">שם המתכון</string>
@@ -98,4 +109,7 @@
     <string name="save">שמור</string>
     <string name="recipe_edit">עריכת מתכון :</string>
     <string name="edit_delete_view_my_recipes">האם אתה רוצה לערוך,לצפות במתכון או למחוק את המתכון?</string>
+    <string name="recipe_feature">מאפייני מתכון:</string>
+    <string name="recipe_type">סוג מאכל:</string>
+
 </resources>

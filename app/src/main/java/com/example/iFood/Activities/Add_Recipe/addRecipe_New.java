@@ -32,8 +32,7 @@ import com.example.iFood.Activities.MainActivity;
 import com.example.iFood.Activities.MyRecipes;
 import com.example.iFood.Activities.ProfileActivity;
 import com.example.iFood.Activities.SearchRecipe;
-import com.example.iFood.Activities.SendMessage;
-import com.example.iFood.Activities.oldActivities.Inbox;
+
 import com.example.iFood.Classes.Recipes;
 import com.example.iFood.Classes.Users;
 import com.example.iFood.Notification.APIService;
@@ -70,8 +69,10 @@ import retrofit2.Response;
 public class addRecipe_New extends AppCompatActivity {
 
     // Public Variables ( shared with fragments )
-    public static String recipeName="",recipeIngredients="",recipeInstructions="",recipeImage="";
+    public static String recipeName="",recipeIngredients="",recipeInstructions="",recipeImage="",recipe_Type,recipeFeature;
     public static Bitmap bitmapImage=null;
+    public static List<String> featureList;
+    public static List<String> recipeType;
 
     // Connect to DB & Storage
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -165,14 +166,20 @@ public class addRecipe_New extends AppCompatActivity {
                   viewPager.setCurrentItem(stepPosition);
                   btnNext.setVisibility(View.VISIBLE);
                   btnConfirm.setVisibility(View.GONE);
-                 Snackbar.make(v,"Recipe name / Ingredients cannot be empty", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                 Snackbar.make(v,"Recipe name / Ingredients cannot be empty.", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
               }
               else if(recipeInstructions.isEmpty()){
                   stepPosition=1;
                   viewPager.setCurrentItem(stepPosition);
                   btnNext.setVisibility(View.VISIBLE);
                   btnConfirm.setVisibility(View.GONE);
-                  Snackbar.make(v,"Please explain how to prepare this recipe", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+                  Snackbar.make(v,"Please explain how to prepare this recipe.", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
+              }else if(recipe_Type.isEmpty() || recipeFeature.isEmpty()){
+                  stepPosition=1;
+                  viewPager.setCurrentItem(stepPosition);
+                  btnNext.setVisibility(View.VISIBLE);
+                  btnConfirm.setVisibility(View.GONE);
+                  Snackbar.make(v,"Please enter the type and features of this recipe.", Snackbar.LENGTH_SHORT).setAction("Action",null).show();
               }
               else if(bitmapImage == null)
               {
@@ -185,7 +192,7 @@ public class addRecipe_New extends AppCompatActivity {
                   progressDialog.setCanceledOnTouchOutside(false);
                   progressDialog.show();
                   createRecipe();
-                  //Log.i("image2","Image is:"+bitmapImage);
+
               }
 
        });
@@ -318,7 +325,7 @@ public class addRecipe_New extends AppCompatActivity {
                         // Declare the recipe class.
                         Recipes rec;
                         // Assign values to constructor
-                        rec = new Recipes(recipeName,recipeIngredients,getResources().getString(R.string.method),recipeInstructions,recipeImage,id,userName);
+                        rec = new Recipes(recipeName,recipeIngredients,getResources().getString(R.string.method),recipeInstructions,recipeImage,id,userName,recipe_Type,recipeFeature);
                         // Set it as new recipe that waiting for approval.
                         rec.setApproved(false);
 

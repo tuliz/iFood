@@ -37,24 +37,23 @@
                 android:text="@string/recipe_name"
                 android:textSize="21sp"
                 android:textStyle="bold" />
-            <ru.embersoft.expandabletextview.ExpandableTextView
-                    app:etv_animationTime="20"
-                    app:etv_expandLines="1"
-                    app:etv_showLine="false"
-                    app:etv_textContentSize="20sp"
-                    app:etv_textExpand="Show more"
-                    app:etv_textShrink="Show less"
-                    app:etv_textContentColor="#8A000000"
-                    app:etv_textStateColor="#8A000000"
-                    android:id="@+id/ingredients"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="18dp"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/ingredients"
-                    android:textSize="20sp"
-            />
 
+            <ru.embersoft.expandabletextview.ExpandableTextView
+                android:id="@+id/ingredients"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/ingredients"
+                android:textSize="20sp"
+                app:etv_animationTime="20"
+                app:etv_expandLines="1"
+                app:etv_showLine="false"
+                app:etv_textContentColor="#8A000000"
+                app:etv_textContentSize="20sp"
+                app:etv_textExpand="Show more"
+                app:etv_textShrink="Show less"
+                app:etv_textStateColor="#8A000000" />
 
 
             <TextView
@@ -67,27 +66,63 @@
                 android:textStyle="bold" />
 
             <ru.embersoft.expandabletextview.ExpandableTextView
-                app:etv_animationTime="20"
-                app:etv_expandLines="1"
-                app:etv_showLine="false"
-                app:etv_textContentSize="20sp"
-                app:etv_textExpand="Show more"
-                app:etv_textShrink="Show less"
-                app:etv_textContentColor="#8A000000"
-                app:etv_textStateColor="#8A000000"
                 android:id="@+id/recipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="18dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/ingredients"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                app:etv_animationTime="20"
+                app:etv_expandLines="1"
+                app:etv_showLine="false"
+                app:etv_textContentColor="#8A000000"
+                app:etv_textContentSize="20sp"
+                app:etv_textExpand="Show more"
+                app:etv_textShrink="Show less"
+                app:etv_textStateColor="#8A000000" />
 
+            <TextView
+                android:text="@string/recipe_feature"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+            <TextView
+                android:id="@+id/recipeFeatureSelection"
+                android:layout_margin="18dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+
+            <TextView
+                android:text="@string/recipe_type"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </TextView>
+            <TextView
+                android:id="@+id/recipeType"
+                android:layout_margin="18dp"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
 
         </LinearLayout>
 
 
+
+
+
+
     </androidx.core.widget.NestedScrollView>
+
     <LinearLayout
         android:id="@+id/bottomLayout"
         android:gravity="center|bottom"
@@ -129,6 +164,18 @@
             app:tint="@color/colorWhite"
             android:backgroundTint="@color/colorAccent"
             android:src="@drawable/ic_baseline_share">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnReport"
+            app:maxImageSize="35dp"
+            app:tint="@color/colorWhite"
+            android:layout_marginStart="15dp"
+            android:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_baseline_support_agent">
 
         </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </LinearLayout>

@@ -19,7 +19,7 @@ import com.example.iFood.Activities.Add_Recipe.addRecipe_New;
 import com.example.iFood.Activities.EditRecipeActivity;
 import com.example.iFood.Activities.ProfileActivity;
 import com.example.iFood.Activities.SignUpActivity;
-import com.example.iFood.Activities.oldActivities.AddRecipe;
+
 import com.example.iFood.BuildConfig;
 
 import java.io.File;
@@ -133,9 +133,6 @@ public class EditItemImage {
                     if(n.equals("EditRecipeActivity")){
                         ((EditRecipeActivity) mContext).startActivityForResult(takePictureIntent, TAKE_PICTURE);
                     }
-                    if(n.equals("AddRecipe")){
-                        ((AddRecipe) mContext).startActivityForResult(takePictureIntent, TAKE_PICTURE);
-                    }
                     if(n.equals("SignUpActivity")){
                         ((SignUpActivity) mContext).startActivityForResult(takePictureIntent, TAKE_PICTURE);
                     }
@@ -158,9 +155,6 @@ public class EditItemImage {
                 if(n.equals("EditRecipeActivity")){
                     ((EditRecipeActivity) mContext).startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE);
                 }
-                if(n.equals("AddRecipe")){
-                    ((AddRecipe) mContext).startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE);
-                }
                 if(n.equals("SignUpActivity")){
                     ((SignUpActivity) mContext).startActivityForResult(Intent.createChooser(intent, ""), PICK_IMAGE);
                 }
@@ -177,9 +171,6 @@ public class EditItemImage {
         tempFile = null;
         if(n.equals("ProfileActivity")) {
             ((ProfileActivity) mContext).clearImage();
-        }
-        if(n.equals("AddRecipe")) {
-            ((AddRecipe) mContext).clearImage();
         }
         if(n.equals("SignUpActivity")){
             ((SignUpActivity) mContext).clearImage();

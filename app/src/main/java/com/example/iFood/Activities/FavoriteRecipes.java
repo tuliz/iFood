@@ -125,7 +125,7 @@ public class FavoriteRecipes extends AppCompatActivity {
      * This function is responsible for retrieving all the recipes the user liked from the Database.
      */
     private void getFavListbyUser(){
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 myFavList.clear();
@@ -133,14 +133,14 @@ public class FavoriteRecipes extends AppCompatActivity {
                       if(Objects.equals(dst.getKey(), userName))
                         for(DataSnapshot userRecipes : dst.getChildren()){
                            Recipes results = userRecipes.getValue(Recipes.class);
-                           myFavList.add(results);
+                            myFavList.add(results);
                             refresh_lv();
 
                    }
 
                 }
                 if(myFavList.size()<1)
-                   favSize();
+                         favSize();
                 tvMyRecipesCount.setText(String.valueOf(myFavList.size()));
             }
 

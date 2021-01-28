@@ -1,4 +1,66 @@
 <resources>
+    <string-array name="recipeFeatures">
+        <item>Kosher</item>
+        <item>Not Vegetarian</item>
+        <item>Vegan</item>
+        <item>Not Vegan</item>
+        <item>Vegetarian</item>
+        <item>Not Vegetarian</item>
+    </string-array>
+
+    <string-array name="recipeType">
+        <item></item>
+        <item>Albanian</item>
+        <item>Argentine</item>
+        <item>American</item>
+        <item>Arab</item>
+        <item>Armenian</item>
+        <item>Azerbaijani</item>
+        <item>Belarusian</item>
+        <item>Bangladeshi</item>
+        <item>Brazilian</item>
+        <item>British</item>
+        <item>Bulgarian</item>
+        <item>Chinese</item>
+        <item>Danish</item>
+        <item>Ethiopian</item>
+        <item>French</item>
+        <item>Filipino</item>
+        <item>German</item>
+        <item>Greek</item>
+        <item>Indian</item>
+        <item>Indonesian</item>
+        <item>Irish</item>
+        <item>Italian</item>
+        <item>Jamaican</item>
+        <item>Japanese</item>
+        <item>Jewish</item>
+        <item>Koren</item>
+        <item>Kurdish</item>
+        <item>Lebanese</item>
+        <item>Lithuanian</item>
+        <item>Mexican</item>
+        <item>Native American</item>
+        <item>Parsi</item>
+        <item>Polish</item>
+        <item>Pakistani</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Serbian</item>
+        <item>Spanish</item>
+        <item>Thai</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Vietnamese</item>
+
+
+    </string-array>
+
+
+
+
+    <!-- App variables -->
     <string name="app_name" translatable="false">iFood</string>
     <string name="ingredients">Ingredients</string>
     <string name="cancel">Cancel</string>
@@ -109,6 +171,8 @@
     <string name="save">Save</string>
     <string name="recipe_edit">Recipe Edit :</string>
     <string name="edit_delete_view_my_recipes">Do you wish to Edit,View or Delete your Recipe?</string>
+    <string name="recipe_feature">Recipe Features:</string>
+    <string name="recipe_type">Recipe Type:</string>
 
 
 </resources>

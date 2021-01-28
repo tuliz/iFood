@@ -15,12 +15,15 @@ public class Recipes {
     public String recipe;
     public String recipePicture;
     public String addedBy;
+    public String type;
+    public String feature;
     private boolean approved;
     public Object timestamp;
 
     Recipes(){}
 
-    public Recipes(String recipeName, String recipeIngredients, String recipeMethodTitle, String recipe, String recipePicture,String id,String addedBy) {
+
+    public Recipes(String recipeName, String recipeIngredients, String recipeMethodTitle, String recipe, String recipePicture, String id, String addedBy, String type, String feature) {
         this.recipeName = recipeName;
         this.recipeIngredients = recipeIngredients;
         this.recipeMethodTitle = recipeMethodTitle;
@@ -28,6 +31,8 @@ public class Recipes {
         this.recipePicture = recipePicture;
         this.id = id;
         this.addedBy = addedBy;
+        this.type = type;
+        this.feature = feature;
         timestamp = ServerValue.TIMESTAMP;
 
     }
@@ -94,6 +99,22 @@ public class Recipes {
     public void setAddedBy(String addedBy) {
         this.addedBy = addedBy;
     }
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getFeature() {
+        return feature;
+    }
+
+    public void setFeature(String feature) {
+        this.feature = feature;
+    }
+
     public Object getTimestamp() {
         return timestamp;
     }

@@ -57,6 +57,8 @@ public class RejectAdapter extends RecyclerView.Adapter<RejectAdapter.MyHolder> 
             rejectIntent.putExtra("RecipeName",mData.get(position).getTitle());
             rejectIntent.putExtra("RecipeIngredients",mData.get(position).getIngredients());
             rejectIntent.putExtra("RecipeMethodTitle",mData.get(position).getRecipeMethodTitle());
+            rejectIntent.putExtra("recipeType",mData.get(position).getType());
+            rejectIntent.putExtra("recipeFeature",mData.get(position).getFeature());
             rejectIntent.putExtra("Recipe",mData.get(position).getContent());
             rejectIntent.putExtra("id",mData.get(position).getRecipeID());
             rejectIntent.putExtra("Thumbnail",mData.get(position).getRecipeUrl());

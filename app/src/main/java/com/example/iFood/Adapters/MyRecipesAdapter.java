@@ -106,6 +106,8 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
                     edit.putExtra("Recipe",mData.get(i).getRecipe());
                     edit.putExtra("Thumbnail",mData.get(i).getRecipePicture());
                     edit.putExtra("recipeID",mData.get(i).getId());
+                    edit.putExtra("recipeType",mData.get(i).getType());
+                    edit.putExtra("recipeFeature",mData.get(i).getFeature());
                     edit.putExtra("userName",userName);
                     edit.putExtra("userRole",userRole);
                     myDialog.dismiss();
@@ -119,6 +121,8 @@ public class MyRecipesAdapter extends RecyclerView.Adapter<MyRecipesAdapter.MyHo
                 intent1.putExtra("RecipeIngredients",mData.get(i).getRecipeIngredients());
                 intent1.putExtra("RecipeMethodTitle",mData.get(i).getRecipeMethodTitle());
                 intent1.putExtra("Recipe",mData.get(i).getRecipe());
+                intent1.putExtra("recipeType",mData.get(i).getType());
+                intent1.putExtra("recipeFeature",mData.get(i).getFeature());
                 intent1.putExtra("Thumbnail",mData.get(i).getRecipePicture());
                 intent1.putExtra("approved",check);
                 intent1.putExtra("userRole",userRole);

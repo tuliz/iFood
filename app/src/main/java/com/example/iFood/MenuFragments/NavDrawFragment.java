@@ -152,7 +152,7 @@ public class NavDrawFragment extends BottomSheetDialogFragment {
                 main.putExtra("username", username);
                 main.putExtra("userRole", userRole);
                 startActivity(main);
-                Objects.requireNonNull(getActivity()).finishAffinity();
+
             } else if (itemId == R.id.menu_MyRecepies) {
                 Intent myRecipes = new Intent(mContext.getApplicationContext(), MyRecipes.class);
                 myRecipes.putExtra("username", username);

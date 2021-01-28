@@ -63,11 +63,11 @@ public class RecipeActivity extends AppCompatActivity {
     Dialog myDialog;
     Bitmap image = null;
     Uri imageToSend;
-    FloatingActionButton btnMsg,btnFav,btnShare;
-    String addedBy,userName,activity,Title,Ingredients,MethodTitle,Recipe,recipeID,recipeImage,userRole,approved,reason="";
+    FloatingActionButton btnMsg,btnFav,btnShare,btnReport;
+    String addedBy,userName,activity,Title,Ingredients,MethodTitle,Recipe,recipeID,recipeImage,userRole,approved,reason="",recipe_Type,recipeFeature;
     TextView mRecipeName,mRecipeMethodTitle;
     Button confirm, cancel;
-    TextView option1,option2,option3,option4,option5,option6;
+    TextView option1,option2,option3,option4,option5,option6,recipeFeatureSelection,recipeType;
     EditText otherReason;
     ExpandableTextView mRecipeIngredients,mRecipe;
     ProgressDialog progressDialog;
@@ -87,6 +87,8 @@ public class RecipeActivity extends AppCompatActivity {
         userName = getIntent().getStringExtra("username");
         activity = getIntent().getStringExtra("activity");
         addedBy = getIntent().getExtras().getString("addedBy");
+        recipe_Type = getIntent().getExtras().getString("recipeType");
+        recipeFeature = getIntent().getExtras().getString("recipeFeature");
         Title = getIntent().getExtras().getString("RecipeName");
         Ingredients = getIntent().getExtras().getString("RecipeIngredients");
         MethodTitle = getIntent().getExtras().getString("RecipeMethodTitle");
@@ -101,12 +103,15 @@ public class RecipeActivity extends AppCompatActivity {
         btnFav = findViewById(R.id.btnFav);
         btnMsg = findViewById(R.id.btnSendMessage);
         btnShare = findViewById(R.id.btnShare);
+        btnReport = findViewById(R.id.btnReport);
 
         //////////////
         mRecipeName = findViewById(R.id.text_recipe);
         mRecipeIngredients = findViewById(R.id.ingredients);
         mRecipeMethodTitle = findViewById(R.id.method);
         mRecipe = findViewById(R.id.recipe);
+        recipeType = findViewById(R.id.recipeType);
+        recipeFeatureSelection = findViewById(R.id.recipeFeatureSelection);
         ///////////////
 
 
@@ -115,6 +120,8 @@ public class RecipeActivity extends AppCompatActivity {
         mRecipeIngredients.setText(Ingredients);
         mRecipeMethodTitle.setText(MethodTitle);
         mRecipe.setText(Recipe);
+        recipeFeatureSelection.setText(recipeFeature);
+        recipeType.setText(recipe_Type);
 
         //Setting the ExpandableText closed until user open it
         mRecipeIngredients.resetState(true);
@@ -138,6 +145,14 @@ public class RecipeActivity extends AppCompatActivity {
 
         });
 
+        btnReport.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("plain/text");
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "ifoodspprt@gmail.com" });
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Recipe Report: "+Title);
+            intent.putExtra(Intent.EXTRA_TEXT, "Hi, I would like to report recipe id ("+recipeID+") because...");
+            startActivity(Intent.createChooser(intent, ""));
+        });
 
 
         btnShare.setOnClickListener(v -> new Thread(() -> {
@@ -196,7 +211,10 @@ public class RecipeActivity extends AppCompatActivity {
                     btnApprove.setImageResource(R.drawable.ic_baseline_check);
                     btnApprove.setSize(FloatingActionButton.SIZE_NORMAL);
                     btnApprove.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                    btnApprove.setOnClickListener(v -> recipesRef.child(recipeID).child(addedBy).child("approved").setValue(true));
+                    btnApprove.setOnClickListener(v -> {
+                        recipesRef.child(recipeID).child(addedBy).child("approved").setValue(true);
+                        finish();
+                    });
                     FloatingActionButton btnDel = new FloatingActionButton(this);
                     btnDel.setId(View.generateViewId());
                     btnDel.setImageResource(R.drawable.ic_exit);
@@ -281,7 +299,7 @@ public class RecipeActivity extends AppCompatActivity {
                                 // Get the recipe details for future review later on
                                 RejectedRecipe rejectedRecipe;
                                 rejectedRecipe = new RejectedRecipe(recipeID, Title, Recipe, MethodTitle
-                                        , Ingredients, recipeImage, reason, addedBy, userName, false,
+                                        , Ingredients, recipeImage, reason, addedBy,recipe_Type,recipeFeature, userName, false,
                                         formattedDate, time);
 
                                 //deleted_list.child(userName).child(recipeID).setValue(rejectedRecipe);
@@ -371,23 +389,23 @@ public class RecipeActivity extends AppCompatActivity {
          @Override
          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
              for(DataSnapshot dst : dataSnapshot.getChildren()) {
-                 Log.w("TAG", "key(dst):" + dst.getKey());
+              //   Log.w("TAG", "key(dst):" + dst.getKey());
                          if (Objects.equals(dst.getKey(), recipeID)) {
                              // remove from fav list is clicked on fav the second time
                              ref.child(userName).child(recipeID).removeValue();
                              isExists = true;
-                             Log.w("TAG", "isExists2:" + isExists);
+                            // Log.w("TAG", "isExists2:" + isExists);
                              Toast.makeText(RecipeActivity.this, "Recipe removed from favorites.", Toast.LENGTH_SHORT).show();
                              break;
                          }
 
 
              }
-             Log.w("TAG","isExists3:"+isExists);
+             //Log.w("TAG","isExists3:"+isExists);
              if(!isExists){
                  // didn't found the ID meaning not in the list so adding to user fav list
                  Recipes r;
-                 r= new Recipes(Title,Ingredients,MethodTitle,Recipe,recipeImage,recipeID,addedBy);
+                 r= new Recipes(Title,Ingredients,MethodTitle,Recipe,recipeImage,recipeID,addedBy,recipe_Type,recipeFeature);
                  ref.child(userName).child(recipeID).setValue(r);
                  Toast.makeText(RecipeActivity.this,"Added to favorites!",Toast.LENGTH_SHORT).show();
 
